@@ -3,7 +3,7 @@ CRM project
 
 ### TÍCH HỢP
 
-<img src="https://mvnrepository.com/img/3170dd7a99eff7eed8d792fe711a95a8" align="left" width="2%" height="2%"></img>
+<img src="https://media-exp1.licdn.com/dms/image/C5622AQHVyAZtOvjGQA/feedshare-shrink_800/0/1660070397603?e=1663200000&v=beta&t=FxozVO6n2WM7JZt-GLfJkzo_pMuTg7uXC5ziY4IeuvI" align="left" width="2%" height="2%"></img>
 <div style="display:flex;">
 
 - Java JWT » 4.0.0
