@@ -1,5 +1,7 @@
 package com.yan.crm_proj.model;
 
+import java.util.*;
+
 import javax.persistence.*;
 
 import lombok.*;
@@ -11,7 +13,7 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class TaskState {
+public class TaskStatus {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
@@ -20,4 +22,7 @@ public class TaskState {
     @NonNull
     @Column(name = "ten")
     private String name;
+
+    @OneToMany(mappedBy = "status")
+    private Set<Task> tasks;
 }

@@ -6,18 +6,27 @@ import org.springframework.web.servlet.*;
 
 import lombok.*;
 
+import static com.yan.crm_proj.common.TemplateConstant.*;
+import static com.yan.crm_proj.common.ViewConstant.*;
+
 @Controller
-@RequestMapping("/role")
+@RequestMapping(ROLE_VIEW)
 public class RoleController {
     @GetMapping("")
     public ModelAndView role() {
-        var mav = new ModelAndView("role");
+        var mav = new ModelAndView(ROLE_TEMP);
         return mav;
     }
 
-    @GetMapping("/add")
+    @GetMapping(ADD_VIEW)
     public ModelAndView roleAdd() {
-        var mav = new ModelAndView("role-add");
+        var mav = new ModelAndView(ROLE_ADD_TEMP);
+        return mav;
+    }
+
+    @GetMapping(EDIT_VIEW)
+    public ModelAndView roleEdit() {
+        var mav = new ModelAndView(ROLE_EDIT_TEMP);
         return mav;
     }
 }

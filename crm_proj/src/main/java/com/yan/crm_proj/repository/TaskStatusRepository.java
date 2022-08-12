@@ -6,5 +6,6 @@ import org.springframework.stereotype.*;
 import com.yan.crm_proj.model.*;
 
 @Repository
-public interface TaskStateRepository extends JpaRepository<TaskState, Integer> {
+public interface TaskStatusRepository extends JpaRepository<TaskStatus, Integer> {
+    public TaskStatus findByName(String name);
 }

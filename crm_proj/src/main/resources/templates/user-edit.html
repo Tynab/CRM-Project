@@ -19,6 +19,8 @@
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
     <link href="/css/colors/blue-dark.css" id="theme" rel="stylesheet">
+    <!-- Toastify JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -64,8 +66,9 @@
                     <li>
                         <div class="dropdown">
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img src="/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle" />
-                                <strong class="hidden-xs">Nguyễn Văn A</strong>
+                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
+                                    class="img-circle" />
+                                <strong th:text="${user.name}" class="hidden-xs">Name</strong>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
@@ -122,34 +125,36 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form class="form-horizontal form-material">
+                            <form class="form-horizontal form-material" th:action="@{/user/edit/save}" method="put">
                                 <div class="form-group">
                                     <label class="col-md-12">Họ Tên</label>
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Họ và tên đầy đủ"
-                                            class="form-control form-control-line" required>
+                                            class="form-control form-control-line" th:value="${person.name}" name="name"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Email</label>
                                     <div class="col-md-12">
                                         <input type="email" placeholder="Thư điện tử"
-                                            class="form-control form-control-line" name="example-email"
-                                            id="example-email" required>
+                                            class="form-control form-control-line" th:value="${person.email}" name="email"
+                                            id="example-email" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mật Khẩu</label>
                                     <div class="col-md-12">
                                         <input type="password" placeholder="Mật mã đăng nhập"
-                                            class="form-control form-control-line" required>
+                                            class="form-control form-control-line" name="password" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Điện Thoại</label>
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Số di động"
-                                            class="form-control form-control-line">
+                                            class="form-control form-control-line" th:value="${person.phone}"
+                                            name="phone">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -157,7 +162,8 @@
                                     <div class="col-md-12">
                                         <input type="text"
                                             placeholder="Số nhà, tên đường, xã / phường, huyện / quận, tỉnh / thành"
-                                            class="form-control form-control-line">
+                                            class="form-control form-control-line" th:value="${person.address}"
+                                            name="address">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -191,6 +197,8 @@
     <script src="/js/waves.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="/js/custom.min.js"></script>
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

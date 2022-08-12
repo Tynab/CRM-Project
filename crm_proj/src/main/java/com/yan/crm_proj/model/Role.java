@@ -1,5 +1,7 @@
 package com.yan.crm_proj.model;
 
+import java.util.*;
+
 import javax.persistence.*;
 
 import lombok.*;
@@ -23,4 +25,7 @@ public class Role {
 
     @Column(name = "mo_ta")
     private String description;
+
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
 }

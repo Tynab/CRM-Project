@@ -1,12 +1,16 @@
 package com.yan.crm_proj.service;
 
+import java.util.*;
+
 import javax.transaction.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.jpa.domain.*;
 import org.springframework.stereotype.*;
 
 import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.repository.*;
+import com.yan.crm_proj.specification.*;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -41,5 +45,17 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(int id) {
         log.info("Deleting task with id: {}", id);
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Task> getTasksByDoer(int doerId) {
+        log.info("Fetching tasks by doer: {}", doerId);
+        return taskRepository.findAllByDoerId(doerId);
+    }
+
+    @Override
+    public List<Task> getTasksByDoerAndTaskStatus(int doerId, String taskStatusName) {
+        log.info("Fetching tasks by doer: {} and task status: {}", doerId, taskStatusName);
+        return taskRepository.findAll(Specification.where(TaskSpecification.findByDoerIdAndTaskStatusName(doerId, taskStatusName)));
     }
 }

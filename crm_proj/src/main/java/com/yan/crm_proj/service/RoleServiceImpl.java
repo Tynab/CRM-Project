@@ -12,9 +12,9 @@ import lombok.*;
 import lombok.extern.slf4j.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private final RoleRepository roleRepository;
@@ -26,9 +26,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getRole(int id) {
-        log.info("Fetching role with id: {}", id);
-        return roleRepository.findById(id).orElse(null);
+    public Role getRole(String name) {
+        log.info("Fetching role with name: {}", name);
+        return roleRepository.findByName(name);
     }
 
     @Override

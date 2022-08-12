@@ -22,22 +22,30 @@ public class Project {
     @Column(name = "id")
     private int id;
 
+    @NonNull
     @Column(name = "ten")
     private String name;
 
     @Column(name = "mo_ta")
     private String description;
 
+    @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "ngay_bat_dau")
     private Date startDate;
 
+    @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "ngay_ket_thuc")
     private Date endDate;
 
-    @NonNull
+    @Column(name = "id_nguoi_tao")
+    private int originatorId;
+
     @JoinColumn(name = "id_nguoi_tao", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = EAGER)
     private User originator;
+
+    @OneToMany(mappedBy = "project")
+    private Set<Task> tasks;
 }

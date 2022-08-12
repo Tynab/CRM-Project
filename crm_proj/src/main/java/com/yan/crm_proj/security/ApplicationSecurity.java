@@ -2,7 +2,6 @@ package com.yan.crm_proj.security;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
-import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.*;
@@ -11,21 +10,23 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.savedrequest.*;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+
 import com.yan.crm_proj.filter.*;
 
 import lombok.*;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private final UserDetailsService userDetailsService;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private final HttpSessionRequestCache httpSessionRequestCache;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -36,7 +37,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         var jwtAuthenFilter = new JwtAuthenFilter(authenticationManagerBean());
         jwtAuthenFilter.setFilterProcessesUrl("/api/login");
-        http.csrf().disable().requestCache().requestCache(getHttpSessionRequestCache()).and().authorizeRequests()
+        http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests() // stateless
                 .antMatchers("/api/login/**", "/user/refresh/**").permitAll()
                 .antMatchers("/index/**", "/profile/**").hasAnyRole("MEMBER", "LEADER", "ADMIN")
                 .antMatchers("/project/**", "/role/**", "/task/**", "/user/**")
@@ -69,12 +70,5 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public HttpSessionRequestCache getHttpSessionRequestCache() {
-        var httpSessionRequestCache = new HttpSessionRequestCache();
-        httpSessionRequestCache.setCreateSessionAllowed(false);
-        return httpSessionRequestCache;
     }
 }

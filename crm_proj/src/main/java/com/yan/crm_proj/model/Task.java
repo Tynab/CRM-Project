@@ -22,32 +22,41 @@ public class Task {
     @Column(name = "id")
     private int id;
 
+    @NonNull
     @Column(name = "ten")
     private String name;
 
     @Column(name = "mo_ta")
     private String description;
 
+    @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "ngay_bat_dau")
     private Date startDate;
 
+    @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "ngay_ket_thuc")
     private Date endDate;
 
-    @NonNull
+    @Column(name = "id_nguoi_thuc_hien")
+    private int doerId;
+
     @JoinColumn(name = "id_nguoi_thuc_hien", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     private User doer;
 
-    @NonNull
+    @Column(name = "id_du_an")
+    private int projectId;
+
     @JoinColumn(name = "id_du_an", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = EAGER)
     private Project project;
 
-    @NonNull
+    @Column(name = "id_trang_thai_cong_viec")
+    private int statusId;
+
     @JoinColumn(name = "id_trang_thai_cong_viec", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = EAGER)
-    private TaskState state;
+    private TaskStatus status;
 }

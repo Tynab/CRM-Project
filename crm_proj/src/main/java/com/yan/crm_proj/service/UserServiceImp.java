@@ -14,6 +14,7 @@ import com.yan.crm_proj.repository.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 
+import static com.yan.crm_proj.common.AttributeConstant.*;
 import static java.util.Collections.*;
 
 @Service
@@ -35,7 +36,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         } else {
             log.info("User found: {}", username);
-            var authorities = singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName().toUpperCase()));
+            var authorities = singleton(new SimpleGrantedAuthority(ROLE_KEY + user.getRole().getName().toUpperCase()));
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                     authorities);
         }
@@ -49,7 +50,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public User getUser(String email) {
-        log.info("Fetching user with id: {}", email);
+        log.info("Fetching user with email: {}", email);
         return userRepository.findByEmail(email);
     }
 

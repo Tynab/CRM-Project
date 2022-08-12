@@ -4,24 +4,27 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
+import static com.yan.crm_proj.common.TemplateConstant.*;
+import static com.yan.crm_proj.common.ViewConstant.*;
+
 @Controller
 @RequestMapping("")
 public class ApplicationController {
-    @GetMapping("/login")
+    @GetMapping(LOGIN_VIEW)
     public ModelAndView login() {
-        var mav = new ModelAndView("login");
+        var mav = new ModelAndView(LOGIN_TEMP);
         return mav;
     }
 
-    @GetMapping("/index")
+    @GetMapping(INDEX_VIEW)
     public ModelAndView index() {
-        var mav = new ModelAndView("index");
+        var mav = new ModelAndView(INDEX_TEMP);
         return mav;
     }
 
-    @GetMapping("/403")
+    @GetMapping(FORBIDDEN_VIEW)
     public ModelAndView error() {
-        var mav = new ModelAndView("403");
+        var mav = new ModelAndView(FORBIDDEN_TEMP);
         return mav;
     }
 }

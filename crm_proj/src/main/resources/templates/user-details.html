@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
-    <title>User | CRM Project</title>
+    <title th:text="${person.name+' | CRM Project'}">User | CRM Project</title>
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
@@ -75,8 +75,9 @@
                     <li>
                         <div class="dropdown">
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img src="/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle" />
-                                <strong class="hidden-xs">Nguyễn Văn A</strong>
+                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
+                                    class="img-circle" />
+                                <strong th:text="${user.name}" class="hidden-xs">Name</strong>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
@@ -136,10 +137,10 @@
                                     src="/plugins/images/large/img1.jpg">
                                 <div class="overlay-box">
                                     <div class="user-content">
-                                        <a><img src="/plugins/images/users/1.jpg" class="thumb-lg img-circle"
-                                                alt="img"></a>
-                                        <h4 class="text-white">Nguyễn Văn A</h4>
-                                        <h5 class="text-white">nva@gmail.com</h5>
+                                        <a><img th:src="@{${'/plugins/images/users/'+person.image}}"
+                                                class="thumb-lg img-circle" alt="img"></a>
+                                        <h4 th:text="${person.name}" class="text-white">Name</h4>
+                                        <h5 th:text="${person.email}" class="text-white">Email</h5>
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +155,8 @@
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
-                                            <h3 class="counter text-right m-t-15 text-danger">20%</h3>
+                                            <h3 th:text="${notStartedPecent+'%'}"
+                                                class="counter text-right m-t-15 text-danger">0%</h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i data-icon="E" class="linea-icon linea-basic"></i>
@@ -164,7 +166,8 @@
                                             <div class="progress">
                                                 <div class="progress-bar progress-bar-danger" role="progressbar"
                                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 20%"></div>
+                                                    th:style="'width:' + ${notStartedPecent} + '%;'">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -176,7 +179,8 @@
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
-                                            <h3 class="counter text-right m-t-15 text-megna">50%</h3>
+                                            <h3 th:text="${inProgressPecent+'%'}"
+                                                class="counter text-right m-t-15 text-megna">0%</h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
@@ -186,7 +190,8 @@
                                             <div class="progress">
                                                 <div class="progress-bar progress-bar-megna" role="progressbar"
                                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 50%"></div>
+                                                    th:style="'width:' + ${inProgressPecent} + '%'">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -198,17 +203,19 @@
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
-                                            <h3 class="counter text-right m-t-15 text-primary">30%</h3>
+                                            <h3 th:text="${completedPercent+'%'}"
+                                                class="counter text-right m-t-15 text-primary">0%</h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-                                            <h5 class="text-muted vb text-center">HOÀN THÀNH</h5>
+                                            <h5 class="text-muted vb text-center">ĐÃ HOÀN THÀNH</h5>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
                                                 <div class="progress-bar progress-bar-primary" role="progressbar"
                                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 30%"></div>
+                                                    th:style="'width:' + ${completedPercent} + '%'">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -228,16 +235,14 @@
                         <div class="white-box">
                             <h3 class="box-title">Chưa thực hiện</h3>
                             <div class="message-center">
-                                <a th:href="@{/task/edit}">
+                                <a th:each="task : ${taskNotStarted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5>Công việc 1</h5> <span class="mail-desc">Dự án 1</span> <span
-                                            class="time">dd/mm/yyyy - dd/mm/yyyy</span>
-                                    </div>
-                                </a>
-                                <a th:href="@{/task/edit}">
-                                    <div class="mail-contnet">
-                                        <h5>Công việc 2</h5> <span class="mail-desc">Dự án 2</span> <span
-                                            class="time">dd/mm/yyyy - dd/mm/yyyy</span>
+                                        <h5 th:text="${task.name}">Task</h5>
+                                        <span class="mail-desc">Project</span>
+                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <span
+                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
+                                            class="time">From date - To date</span>
                                     </div>
                                 </a>
                             </div>
@@ -247,10 +252,14 @@
                         <div class="white-box">
                             <h3 class="box-title">Đang thực hiện</h3>
                             <div class="message-center">
-                                <a th:href="@{/task/edit}">
+                                <a th:each="task : ${taskInProgress}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5>Công việc 3</h5> <span class="mail-desc">Dự án 3</span> <span
-                                            class="time">dd/mm/yyyy - dd/mm/yyyy</span>
+                                        <h5 th:text="${task.name}">Task</h5>
+                                        <span class="mail-desc">Project</span>
+                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <span
+                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
+                                            class="time">From date - To date</span>
                                     </div>
                                 </a>
                             </div>
@@ -260,10 +269,14 @@
                         <div class="white-box">
                             <h3 class="box-title">Đã hoàn thành</h3>
                             <div class="message-center">
-                                <a th:href="@{/task/edit}">
+                                <a th:each="task : ${taskCompleted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5>Công việc 4</h5> <span class="mail-desc">Dự án 4</span> <span
-                                            class="time">dd/mm/yyyy - dd/mm/yyyy</span>
+                                        <h5 th:text="${task.name}">Task</h5>
+                                        <span class="mail-desc">Project</span>
+                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <span
+                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
+                                            class="time">From date - To date</span>
                                     </div>
                                 </a>
                             </div>

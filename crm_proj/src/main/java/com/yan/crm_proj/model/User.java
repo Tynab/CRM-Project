@@ -1,5 +1,7 @@
 package com.yan.crm_proj.model;
 
+import java.util.*;
+
 import javax.persistence.*;
 
 import lombok.*;
@@ -26,8 +28,13 @@ public class User {
     @Column(name = "mat_khau")
     private String password;
 
+    @NonNull
     @Column(name = "ho_ten")
     private String name;
+
+    @NonNull
+    @Column(name = "hinh_anh")
+    private String image;
 
     @Column(name = "dia_chi")
     private String address;
@@ -35,8 +42,13 @@ public class User {
     @Column(name = "so_dien_thoai")
     private String phone;
 
-    @NonNull
+    @Column(name = "id_loai_thanh_vien")
+    private int roleId;
+
     @JoinColumn(name = "id_loai_thanh_vien", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = EAGER)
     private Role role;
+
+    @OneToMany(mappedBy = "doer")
+    private Set<Task> tasks;
 }

@@ -77,16 +77,7 @@ CREATE TABLE
 
 INSERT INTO
     loai_thanh_vien (ten, mo_ta)
-VALUES (
-        'admin',
-        'Quản lý'
-    ), (
-        'leader',
-        'Trưởng nhóm'
-    ), (
-        'member',
-        'Nhân viên'
-    );
+VALUES ('admin', 'Quản lý'), ('leader', 'Trưởng nhóm'), ('member', 'Nhân viên');
 
 -- add data to nguoi_dung
 
@@ -176,19 +167,19 @@ INSERT INTO
         id_nguoi_tao
     )
 VALUES (
-        'HRM220101',
+        'HRM_220101',
         'Human Resource Management',
         '2022-01-01',
         '2022-12-01',
         2
     ), (
-        'CRM220101',
+        'CRM_220101',
         'Customer Relationship Management',
         '2022-01-01',
         '2022-07-01',
         4
     ), (
-        'Jira220701',
+        'Jira_220701',
         'Godzilla (Gojira)',
         '2022-07-01',
         '2023-01-01',
@@ -199,7 +190,7 @@ VALUES (
 
 INSERT INTO
     trang_thai_cong_viec (ten)
-VALUES ('Chưa bắt đầu'), ('Đang thực hiện'), ('Đã hoàn thành');
+VALUES ('chưa bắt đầu'), ('đang thực hiện'), ('đã hoàn thành');
 
 -- add data to cong_viec
 
@@ -214,7 +205,7 @@ INSERT INTO
         id_trang_thai_cong_viec
     )
 VALUES (
-        'Soft_HRM220101',
+        'Soft_HRM_220101',
         'Soft design: tạo spec tài liệu cho HRM',
         '2022-01-01',
         '2022-03-01',
@@ -222,7 +213,7 @@ VALUES (
         1,
         3
     ), (
-        'Sys_HRM220101',
+        'Sys_HRM_220101',
         'System design: study, investigate, estimate, confirm, transfer, đưa ra schedule cho HRM',
         '2022-03-01',
         '2022-04-01',
@@ -230,7 +221,7 @@ VALUES (
         1,
         3
     ), (
-        'DB_HRM220101',
+        'DB_HRM_220101',
         'Tạo database cho HRM',
         '2022-04-01',
         '2022-06-01',
@@ -238,7 +229,7 @@ VALUES (
         1,
         3
     ), (
-        'BE_HRM220101',
+        'BE_HRM_220101',
         'Tạo backend cho HRM',
         '2022-06-01',
         '2022-08-01',
@@ -246,7 +237,7 @@ VALUES (
         1,
         2
     ), (
-        'FE_HRM220101',
+        'FE_HRM_220101',
         'Tạo frontend cho HRM',
         '2022-06-01',
         '2022-08-01',
@@ -254,7 +245,7 @@ VALUES (
         1,
         2
     ), (
-        'UT_HRM220101',
+        'UT_HRM_220101',
         'Unit test cho HRM',
         '2022-08-01',
         '2022-10-01',
@@ -262,7 +253,7 @@ VALUES (
         1,
         1
     ), (
-        'ST_HRM220101',
+        'ST_HRM_220101',
         'System test cho HRM',
         '2022-10-01',
         '2022-12-01',
@@ -270,7 +261,7 @@ VALUES (
         1,
         1
     ), (
-        'Soft_CRM220101',
+        'Soft_CRM_220101',
         'Soft design: tạo spec tài liệu cho CRM',
         '2022-01-01',
         '2022-02-01',
@@ -278,7 +269,7 @@ VALUES (
         2,
         3
     ), (
-        'Sys_CRM220101',
+        'Sys_CRM_220101',
         'System design: study, investigate, estimate, confirm, transfer, đưa ra schedule cho CRM',
         '2022-02-01',
         '2022-03-01',
@@ -286,7 +277,7 @@ VALUES (
         2,
         3
     ), (
-        'DB_CRM220101',
+        'DB_CRM_220101',
         'Tạo database cho CRM',
         '2022-03-01',
         '2022-04-01',
@@ -294,7 +285,7 @@ VALUES (
         2,
         3
     ), (
-        'BE_CRM220101',
+        'BE_CRM_220101',
         'Tạo backend cho CRM',
         '2022-04-01',
         '2022-05-01',
@@ -302,7 +293,7 @@ VALUES (
         2,
         3
     ), (
-        'FE_CRM220101',
+        'FE_CRM_220101',
         'Tạo frontend cho CRM',
         '2022-04-01',
         '2022-05-01',
@@ -310,7 +301,7 @@ VALUES (
         2,
         3
     ), (
-        'UT_CRM220101',
+        'UT_CRM_220101',
         'Unit test cho CRM',
         '2022-05-01',
         '2022-06-01',
@@ -318,7 +309,7 @@ VALUES (
         2,
         3
     ), (
-        'ST_CRM220101',
+        'ST_CRM_220101',
         'System test cho CRM',
         '2022-06-01',
         '2022-07-01',
@@ -326,7 +317,7 @@ VALUES (
         2,
         3
     ), (
-        'Soft_Jira220701',
+        'Soft_Jira_220701',
         'Soft design: tạo spec tài liệu cho Jira',
         '2022-07-01',
         '2022-08-01',
@@ -334,7 +325,7 @@ VALUES (
         3,
         2
     ), (
-        'Sys_Jira220701',
+        'Sys_Jira_220701',
         'System design: study, investigate, estimate, confirm, transfer, đưa ra schedule cho Jira',
         '2022-08-01',
         '2022-09-01',
@@ -342,7 +333,7 @@ VALUES (
         3,
         1
     ), (
-        'DB_Jira220701',
+        'DB_Jira_220701',
         'Tạo database cho Jira',
         '2022-09-01',
         '2022-10-01',
@@ -350,7 +341,7 @@ VALUES (
         3,
         1
     ), (
-        'BE_Jira220701',
+        'BE_Jira_220701',
         'Tạo backend cho Jira',
         '2022-10-01',
         '2022-11-01',
@@ -358,7 +349,7 @@ VALUES (
         3,
         1
     ), (
-        'FE_Jira220701',
+        'FE_Jira_220701',
         'Tạo frontend cho Jira',
         '2022-10-01',
         '2022-11-01',
@@ -366,7 +357,7 @@ VALUES (
         3,
         1
     ), (
-        'UT_Jira220701',
+        'UT_Jira_220701',
         'Unit test cho Jira',
         '2022-11-01',
         '2022-12-01',
@@ -374,7 +365,7 @@ VALUES (
         3,
         1
     ), (
-        'ST_Jira220701',
+        'ST_Jira_220701',
         'System test cho Jira',
         '2022-12-01',
         '2023-01-01',

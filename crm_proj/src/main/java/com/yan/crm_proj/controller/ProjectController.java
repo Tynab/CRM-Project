@@ -4,24 +4,27 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
+import static com.yan.crm_proj.common.TemplateConstant.*;
+import static com.yan.crm_proj.common.ViewConstant.*;
+
 @Controller
-@RequestMapping("/project")
+@RequestMapping(PROJECT_VIEW)
 public class ProjectController {
     @GetMapping("")
     public ModelAndView project() {
-        var mav = new ModelAndView("project");
+        var mav = new ModelAndView(PROJECT_TEMP);
         return mav;
     }
 
-    @GetMapping("/add")
+    @GetMapping(ADD_VIEW)
     public ModelAndView projectAdd() {
-        var mav = new ModelAndView("project-add");
+        var mav = new ModelAndView(PROJECT_ADD_TEMP);
         return mav;
     }
 
-    @GetMapping("/details")
-    public ModelAndView projectDetails() {
-        var mav = new ModelAndView("project-details");
+    @GetMapping(EDIT_VIEW)
+    public ModelAndView projectEdit() {
+        var mav = new ModelAndView(PROJECT_EDIT_TEMP);
         return mav;
     }
 }

@@ -7,4 +7,5 @@ import com.yan.crm_proj.model.*;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
+    public Role findByName(String name);
 }

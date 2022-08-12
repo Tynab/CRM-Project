@@ -66,8 +66,9 @@
                     <li>
                         <div class="dropdown">
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img src="/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle" />
-                                <strong class="hidden-xs">Nguyễn Văn A</strong>
+                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
+                                    class="img-circle" />
+                                <strong th:text="${user.name}" class="hidden-xs">Name</strong>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
@@ -139,28 +140,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>nva@gmail.com</td>
-                                            <td>0123456789</td>
-                                            <td>admin</td>
+                                        <tr th:each="person,i : ${users}">
+                                            <td th:text="${i.index+1}">No.</td>
+                                            <td th:text="${person.name}">Name</td>
+                                            <td th:text="${person.email}">Email</td>
+                                            <td th:text="${person.phone}">Phone</td>
+                                            <td th:text="${person.role.name}">Role</td>
                                             <td>
-                                                <a th:href="@{/user/edit}" class="btn btn-sm btn-primary">Sửa</a>
-                                                <a th:href="@{/user/delete}" class="btn btn-sm btn-danger">Xóa</a>
-                                                <a th:href="@{/user/details}" class="btn btn-sm btn-info">Xem</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Trần Thị B</td>
-                                            <td>ttb@gmail.com</td>
-                                            <td>0987654321</td>
-                                            <td>member</td>
-                                            <td>
-                                                <a th:href="@{/user/edit}" class="btn btn-sm btn-primary">Sửa</a>
-                                                <a th:href="@{/user/delete}" class="btn btn-sm btn-danger">Xóa</a>
-                                                <a th:href="@{/user/details}" class="btn btn-sm btn-info">Xem</a>
+                                                <a th:href="@{/user/findBy/(email=${person.email},action='/edit')}"
+                                                    class="btn btn-sm btn-primary">Sửa</a>
+                                                <a th:href="@{/user/delete/(id=${person.id})}"
+                                                    class="btn btn-sm btn-danger">Xóa</a>
+                                                <a th:href="@{/user/findBy/(email=${person.email},action='/details')}"
+                                                    class="btn btn-sm btn-info">Xem</a>
                                             </td>
                                         </tr>
                                     </tbody>
