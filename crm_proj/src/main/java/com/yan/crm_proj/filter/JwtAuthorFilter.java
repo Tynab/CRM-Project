@@ -17,9 +17,9 @@ import lombok.extern.slf4j.*;
 
 import static com.auth0.jwt.JWT.*;
 import static com.auth0.jwt.algorithms.Algorithm.*;
-import static com.yan.crm_proj.common.ApplicationConstant.*;
-import static com.yan.crm_proj.common.AttributeConstant.*;
-import static com.yan.crm_proj.common.ViewConstant.*;
+import static com.yan.crm_proj.constant.ApplicationConstant.*;
+import static com.yan.crm_proj.constant.AttributeConstant.*;
+import static com.yan.crm_proj.constant.ViewConstant.*;
 import static java.util.Arrays.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
@@ -32,15 +32,15 @@ public class JwtAuthorFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getServletPath().equals("/api/login")
-                || request.getServletPath().equals(USER_VIEW + REFRESH_VIEW)) {
+                || request.getServletPath().equals(PROFILE_VIEW + REFRESH_VIEW)) {
             filterChain.doFilter(request, response);
             return;
         } else {
-            var authorizationHeader = request.getHeader(AUTHORIZATION);
-            if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
+            var header = request.getHeader(AUTHORIZATION);
+            if (header != null && header.startsWith(TOKEN_PREFIX)) {
                 try {
                     final var decodedJwt = require(HMAC256(SECRET_KEY.getBytes())).build()
-                            .verify(authorizationHeader.substring(TOKEN_PREFIX.length()));
+                            .verify(header.substring(TOKEN_PREFIX.length()));
                     final var roles = decodedJwt.getClaim(ROLE_CLAIM_KEY).asArray(String.class);
                     var authorities = new ArrayList<SimpleGrantedAuthority>();
                     stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));

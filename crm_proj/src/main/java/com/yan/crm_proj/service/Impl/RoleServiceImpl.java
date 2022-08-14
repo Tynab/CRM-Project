@@ -1,4 +1,4 @@
-package com.yan.crm_proj.service;
+package com.yan.crm_proj.service.Impl;
 
 import javax.transaction.*;
 
@@ -7,6 +7,8 @@ import org.springframework.stereotype.*;
 
 import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.repository.*;
+import com.yan.crm_proj.service.*;
+import com.yan.crm_proj.util.*;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -18,6 +20,9 @@ import lombok.extern.slf4j.*;
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private final RoleRepository roleRepository;
+
+    @Autowired
+    private final StringUtil stringUtil;
 
     @Override
     public Iterable<Role> getRoles() {
@@ -33,7 +38,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving role with id: {}", role.getId());
+        role.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
+        role.setDescription(stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(role.getDescription())));
+        log.info("Saving role with name: {}", role.getName());
         return roleRepository.save(role);
     }
 

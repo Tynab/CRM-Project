@@ -77,7 +77,7 @@ CREATE TABLE
 
 INSERT INTO
     loai_thanh_vien (ten, mo_ta)
-VALUES ('admin', 'Quản lý'), ('leader', 'Trưởng nhóm'), ('member', 'Nhân viên');
+VALUES ('Admin', 'Quản lý'), ('Leader', 'Trưởng nhóm'), ('Member', 'Nhân viên');
 
 -- add data to nguoi_dung
 
@@ -97,7 +97,7 @@ VALUES (
         -- admina112
         'Nguyễn Văn A',
         '1.jpg',
-        '112 đường Cao Thắng, phường 4, quận 3, thành phố Hồ Chí Minh',
+        '112 đường Cao Thắng, P.4, Q.3, TP.Hồ Chí Minh',
         '0987654321',
         1
     ), (
@@ -106,7 +106,7 @@ VALUES (
         -- leaderc459
         'Trần Thị C',
         '2.jpg',
-        '459 đường Sư Vạn Hạnh, phường 12, quận 10, thành phố Hồ Chí Minh',
+        '459 đường Sư Vạn Hạnh, P.12, Q.10, TP.Hồ Chí Minh',
         '0123456789',
         2
     ), (
@@ -115,7 +115,7 @@ VALUES (
         -- memberd117
         'Lê Văn D',
         '3.jpg',
-        '117 đường Tân Cảng, phường 25, quận Bình Thạnh, thành phố Hồ Chí Minh',
+        '117 đường Tân Cảng, P.25, Q.Bình Thạnh, TP.Hồ Chí Minh',
         '0918273645',
         3
     ), (
@@ -124,7 +124,7 @@ VALUES (
         -- leaderb110
         'Phạm Thị B',
         '4.jpg',
-        '110 đường số 10, phường 10, quận Gò Vấp, thành phố Hồ Chí Minh',
+        '110 đường số 10, P.10, Q.Gò Vấp, TP.Hồ Chí Minh',
         '0963852741',
         2
     ), (
@@ -133,7 +133,7 @@ VALUES (
         -- membere56
         'Hoàng Văn E',
         '5.jpg',
-        '56 đường Lê Cảnh Tuân, phường Phú Thọ Hoà, quận Tân Phú, thành phố Hồ Chí Minh',
+        '56 đường Lê Cảnh Tuân, P.Phú Thọ Hoà, Q.Tân Phú, TP.Hồ Chí Minh',
         '0951874632',
         3
     ), (
@@ -142,7 +142,7 @@ VALUES (
         -- membere6c
         'Huỳnh Thị E',
         '6.jpg',
-        '6C đường số 8, phường Linh Tây, quận Thủ Đức, thành phố Hồ Chí Minh',
+        '6C đường số 8, P.Linh Tây, Q.Thủ Đức, TP.Hồ Chí Minh',
         '0951632874',
         3
     ), (
@@ -151,7 +151,7 @@ VALUES (
         -- memberg103
         'Nguyễn Văn G',
         '7.jpg',
-        '103 đường Nguyễn Hữu Dật, phường Hoà Cường Bắc, quận Hải Châu, thành phố Đà Nẵng',
+        '103 đường Nguyễn Hữu Dật, P.Hoà Cường Bắc, Q.Hải Châu, TP.Đà Nẵng',
         '0987456321',
         3
     );
@@ -190,7 +190,7 @@ VALUES (
 
 INSERT INTO
     trang_thai_cong_viec (ten)
-VALUES ('chưa bắt đầu'), ('đang thực hiện'), ('đã hoàn thành');
+VALUES ('Chưa bắt đầu'), ('Đang thực hiện'), ('Đã hoàn thành');
 
 -- add data to cong_viec
 

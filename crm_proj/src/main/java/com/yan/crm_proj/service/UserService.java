@@ -9,5 +9,7 @@ public interface UserService {
 
     public User saveUser(User user);
 
+    public User saveUserWithoutPassword(User user);
+
     public void deleteUser(int id);
 }

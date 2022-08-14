@@ -13,7 +13,7 @@ public interface TaskService {
 
     public void deleteTask(int id);
 
-    public List<Task> getTasksByDoer(int doerId);
+    public List<Task> getTasksByDoer(String email);
 
-    public List<Task> getTasksByDoerAndTaskStatus(int doerId, String taskStatusName);
+    public List<Task> getTasksByDoerAndTaskStatus(String email, String taskStatusName);
 }

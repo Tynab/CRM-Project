@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
-    <title th:text="${person.name+' | CRM Project'}">User | CRM Project</title>
+    <meta name="description" content="Midterm Project">
+    <meta name="author" content="Yami An Nephilim">
+    <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
+    <title th:text="${person.name+' | CRM Project'}">
+        User | CRM Project
+    </title>
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
@@ -18,25 +20,18 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
-    <link href="/css/colors/blue-dark.css" id="theme" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href="/css/colors/blue-dark.css" rel="stylesheet" id="theme">
+    <style>
+        .center {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    </style>
 </head>
-
-<style>
-    .center {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
-</style>
 
 <body>
     <!-- Preloader -->
@@ -77,59 +72,85 @@
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
                                 <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
                                     class="img-circle" />
-                                <strong th:text="${user.name}" class="hidden-xs">Name</strong>
+                                <strong th:text="${user.name}" class="hidden-xs">
+                                    Name
+                                </strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
+                                <li>
+                                    <a th:href="@{/profile}">
+                                        Thông tin cá nhân
+                                    </a>
+                                </li>
                                 <li class="divider"></li>
-                                <li><a th:href="@{/logout}">Đăng xuất</a></li>
+                                <li>
+                                    <a th:href="@{/logout}">
+                                        Đăng xuất
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-header -->
-            <!-- /.navbar-top-links -->
-            <!-- /.navbar-static-side -->
         </nav>
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
                     <li style="padding: 10px 0 0;">
-                        <a th:href="@{/index}" class="waves-effect"><i class="fa fa-clock-o fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
+                        <a th:href="@{/index}" class="waves-effect">
+                            <i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dashboard
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/user}" class="waves-effect"><i class="fa fa-user fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Thành viên</span></a>
+                        <a th:href="@{/user}" class="waves-effect">
+                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Thành viên
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/role}" class="waves-effect"><i class="fa fa-modx fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Vai Trò</span></a>
+                        <a th:href="@{/role}" class="waves-effect">
+                            <i class="fa fa-modx fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Vai Trò
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/project}" class="waves-effect"><i class="fa fa-calendar fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dự án</span></a>
+                        <a th:href="@{/project}" class="waves-effect">
+                            <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dự án
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/task}" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Công việc</span></a>
+                        <a th:href="@{/task}" class="waves-effect">
+                            <i class="fa fa-table fa-fw" aria-hidden="true">
+                            </i><span class="hide-menu">
+                                Công việc
+                            </span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
+        <!-- Page content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Chi tiết thành viên</h4>
+                        <h4 class="page-title">
+                            Chi tiết thành viên
+                        </h4>
                     </div>
                 </div>
-                <!-- /.row -->
-                <!-- .row -->
                 <div class="row">
                     <div class="col-md-4 col-xs-12">
                         <div class="white-box">
@@ -137,30 +158,37 @@
                                     src="/plugins/images/large/img1.jpg">
                                 <div class="overlay-box">
                                     <div class="user-content">
-                                        <a><img th:src="@{${'/plugins/images/users/'+person.image}}"
-                                                class="thumb-lg img-circle" alt="img"></a>
-                                        <h4 th:text="${person.name}" class="text-white">Name</h4>
-                                        <h5 th:text="${person.email}" class="text-white">Email</h5>
+                                        <a>
+                                            <img th:src="@{${'/plugins/images/users/'+person.image}}"
+                                                class="thumb-lg img-circle" alt="img">
+                                        </a>
+                                        <h4 th:text="${person.name}" class="text-white">
+                                            Name
+                                        </h4>
+                                        <h5 th:text="${person.email}" class="text-white">
+                                            Email
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                        <!-- BEGIN THỐNG KÊ -->
                         <div class="row">
-                            <!--col -->
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
                                             <h3 th:text="${notStartedPecent+'%'}"
-                                                class="counter text-right m-t-15 text-danger">0%</h3>
+                                                class="counter text-right m-t-15 text-danger">
+                                                0%
+                                            </h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i data-icon="E" class="linea-icon linea-basic"></i>
-                                            <h5 class="text-muted vb text-center">CHƯA BẮT ĐẦU</h5>
+                                            <h5 class="text-muted vb text-center">
+                                                CHƯA BẮT ĐẦU
+                                            </h5>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
@@ -173,18 +201,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.col -->
-                            <!--col -->
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
                                             <h3 th:text="${inProgressPecent+'%'}"
-                                                class="counter text-right m-t-15 text-megna">0%</h3>
+                                                class="counter text-right m-t-15 text-megna">
+                                                0%
+                                            </h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
-                                            <h5 class="text-muted vb text-center">ĐANG THỰC HIỆN</h5>
+                                            <h5 class="text-muted vb text-center">
+                                                ĐANG THỰC HIỆN
+                                            </h5>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
@@ -197,18 +227,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.col -->
-                            <!--col -->
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                 <div class="white-box">
                                     <div class="col-in row">
                                         <div class="col-xs-12">
                                             <h3 th:text="${completedPercent+'%'}"
-                                                class="counter text-right m-t-15 text-primary">0%</h3>
+                                                class="counter text-right m-t-15 text-primary">
+                                                0%
+                                            </h3>
                                         </div>
                                         <div class="col-xs-12">
                                             <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-                                            <h5 class="text-muted vb text-center">ĐÃ HOÀN THÀNH</h5>
+                                            <h5 class="text-muted vb text-center">
+                                                ĐÃ HOÀN THÀNH
+                                            </h5>
                                         </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="progress">
@@ -221,28 +253,35 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.col -->
                         </div>
-                        <!-- END THỐNG KÊ -->
-
                     </div>
                 </div><br />
-                <!-- /.row -->
-                <!-- BEGIN DANH SÁCH CÔNG VIỆC -->
-                <h4>DANH SÁCH CÔNG VIỆC</h4>
+                <h4>
+                    DANH SÁCH CÔNG VIỆC
+                </h4>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="white-box">
-                            <h3 class="box-title">Chưa thực hiện</h3>
+                            <h3 class="box-title">
+                                Chưa thực hiện
+                            </h3>
                             <div class="message-center">
                                 <a th:each="task : ${taskNotStarted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5 th:text="${task.name}">Task</h5>
-                                        <span class="mail-desc">Project</span>
-                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <h5 th:text="${task.name}">
+                                            Task
+                                        </h5>
+                                        <span class="mail-desc">
+                                            Project
+                                        </span>
+                                        <span th:text="${task.description}" class="mail-desc">
+                                            Description
+                                        </span>
                                         <span
                                             th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
-                                            class="time">From date - To date</span>
+                                            class="time">
+                                            From date - To date
+                                        </span>
                                     </div>
                                 </a>
                             </div>
@@ -250,16 +289,26 @@
                     </div>
                     <div class="col-md-4">
                         <div class="white-box">
-                            <h3 class="box-title">Đang thực hiện</h3>
+                            <h3 class="box-title">
+                                Đang thực hiện
+                            </h3>
                             <div class="message-center">
                                 <a th:each="task : ${taskInProgress}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5 th:text="${task.name}">Task</h5>
-                                        <span class="mail-desc">Project</span>
-                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <h5 th:text="${task.name}">
+                                            Task
+                                        </h5>
+                                        <span class="mail-desc">
+                                            Project
+                                        </span>
+                                        <span th:text="${task.description}" class="mail-desc">
+                                            Description
+                                        </span>
                                         <span
                                             th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
-                                            class="time">From date - To date</span>
+                                            class="time">
+                                            From date - To date
+                                        </span>
                                     </div>
                                 </a>
                             </div>
@@ -267,41 +316,49 @@
                     </div>
                     <div class="col-md-4">
                         <div class="white-box">
-                            <h3 class="box-title">Đã hoàn thành</h3>
+                            <h3 class="box-title">
+                                Đã hoàn thành
+                            </h3>
                             <div class="message-center">
                                 <a th:each="task : ${taskCompleted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
-                                        <h5 th:text="${task.name}">Task</h5>
-                                        <span class="mail-desc">Project</span>
-                                        <span th:text="${task.description}" class="mail-desc">Description</span>
+                                        <h5 th:text="${task.name}">
+                                            Task
+                                        </h5>
+                                        <span class="mail-desc">
+                                            Project
+                                        </span>
+                                        <span th:text="${task.description}" class="mail-desc">
+                                            Description
+                                        </span>
                                         <span
-                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
-                                            class="time">From date - To date</span>
+                                            th:text="${#dates.format(task.startDate,'dd/MM/yyyy')+' - '+#dates.format(task.endDate,'dd/MM/yyyy')}"
+                                            class="time">
+                                            From date - To date
+                                        </span>
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END DANH SÁCH CÔNG VIỆC -->
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2022 &copy; cybersoft.com </footer>
+            <footer class="footer text-center">
+                2022 &copy; cybersoft.com
+            </footer>
         </div>
-        <!-- /#page-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <!-- jQuery -->
+    <!-- jQuery JS -->
     <script src="/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
+    <!-- Bootstrap Core JS -->
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Menu Plugin JavaScript -->
+    <!-- Menu Plugin JS -->
     <script src="/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
-    <!-- Slimscroll JavaScript -->
+    <!-- Slimscroll JS -->
     <script src="/js/jquery.slimscroll.js"></script>
-    <!-- Wave Effects -->
+    <!-- Wave Effects JS -->
     <script src="/js/waves.js"></script>
-    <!-- Custom Theme JavaScript -->
+    <!-- Custom Theme JS -->
     <script src="/js/custom.min.js"></script>
 </body>
 

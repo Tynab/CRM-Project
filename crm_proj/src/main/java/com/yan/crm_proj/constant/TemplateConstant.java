@@ -1,4 +1,4 @@
-package com.yan.crm_proj.common;
+package com.yan.crm_proj.constant;
 
 public class TemplateConstant {
     public static final String LOGIN_TEMP = "login";

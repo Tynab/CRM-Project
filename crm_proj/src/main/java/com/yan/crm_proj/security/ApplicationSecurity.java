@@ -37,7 +37,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         var jwtAuthenFilter = new JwtAuthenFilter(authenticationManagerBean());
         jwtAuthenFilter.setFilterProcessesUrl("/api/login");
-        http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests() // stateless
+        http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests() // replace stateless
                 .antMatchers("/api/login/**", "/user/refresh/**").permitAll()
                 .antMatchers("/index/**", "/profile/**").hasAnyRole("MEMBER", "LEADER", "ADMIN")
                 .antMatchers("/project/**", "/role/**", "/task/**", "/user/**")
@@ -48,22 +48,6 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl("/login").permitAll().and()
                 .exceptionHandling().accessDeniedPage("/403").and().addFilter(jwtAuthenFilter)
                 .addFilterBefore(new JwtAuthorFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // http.csrf().disable();
-        // http.sessionManagement().sessionCreationPolicy(STATELESS);
-        // http.authorizeRequests().antMatchers("/api/login/**",
-        // "/user/refresh/**").permitAll();
-        // http.authorizeRequests().antMatchers("/index").hasAnyAuthority("ROLE_MEMBER");
-        // http.authorizeRequests().antMatchers("/index/**", "/profile/**",
-        // "/project/**", "/role/**", "/task/**",
-        // "/user/**").hasAnyAuthority("ROLE_ADMIN");
-        // http.authorizeRequests().anyRequest().authenticated();
-        // http.formLogin().loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/profile").failureUrl("/login?error=true").permitAll();
-        // http.logout().invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl("/login").permitAll();
-        // http.exceptionHandling().accessDeniedPage("/403");
-        // http.addFilter(jwtAuthenFilter);
-        // http.addFilterBefore(new JwtAuthorFilter(),
-        // UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

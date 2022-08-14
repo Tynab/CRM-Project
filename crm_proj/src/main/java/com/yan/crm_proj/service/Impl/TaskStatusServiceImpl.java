@@ -1,4 +1,4 @@
-package com.yan.crm_proj.service;
+package com.yan.crm_proj.service.Impl;
 
 import javax.transaction.*;
 
@@ -7,6 +7,8 @@ import org.springframework.stereotype.*;
 
 import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.repository.*;
+import com.yan.crm_proj.service.*;
+import com.yan.crm_proj.util.*;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -18,6 +20,9 @@ import lombok.extern.slf4j.*;
 public class TaskStatusServiceImpl implements TaskStatusService {
     @Autowired
     private final TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private final StringUtil stringUtil;
 
     @Override
     public Iterable<TaskStatus> getTaskStatuses() {
@@ -33,7 +38,8 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     @Override
     public TaskStatus saveTaskStatus(TaskStatus taskStatus) {
-        log.info("Saving task status with id: {}", taskStatus.getId());
+        taskStatus.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(taskStatus.getName())));
+        log.info("Saving task status with name: {}", taskStatus.getName());
         return taskStatusRepository.save(taskStatus);
     }
 

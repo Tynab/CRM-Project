@@ -1,4 +1,4 @@
-package com.yan.crm_proj.service;
+package com.yan.crm_proj.service.Impl;
 
 import javax.transaction.*;
 
@@ -7,6 +7,8 @@ import org.springframework.stereotype.*;
 
 import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.repository.*;
+import com.yan.crm_proj.service.*;
+import com.yan.crm_proj.util.*;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -18,6 +20,9 @@ import lombok.extern.slf4j.*;
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private final ProjectRepository projectRepository;
+
+    @Autowired
+    private final StringUtil stringUtil;
 
     @Override
     public Iterable<Project> getProjects() {
@@ -33,7 +38,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveProject(Project project) {
-        log.info("Saving project with id: {}", project.getId());
+        project.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(project.getName())));
+        project.setDescription(
+                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(project.getDescription())));
+        log.info("Saving project with name: {}", project.getName());
         return projectRepository.save(project);
     }
 

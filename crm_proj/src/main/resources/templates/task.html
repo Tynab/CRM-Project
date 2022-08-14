@@ -5,28 +5,24 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
-    <title>Task | CRM Project</title>
+    <meta name="description" content="Midterm Project">
+    <meta name="author" content="Yami An Nephilim">
+    <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
+    <title>
+        Task | CRM Project
+    </title>
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
     <link href="/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- Animation CSS -->
     <link href="/css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
-    <link href="/css/colors/blue-dark.css" id="theme" rel="stylesheet">
+    <link href="/css/colors/blue-dark.css" rel="stylesheet" id="theme">
     <link href="/css/custom.css" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
@@ -66,63 +62,92 @@
                     <li>
                         <div class="dropdown">
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img src="/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle" />
-                                <strong class="hidden-xs">Nguyễn Văn A</strong>
+                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
+                                    class="img-circle" />
+                                <strong th:text="${user.name}" class="hidden-xs">
+                                    Name
+                                </strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
+                                <li>
+                                    <a th:href="@{/profile}">
+                                        Thông tin cá nhân
+                                    </a>
+                                </li>
                                 <li class="divider"></li>
-                                <li><a th:href="@{/logout}">Đăng xuất</a></li>
+                                <li>
+                                    <a th:href="@{/logout}">
+                                        Đăng xuất
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-header -->
-            <!-- /.navbar-top-links -->
-            <!-- /.navbar-static-side -->
         </nav>
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
                     <li style="padding: 10px 0 0;">
-                        <a th:href="@{/index}" class="waves-effect"><i class="fa fa-clock-o fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
+                        <a th:href="@{/index}" class="waves-effect">
+                            <i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dashboard
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/user}" class="waves-effect"><i class="fa fa-user fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Thành viên</span></a>
+                        <a th:href="@{/user}" class="waves-effect">
+                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Thành viên
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/role}" class="waves-effect"><i class="fa fa-modx fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Vai Trò</span></a>
+                        <a th:href="@{/role}" class="waves-effect">
+                            <i class="fa fa-modx fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Vai Trò
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/project}" class="waves-effect"><i class="fa fa-calendar fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dự án</span></a>
+                        <a th:href="@{/project}" class="waves-effect">
+                            <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dự án
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/task}" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Công việc</span></a>
+                        <a th:href="@{/task}" class="waves-effect">
+                            <i class="fa fa-table fa-fw" aria-hidden="true">
+                            </i><span class="hide-menu">
+                                Công việc
+                            </span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
+        <!-- Page content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Danh sách công việc</h4>
+                        <h4 class="page-title">
+                            Danh sách công việc
+                        </h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a th:href="@{/task/add}" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a th:href="@{/task/add}" class="btn btn-sm btn-success">
+                            Thêm mới
+                        </a>
                     </div>
-                    <!-- /.col-lg-12 -->
                 </div>
-                <!-- /row -->
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">

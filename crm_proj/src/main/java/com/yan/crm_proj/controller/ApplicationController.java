@@ -4,8 +4,8 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
-import static com.yan.crm_proj.common.TemplateConstant.*;
-import static com.yan.crm_proj.common.ViewConstant.*;
+import static com.yan.crm_proj.constant.TemplateConstant.*;
+import static com.yan.crm_proj.constant.ViewConstant.*;
 
 @Controller
 @RequestMapping("")
