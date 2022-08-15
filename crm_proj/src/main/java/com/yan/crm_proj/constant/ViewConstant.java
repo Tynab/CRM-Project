@@ -12,6 +12,7 @@ public class ViewConstant {
     public static final String ROLE_VIEW = "/role";
     public static final String PROJECT_VIEW = "/project";
     public static final String TASK_VIEW = "/task";
+    public static final String TOKEN_VIEW = "/token";
 
     public static final String ADD_VIEW = "/add";
 
@@ -24,6 +25,8 @@ public class ViewConstant {
     public static final String INFO_VIEW = "/info";
 
     public static final String DETAILS_VIEW = "/details";
+
+    public static final String AVATAR_VIEW = "/avatar";
 
     public static final String FIND_VIEW = "/findBy";
 

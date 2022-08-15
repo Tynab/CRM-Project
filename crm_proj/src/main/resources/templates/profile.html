@@ -24,6 +24,12 @@
     <!-- Toastify CSS -->
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet" type="text/css">
     <style>
+        /* Hide input file */
+        #upload {
+            display: none
+        }
+
+        /* Cover align */
         .center {
             position: absolute;
             top: 0;
@@ -165,10 +171,14 @@
                                 <img class="center" width="100%" alt="user" src="/plugins/images/large/img1.jpg">
                                 <div class="overlay-box">
                                     <div class="user-content">
-                                        <a href="javascript:void(0)">
-                                            <img th:src="@{${'/plugins/images/users/'+user.image}}"
-                                                class="thumb-lg img-circle" alt="img">
-                                        </a>
+                                        <form name="form-avatar" th:action="@{/profile/edit/avatar}"
+                                            enctype="multipart/form-data" method="post">
+                                            <input type="file" name="avatar" id="upload" accept="image/jpeg">
+                                            <a href="" id="upload-link">
+                                                <img th:src="@{${'/plugins/images/users/'+user.image}}"
+                                                    class="thumb-lg img-circle" alt="img">
+                                            </a>
+                                        </form>
                                         <h4 th:text="${user.name}" class="text-white">
                                             Name
                                         </h4>
@@ -307,7 +317,8 @@
                                             <td th:text="${#dates.format(task.endDate,'dd/MM/yyyy')}">End date</td>
                                             <td th:text="${task.status.name}">Status</td>
                                             <td>
-                                                <a th:href="@{/profile/findBy/(id=${task.id})}" class="btn btn-sm btn-primary">
+                                                <a th:href="@{/profile/findBy/(id=${task.id})}"
+                                                    class="btn btn-sm btn-primary">
                                                     Cập nhật
                                                 </a>
                                             </td>
@@ -339,6 +350,21 @@
     <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js" type="text/javascript"></script>
     <script src="/js/script.js"></script>
+    <!-- Link image to input file -->
+    <script>
+        $(function () {
+            $("#upload-link").on('click', function (e) {
+                e.preventDefault();
+                $("#upload:hidden").trigger('click');
+            });
+        });
+    </script>
+    <!-- Submit file change -->
+    <script>
+        $(":file").change(function (e) {
+            $("[name=form-avatar]").trigger('submit');
+        });
+    </script>
 </body>
 
 </html>

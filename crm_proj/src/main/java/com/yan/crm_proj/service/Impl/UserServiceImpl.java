@@ -13,32 +13,30 @@ import com.yan.crm_proj.repository.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import lombok.*;
 import lombok.extern.slf4j.*;
 
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static java.util.Collections.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private final StringUtil stringUtil;
+    private StringUtil stringUtil;
 
     @Autowired
-    private final AddressUtil addressUtil;
+    private AddressUtil addressUtil;
 
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final var user = userRepository.findByEmail(username);
+        var user = userRepository.findByEmail(username);
         // check user exists
         if (user == null) {
             log.error("User not found");
@@ -46,7 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             log.info("User found: {}", username);
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                    singleton(new SimpleGrantedAuthority(ROLE_KEY + user.getRole().getName().toUpperCase())));
+                    singleton(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRole().getName().toUpperCase())));
         }
     }
 

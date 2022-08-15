@@ -10,19 +10,17 @@ import com.yan.crm_proj.repository.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import lombok.*;
 import lombok.extern.slf4j.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
-    private final ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    private final StringUtil stringUtil;
+    private StringUtil stringUtil;
 
     @Override
     public Iterable<Project> getProjects() {

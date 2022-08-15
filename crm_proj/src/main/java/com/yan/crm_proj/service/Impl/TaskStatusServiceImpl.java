@@ -10,19 +10,17 @@ import com.yan.crm_proj.repository.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import lombok.*;
 import lombok.extern.slf4j.*;
 
 @Service
 @Transactional
 @Slf4j
-@RequiredArgsConstructor
 public class TaskStatusServiceImpl implements TaskStatusService {
     @Autowired
-    private final TaskStatusRepository taskStatusRepository;
+    private TaskStatusRepository taskStatusRepository;
 
     @Autowired
-    private final StringUtil stringUtil;
+    private StringUtil stringUtil;
 
     @Override
     public Iterable<TaskStatus> getTaskStatuses() {

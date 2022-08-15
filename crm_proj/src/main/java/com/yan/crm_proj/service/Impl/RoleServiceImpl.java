@@ -10,19 +10,17 @@ import com.yan.crm_proj.repository.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import lombok.*;
 import lombok.extern.slf4j.*;
 
 @Service
 @Transactional
 @Slf4j
-@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     @Autowired
-    private final RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    private final StringUtil stringUtil;
+    private StringUtil stringUtil;
 
     @Override
     public Iterable<Role> getRoles() {
@@ -39,7 +37,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role saveRole(Role role) {
         role.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
-        role.setDescription(stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(role.getDescription())));
+        role.setDescription(
+                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(role.getDescription())));
         log.info("Saving role with name: {}", role.getName());
         return roleRepository.save(role);
     }

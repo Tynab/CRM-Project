@@ -10,13 +10,13 @@ public class AttributeConstant {
     public static final String TASKS_PARAM = "tasks";
     public static final String TASK_PARAM = "task";
     public static final String TASKSTATUSES_PARAM = "taskStatuses";
-    public static final String T_TS_IP_PARAM = "notStartedPecent";
-    public static final String T_TS_PP_PARAM = "inProgressPecent";
-    public static final String T_TS_OP_PARAM = "completedPercent";
+    public static final String NOT_STARTED_PERCENT_PARAM = "notStartedPecent";
+    public static final String IN_PROGRESS_PERCENT_PARAM = "inProgressPecent";
+    public static final String COMPLETED_PERCENT_PARAM = "completedPercent";
 
     public static final String TOKEN_PREFIX = "Bearer ";
-
-    public static final String REDIRECT = "redirect:";
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String REDIRECT_PREFIX = "redirect:";
 
     public static final String ROLE_CLAIM_KEY = "roles";
 
@@ -24,7 +24,7 @@ public class AttributeConstant {
 
     public static final String ERROR_MESSAGE_KEY = "error_message";
 
-    public static final String MESSAGE_URL = "?flag=true&msg=";
+    public static final String MESSAGE_URL_QUERY = "?flag=true&msg=";
 
-    public static final String ROLE_KEY = "ROLE_";
+    public static final String AVATAR_PATH = "./src/main/resources/static/plugins/images/users";
 }

@@ -6,7 +6,6 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.userdetails.*;
@@ -28,14 +27,13 @@ import static org.springframework.http.MediaType.*;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
-	@Autowired
 	private final AuthenticationManager authenticationManager;
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		final var username = request.getParameter("username");
-		final var password = request.getParameter("password");
+		var username = request.getParameter("username");
+		var password = request.getParameter("password");
 		log.info("Email: {}", username);
 		log.info("Password: {}", password);
 		return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -44,8 +42,8 @@ public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		final var user = (User) authResult.getPrincipal();
-		final var algorithm = HMAC256(SECRET_KEY.getBytes());
+		var user = (User) authResult.getPrincipal();
+		var algorithm = HMAC256(SECRET_KEY.getBytes());
 		var tokens = new HashMap<>();
 		tokens.put(ACCESS_TOKEN_KEY,
 				create().withSubject(user.getUsername()).withExpiresAt(new Date(currentTimeMillis() + EXPIRATION_TIME))

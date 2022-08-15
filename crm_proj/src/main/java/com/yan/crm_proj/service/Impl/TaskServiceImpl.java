@@ -12,22 +12,20 @@ import com.yan.crm_proj.repository.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import lombok.*;
 import lombok.extern.slf4j.*;
 
-import static com.yan.crm_proj.spec.TaskSpec.*;
+import static com.yan.crm_proj.specification.TaskSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     @Autowired
-    private final TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    private final StringUtil stringUtil;
+    private StringUtil stringUtil;
 
     @Override
     public Iterable<Task> getTasks() {
@@ -44,7 +42,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task saveTask(Task task) {
         task.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(task.getName())));
-        task.setDescription(stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(task.getDescription())));
+        task.setDescription(
+                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(task.getDescription())));
         log.info("Saving task with name: {}", task.getName());
         return taskRepository.save(task);
     }

@@ -31,7 +31,7 @@ public class JwtAuthorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getServletPath().equals("/api/login")
+        if (request.getServletPath().equals(API_VIEW + LOGIN_VIEW)
                 || request.getServletPath().equals(PROFILE_VIEW + REFRESH_VIEW)) {
             filterChain.doFilter(request, response);
             return;
@@ -39,11 +39,11 @@ public class JwtAuthorFilter extends OncePerRequestFilter {
             var header = request.getHeader(AUTHORIZATION);
             if (header != null && header.startsWith(TOKEN_PREFIX)) {
                 try {
-                    final var decodedJwt = require(HMAC256(SECRET_KEY.getBytes())).build()
+                    var decodedJwt = require(HMAC256(SECRET_KEY.getBytes())).build()
                             .verify(header.substring(TOKEN_PREFIX.length()));
-                    final var roles = decodedJwt.getClaim(ROLE_CLAIM_KEY).asArray(String.class);
                     var authorities = new ArrayList<SimpleGrantedAuthority>();
-                    stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+                    stream(decodedJwt.getClaim(ROLE_CLAIM_KEY).asArray(String.class))
+                            .forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
                     getContext().setAuthentication(
                             new UsernamePasswordAuthenticationToken(decodedJwt.getSubject(), null, authorities));
                     filterChain.doFilter(request, response);

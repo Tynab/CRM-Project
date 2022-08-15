@@ -1,4 +1,4 @@
-package com.yan.crm_proj.spec;
+package com.yan.crm_proj.specification;
 
 import java.util.*;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.*;
 
 import com.yan.crm_proj.model.*;
 
-public class TaskSpec {
+public class TaskSpecification {
     // Find tasks by doer email and task status name
     public static Specification<Task> findByDoerEmailAndTaskStatusName(String email, String taskStatusName) {
         return (root, query, cb) -> {
