@@ -18,7 +18,7 @@ import lombok.extern.slf4j.*;
 
 import static com.auth0.jwt.JWT.*;
 import static com.auth0.jwt.algorithms.Algorithm.*;
-import static com.yan.crm_proj.constant.ApplicationConstant.*;
+import static com.yan.crm_proj.constant.AppConstant.*;
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static java.lang.System.*;
 import static java.util.stream.Collectors.*;

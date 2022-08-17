@@ -57,6 +57,6 @@ public class Task {
     private int statusId;
 
     @JoinColumn(name = "id_trang_thai_cong_viec", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     private TaskStatus status;
 }

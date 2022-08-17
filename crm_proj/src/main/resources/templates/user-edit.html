@@ -20,7 +20,7 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
-    <link href="/css/colors/blue-dark.css" rel="stylesheet" id="theme">
+    <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
 </head>
 
 <body>
@@ -194,6 +194,18 @@
                                             placeholder="Số nhà, tên đường, xã / phường, huyện / quận, tỉnh / thành"
                                             class="form-control form-control-line" th:value="${person.address}"
                                             name="address">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">
+                                        Vai Trò
+                                    </label>
+                                    <div class="col-md-12">
+                                        <select name="roleId" class="form-control form-control-line">
+                                            <option th:each="role : ${roles}" th:value="${role.id}"
+                                                th:text="${role.name}" th:selected="${role.id}==${person.roleId}">
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">

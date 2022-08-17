@@ -1,6 +1,7 @@
 package com.yan.crm_proj.controller;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
@@ -9,8 +10,8 @@ import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import static com.yan.crm_proj.constant.ApplicationConstant.*;
-import static com.yan.crm_proj.constant.ApplicationConstant.TaskStatus.*;
+import static com.yan.crm_proj.constant.AppConstant.*;
+import static com.yan.crm_proj.constant.AppConstant.TaskStatus.*;
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static com.yan.crm_proj.constant.TemplateConstant.*;
 import static com.yan.crm_proj.constant.ViewConstant.*;
@@ -30,15 +31,14 @@ public class UserController {
     private TaskService taskService;
 
     @Autowired
-    private ApplicationUtil applicationUtil;
-
-    @Autowired
     private UserUtil userUtil;
 
     // Fields
     private User mCurrentAccount;
     private User mChoosenOne;
+    private String mMessage;
     private boolean mIsByPass;
+    private boolean mIsFlag;
 
     // Load user list
     @GetMapping("")
@@ -50,13 +50,14 @@ public class UserController {
             var mav = new ModelAndView(USER_TEMP);
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            // reset bypass
+            showMessageBox(mav);
             mIsByPass = false;
             return mav;
         }
     }
 
     // Load new user input form
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(ADD_VIEW)
     public ModelAndView userAdd() {
         // Check current account still valid
@@ -64,48 +65,52 @@ public class UserController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(USER_ADD_TEMP);
+            mav.addObject("defaultRoleId", roleService.getRole(DEFAULT_ROLE).getId());
+            mav.addObject(ROLES_PARAM, roleService.getRoles());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            // reset bypass
+            showMessageBox(mav);
             mIsByPass = false;
             return mav;
         }
     }
 
     // Add new user
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(ADD_VIEW + SAVE_VIEW)
     public String userAddSave(User user) {
         // Check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            // redirect instantly
+            mIsFlag = true;
             mIsByPass = true;
             // check email is already exist
             if (userService.getUser(user.getEmail()) != null) {
-                return REDIRECT_PREFIX + USER_VIEW + ADD_VIEW
-                        + applicationUtil.sendMsgUrl("Tài khoản email này đã được đăng ký!");
+                mMessage = "Tài khoản email này đã được đăng ký!";
+                return REDIRECT_PREFIX + USER_VIEW + ADD_VIEW;
             } else {
                 user.setImage(DEFAULT_AVATAR);
-                user.setRoleId(roleService.getRole(DEFAULT_ROLE).getId());
                 userService.saveUser(user);
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgSuccess();
+                mMessage = "Tài khoản đã được tạo thành công!";
+                return REDIRECT_PREFIX + USER_VIEW;
             }
         }
     }
 
-    // Get user by email and define action
+    // Get user and define action
     @RequestMapping(FIND_VIEW)
-    public String findUserByEmail(String email, String action) {
+    public String findUser(int id, String action) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mChoosenOne = userService.getUser(email);
-            // redirect instantly
+            mChoosenOne = userService.getUser(id);
             mIsByPass = true;
             // check if user is exist
             if (mChoosenOne == null) {
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgError();
+                mIsFlag = true;
+                mMessage = "Tài khoản không tồn tại!";
+                return REDIRECT_PREFIX + USER_VIEW;
             } else {
                 // check action
                 switch (action) {
@@ -124,6 +129,7 @@ public class UserController {
     }
 
     // Load edit user input form
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(EDIT_VIEW)
     public ModelAndView userEdit() {
         // check current account still valid
@@ -133,55 +139,60 @@ public class UserController {
             var mav = new ModelAndView(USER_EDIT_TEMP);
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(PERSON_PARAM, mChoosenOne);
-            // reset bypass
+            mav.addObject(ROLES_PARAM, roleService.getRoles());
             mIsByPass = false;
             return mav;
         }
     }
 
     // Edit user
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = EDIT_VIEW + SAVE_VIEW, method = { GET, PUT })
     public String userEditSave(User user) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            // redirect instantly
+            mIsFlag = true;
             mIsByPass = true;
             // check user still exist
             if (!isAliveChoosenOne()) {
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgError();
+                mMessage = "Tài khoản không tồn tại!";
+                return REDIRECT_PREFIX + USER_VIEW;
             } else {
                 user.setId(mChoosenOne.getId());
                 user.setImage(mChoosenOne.getImage());
-                user.setRoleId(mChoosenOne.getRoleId());
                 // check new password
                 if (!hasText(user.getPassword())) {
                     userService.saveUserWithoutPassword(user);
                 } else {
                     userService.saveUser(user);
                 }
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgSuccess();
+                mMessage = "Tài khoản đã được cập nhật thành công!";
+                return REDIRECT_PREFIX + USER_VIEW;
             }
         }
     }
 
     // Delete user
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = DELETE_VIEW, method = { GET, DELETE })
-    public String userDelete(String email) {
+    public String userDelete(int id) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mChoosenOne = userService.getUser(email);
-            // redirect instantly
+            mChoosenOne = userService.getUser(id);
+            mIsFlag = true;
             mIsByPass = true;
             // check if user is exist
             if (mChoosenOne == null) {
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgError();
+                mMessage = "Tài khoản không tồn tại!";
+                return REDIRECT_PREFIX + USER_VIEW;
             } else {
                 userService.deleteUser(mChoosenOne.getId());
-                return REDIRECT_PREFIX + USER_VIEW + applicationUtil.urlMsgSuccess();
+                mMessage = "Tài khoản đã được xóa thành công!";
+                return REDIRECT_PREFIX + USER_VIEW;
             }
         }
     }
@@ -195,19 +206,18 @@ public class UserController {
         } else {
             var mav = new ModelAndView(USER_DETAILS_TEMP);
             var choosenOneEmail = mChoosenOne.getEmail();
-            var taskNotStarted = taskService.getTasksByDoerAndTaskStatus(choosenOneEmail, NOT_STARTED);
-            var taskInProgress = taskService.getTasksByDoerAndTaskStatus(choosenOneEmail, IN_PROGRESS);
-            var taskCompleted = taskService.getTasksByDoerAndTaskStatus(choosenOneEmail, COMPLETED);
-            var taskTotal = taskService.getTasksByDoer(choosenOneEmail).size();
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, taskTotal == 0 ? 0 : taskNotStarted.size() * 100 / taskTotal);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, taskTotal == 0 ? 0 : taskInProgress.size() * 100 / taskTotal);
-            mav.addObject(COMPLETED_PERCENT_PARAM, taskTotal == 0 ? 0 : taskCompleted.size() * 100 / taskTotal);
-            mav.addObject("taskNotStarted", taskNotStarted);
-            mav.addObject("taskInProgress", taskInProgress);
-            mav.addObject("taskCompleted", taskCompleted);
+            var tasksNotStarted = taskService.getTasksByDoerAndStatus(choosenOneEmail, NOT_STARTED);
+            var tasksInProgress = taskService.getTasksByDoerAndStatus(choosenOneEmail, IN_PROGRESS);
+            var tasksCompleted = taskService.getTasksByDoerAndStatus(choosenOneEmail, COMPLETED);
+            var tasksCount = taskService.getTasksByDoer(choosenOneEmail).size();
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStarted.size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgress.size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompleted.size() * 100 / tasksCount);
+            mav.addObject("taskNotStarted", tasksNotStarted);
+            mav.addObject("taskInProgress", tasksInProgress);
+            mav.addObject("taskCompleted", tasksCompleted);
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(PERSON_PARAM, mChoosenOne);
-            // reset bypass
             mIsByPass = false;
             return mav;
         }
@@ -220,18 +230,7 @@ public class UserController {
             return true;
         } else {
             mCurrentAccount = userUtil.getAccount();
-            // check account login
-            if (mCurrentAccount == null) {
-                return false;
-            } else {
-                mCurrentAccount = userService.getUser(mCurrentAccount.getEmail());
-                // check database has user
-                if (mCurrentAccount == null) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+            return mCurrentAccount != null;
         }
     }
 
@@ -242,12 +241,17 @@ public class UserController {
             return false;
         } else {
             mChoosenOne = userService.getUser(mChoosenOne.getEmail());
-            // check database has user
-            if (mChoosenOne == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return mChoosenOne != null;
+        }
+    }
+
+    // Show message
+    private void showMessageBox(ModelAndView mav) {
+        // check flag
+        if (mIsFlag) {
+            mav.addObject(FLAG_PARAM, true);
+            mav.addObject(MESSAGE_PARAM, mMessage);
+            mIsFlag = false;
         }
     }
 }

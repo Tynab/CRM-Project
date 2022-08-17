@@ -29,14 +29,14 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     }
 
     @Override
-    public TaskStatus getTaskStatus(String name) {
-        log.info("Fetching status with name: {}", name);
-        return taskStatusRepository.findByName(name);
+    public TaskStatus getTaskStatus(int id) {
+        log.info("Fetching task status with id {}", id);
+        return taskStatusRepository.findById(id).orElse(null);
     }
 
     @Override
     public TaskStatus saveTaskStatus(TaskStatus taskStatus) {
-        taskStatus.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(taskStatus.getName())));
+        taskStatus.setName(stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(taskStatus.getName())));
         log.info("Saving task status with name: {}", taskStatus.getName());
         return taskStatusRepository.save(taskStatus);
     }

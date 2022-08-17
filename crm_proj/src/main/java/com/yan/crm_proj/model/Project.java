@@ -30,12 +30,12 @@ public class Project {
     private String description;
 
     @NonNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "ngay_bat_dau")
     private Date startDate;
 
     @NonNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "ngay_ket_thuc")
     private Date endDate;
 
@@ -43,7 +43,7 @@ public class Project {
     private int originatorId;
 
     @JoinColumn(name = "id_nguoi_tao", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     private User originator;
 
     @OneToMany(mappedBy = "project")

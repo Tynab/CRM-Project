@@ -14,8 +14,7 @@ import com.yan.crm_proj.util.*;
 
 import lombok.extern.slf4j.*;
 
-import static com.yan.crm_proj.specification.TaskSpecification.*;
-import static org.springframework.data.jpa.domain.Specification.*;
+import static org.springframework.util.StringUtils.*;
 
 @Service
 @Transactional
@@ -27,8 +26,11 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private StringUtil stringUtil;
 
+    @Autowired
+    private TextUtil textUtil;
+
     @Override
-    public Iterable<Task> getTasks() {
+    public List<Task> getTasks() {
         log.info("Fetching all tasks");
         return taskRepository.findAll();
     }
@@ -41,9 +43,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        task.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(task.getName())));
-        task.setDescription(
-                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(task.getDescription())));
+        task.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(task.getName())));
+        task.setDescription(textUtil.parseToLegalText(task.getDescription()));
         log.info("Saving task with name: {}", task.getName());
         return taskRepository.save(task);
     }
@@ -55,14 +56,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByDoer(String email) {
-        log.info("Fetching tasks by doer: {}", email);
-        return taskRepository.findAllByDoerEmail(email);
+    public List<Task> getTasksByDoer(String doerEmail) {
+        log.info("Fetching tasks by doer: {}", doerEmail);
+        return taskRepository.findAllByDoerEmail(doerEmail);
     }
 
     @Override
-    public List<Task> getTasksByDoerAndTaskStatus(String email, String taskStatusName) {
-        log.info("Fetching tasks by doer: {} and task status: {}", email, taskStatusName);
-        return taskRepository.findAll(where(findByDoerEmailAndTaskStatusName(email, taskStatusName)));
+    public List<Task> getTasksByStatus(String statusName) {
+        log.info("Fetching tasks by task status: {}", statusName);
+        return taskRepository.findAllByStatusName(statusName);
+    }
+
+    @Override
+    public List<Task> getTasksByDoerAndStatus(String doerEmail, String statusName) {
+        log.info("Fetching tasks by doer: {} and task status: {}", doerEmail, statusName);
+        return taskRepository.findAllByDoerEmailAndStatusName(doerEmail, statusName);
     }
 }

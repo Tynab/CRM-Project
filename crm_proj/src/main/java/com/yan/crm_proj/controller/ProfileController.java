@@ -10,7 +10,7 @@ import com.yan.crm_proj.model.*;
 import com.yan.crm_proj.service.*;
 import com.yan.crm_proj.util.*;
 
-import static com.yan.crm_proj.constant.ApplicationConstant.TaskStatus.*;
+import static com.yan.crm_proj.constant.AppConstant.TaskStatus.*;
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static com.yan.crm_proj.constant.TemplateConstant.*;
 import static com.yan.crm_proj.constant.ViewConstant.*;
@@ -36,15 +36,14 @@ public class ProfileController {
     private ImageService imageService;
 
     @Autowired
-    private ApplicationUtil applicationUtil;
-
-    @Autowired
     private UserUtil userUtil;
 
     // Fields
     private User mCurrentAccount;
     private Task mChoosenOne;
+    private String mMessage;
     private boolean mIsByPass;
+    private boolean mIsFlag;
 
     // Load profile page
     @GetMapping("")
@@ -56,43 +55,46 @@ public class ProfileController {
             var mav = new ModelAndView(PROFILE_TEMP);
             var email = mCurrentAccount.getEmail();
             var tasks = taskService.getTasksByDoer(email);
-            var taskTotal = tasks.size();
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, taskTotal == 0 ? 0
-                    : (taskService.getTasksByDoerAndTaskStatus(email, NOT_STARTED)).size() * 100 / taskTotal);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, taskTotal == 0 ? 0
-                    : (taskService.getTasksByDoerAndTaskStatus(email, IN_PROGRESS)).size() * 100 / taskTotal);
-            mav.addObject(COMPLETED_PERCENT_PARAM, taskTotal == 0 ? 0
-                    : (taskService.getTasksByDoerAndTaskStatus(email, COMPLETED)).size() * 100 / taskTotal);
+            var tasksCount = tasks.size();
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : taskService.getTasksByDoerAndStatus(email, NOT_STARTED).size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : taskService.getTasksByDoerAndStatus(email, IN_PROGRESS).size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : taskService.getTasksByDoerAndStatus(email, COMPLETED).size() * 100 / tasksCount);
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(TASKS_PARAM, tasks);
-            // reset bypass
+            showMessageBox(mav);
             mIsByPass = false;
             return mav;
         }
     }
 
+    // Upload new avatar
     @PostMapping(EDIT_VIEW + AVATAR_VIEW)
-    public String editAvatar(MultipartFile avatar) {
+    public String profileEditAvatar(MultipartFile avatar) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            // redirect instantly
+            mIsFlag = true;
             mIsByPass = true;
             // check file is valid
             if (avatar.isEmpty()) {
-                return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.sendMsgUrl("Tệp không xác định!");
+                mMessage = "Tệp không xác định!";
+                return REDIRECT_PREFIX + PROFILE_VIEW;
             } else {
                 fileUploadService.init();
                 var file = fileUploadService.upload(avatar);
                 // check file is image
                 if (file == null) {
-                    return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.sendMsgUrl("Tệp không hợp lệ!");
+                    mMessage = "Tệp không hợp lệ!";
+                    return REDIRECT_PREFIX + PROFILE_VIEW;
                 } else {
                     // try to modify avatar
                     if (!imageService.resizeImage(file, mCurrentAccount.getId() + ".jpg")) {
-                        return REDIRECT_PREFIX + PROFILE_VIEW
-                                + applicationUtil.sendMsgUrl("Cập nhật ảnh đại diện thất bại!");
+                        mMessage = "Có lỗi xảy ra khi cập nhật ảnh đại diện!";
+                        return REDIRECT_PREFIX + PROFILE_VIEW;
                     } else {
                         // clean up template image
                         if (!mCurrentAccount.getImage().equals(file.getName())) {
@@ -100,8 +102,8 @@ public class ProfileController {
                         }
                         mCurrentAccount.setImage(mCurrentAccount.getId() + ".jpg");
                         userService.saveUserWithoutPassword(mCurrentAccount);
-                        return REDIRECT_PREFIX + PROFILE_VIEW
-                                + applicationUtil.sendMsgUrl("Đã cập nhật ảnh đại diện thành công!");
+                        mMessage = "Cập nhật ảnh đại diện thành công!";
+                        return REDIRECT_PREFIX + PROFILE_VIEW;
                     }
                 }
             }
@@ -117,7 +119,6 @@ public class ProfileController {
         } else {
             var mav = new ModelAndView(PROFILE_INFO_TEMP);
             mav.addObject(USER_PARAM, mCurrentAccount);
-            // reset bypass
             mIsByPass = false;
             return mav;
         }
@@ -125,7 +126,7 @@ public class ProfileController {
 
     // Edit user
     @RequestMapping(value = EDIT_VIEW + INFO_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String userEditInfoSave(User user) {
+    public String profileEditInfoSave(User user) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
@@ -139,25 +140,27 @@ public class ProfileController {
             } else {
                 userService.saveUser(user);
             }
-            // redirect instantly
+            mIsFlag = true;
             mIsByPass = true;
-            return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.urlMsgSuccess();
+            mMessage = "Cập nhật thông tin thành công!";
+            return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
 
-    // Get task by id
+    // Get task
     @RequestMapping(FIND_VIEW)
-    public String findTaskById(int id) {
+    public String findTask(int id) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             mChoosenOne = taskService.getTask(id);
-            // redirect instantly
             mIsByPass = true;
             // check if task is exist
             if (mChoosenOne == null) {
-                return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.urlMsgError();
+                mIsFlag = true;
+                mMessage = "Không tìm thấy công việc!";
+                return REDIRECT_PREFIX + PROFILE_VIEW;
             } else {
                 return REDIRECT_PREFIX + PROFILE_VIEW + EDIT_VIEW + TASK_VIEW;
             }
@@ -175,7 +178,6 @@ public class ProfileController {
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(TASK_PARAM, mChoosenOne);
             mav.addObject(TASKSTATUSES_PARAM, taskStatusService.getTaskStatuses());
-            // reset bypass
             mIsByPass = false;
             return mav;
         }
@@ -183,16 +185,17 @@ public class ProfileController {
 
     // Edit task
     @RequestMapping(value = EDIT_VIEW + TASK_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String taskEditSave(int projectId) {
+    public String profileEditTaskSave(int statusId) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            // redirect instantly
+            mIsFlag = true;
             mIsByPass = true;
             // check task still exist
             if (!isAliveChoosenOne()) {
-                return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.urlMsgError();
+                mMessage = "Không tìm thấy công việc!";
+                return REDIRECT_PREFIX + PROFILE_VIEW;
             } else {
                 mChoosenOne.setId(mChoosenOne.getId());
                 mChoosenOne.setName(mChoosenOne.getName());
@@ -201,10 +204,11 @@ public class ProfileController {
                 mChoosenOne.setEndDate(mChoosenOne.getEndDate());
                 mChoosenOne.setDoerId(mChoosenOne.getDoerId());
                 mChoosenOne.setProjectId(mChoosenOne.getProjectId());
-                mChoosenOne.setStatusId(projectId);
+                mChoosenOne.setStatusId(statusId);
                 taskService.saveTask(mChoosenOne);
+                mMessage = "Cập nhật trạng thái công việc thành công!";
+                return REDIRECT_PREFIX + PROFILE_VIEW;
             }
-            return REDIRECT_PREFIX + PROFILE_VIEW + applicationUtil.urlMsgSuccess();
         }
     }
 
@@ -215,18 +219,7 @@ public class ProfileController {
             return true;
         } else {
             mCurrentAccount = userUtil.getAccount();
-            // check account login
-            if (mCurrentAccount == null) {
-                return false;
-            } else {
-                mCurrentAccount = userService.getUser(mCurrentAccount.getEmail());
-                // check database has user
-                if (mCurrentAccount == null) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+            return mCurrentAccount != null;
         }
     }
 
@@ -237,12 +230,17 @@ public class ProfileController {
             return false;
         } else {
             mChoosenOne = taskService.getTask(mChoosenOne.getId());
-            // check database has task
-            if (mChoosenOne == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return mChoosenOne != null;
+        }
+    }
+
+    // Show message
+    private void showMessageBox(ModelAndView mav) {
+        // check flag
+        if (mIsFlag) {
+            mav.addObject(FLAG_PARAM, true);
+            mav.addObject(MESSAGE_PARAM, mMessage);
+            mIsFlag = false;
         }
     }
 }

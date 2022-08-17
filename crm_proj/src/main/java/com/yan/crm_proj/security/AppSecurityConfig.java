@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
+import org.springframework.security.config.annotation.method.configuration.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.core.userdetails.*;
@@ -14,17 +15,15 @@ import org.springframework.security.web.savedrequest.*;
 import com.yan.crm_proj.filter.*;
 import com.yan.crm_proj.util.*;
 
-import static com.yan.crm_proj.constant.ApplicationConstant.Role.*;
+import static com.yan.crm_proj.constant.AppConstant.Role.*;
 import static com.yan.crm_proj.constant.ViewConstant.*;
 
 @Configuration
 @EnableWebSecurity
-public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    private ApplicationUtil applicationUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -43,14 +42,14 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         jwtAuthenFilter.setFilterProcessesUrl(API_VIEW + LOGIN_VIEW);
         http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests() // replace
                                                                                                              // stateless
-                .antMatchers("/api/login/**", "/user/refresh/**", "/js/script.js", "/css/login.css").permitAll()
-                .antMatchers("/index/**", "/profile/**").hasAnyRole("MEMBER", "LEADER", "ADMIN")
-                .antMatchers("/project/**", "/role/**", "/task/**", "/user/**")
-                .hasRole(ADMIN).anyRequest()
-                .authenticated()
+                .antMatchers(API_VIEW + LOGIN_VIEW, API_VIEW + TOKEN_VIEW + REFRESH_VIEW, "/css/login.css").permitAll()
+                .antMatchers(INDEX_VIEW, PROFILE_VIEW + FREE_VIEW).hasAnyRole(MEMBER, LEADER, ADMIN)
+                .antMatchers(TASK_VIEW + FREE_VIEW, PROJECT_VIEW + FREE_VIEW, USER_VIEW + FREE_VIEW).hasAnyRole(LEADER, ADMIN)
+                .antMatchers(ROLE_VIEW + FREE_VIEW).hasRole(ADMIN)
+                .anyRequest().authenticated()
                 .and().formLogin().loginPage(LOGIN_VIEW).loginProcessingUrl(LOGIN_VIEW)
                 .defaultSuccessUrl(INDEX_VIEW)
-                .failureUrl(LOGIN_VIEW + applicationUtil.sendMsgUrl("Tài khoản chưa chính xác!")).permitAll().and()
+                .failureUrl(LOGIN_VIEW).permitAll().and()
                 .logout()
                 .invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl(LOGIN_VIEW).permitAll().and()
                 .exceptionHandling().accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(jwtAuthenFilter)

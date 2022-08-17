@@ -12,6 +12,8 @@ import com.yan.crm_proj.util.*;
 
 import lombok.extern.slf4j.*;
 
+import static org.springframework.util.StringUtils.*;
+
 @Service
 @Transactional
 @Slf4j
@@ -22,10 +24,19 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private StringUtil stringUtil;
 
+    @Autowired
+    private TextUtil textUtil;
+
     @Override
     public Iterable<Role> getRoles() {
         log.info("Fetching all roles");
         return roleRepository.findAll();
+    }
+
+    @Override
+    public Role getRole(int id) {
+        log.info("Fetching role with id {}", id);
+        return roleRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -36,9 +47,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role saveRole(Role role) {
-        role.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
-        role.setDescription(
-                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(role.getDescription())));
+        role.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
+        role.setDescription(textUtil.parseToLegalText(role.getDescription()));
         log.info("Saving role with name: {}", role.getName());
         return roleRepository.save(role);
     }

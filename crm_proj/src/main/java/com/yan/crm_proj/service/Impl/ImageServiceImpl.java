@@ -8,7 +8,7 @@ import com.yan.crm_proj.service.*;
 
 import lombok.extern.slf4j.*;
 
-import static com.yan.crm_proj.constant.ApplicationConstant.*;
+import static com.yan.crm_proj.constant.AppConstant.*;
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static java.nio.file.Paths.*;
 import static javax.imageio.ImageIO.*;
@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     public boolean resizeImage(File file, String name) {
         try {
             var outputImg = resize(read(file), ULTRA_QUALITY, FIT_EXACT, AVATAR_SIZE);
-            write(outputImg, "jpg", (get(AVATAR_PATH, name)).toFile());
+            write(outputImg, "jpg", get(AVATAR_PATH, name).toFile());
             outputImg.flush();
             return true;
         } catch (Exception e) {

@@ -55,6 +55,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User getUser(int id) {
+        log.info("Fetching user with id {}", id);
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public User getUser(String email) {
         log.info("Fetching user with email: {}", email);
         return userRepository.findByEmail(email);
@@ -65,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(stringUtil.removeSpCharsBeginAndEnd(user.getEmail()).toLowerCase());
         user.setPassword(passwordEncoder.encode(stringUtil.removeWhiteSpaceBeginAndEnd(user.getPassword())));
         user.setName(stringUtil.titleCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(user.getName())));
-        user.setAddress(addressUtil.reparseToLegalAddress(user.getAddress()));
+        user.setAddress(addressUtil.parseToLegalAddress(user.getAddress()));
         log.info("Saving user with email: {}", user.getEmail());
         return userRepository.save(user);
     }
@@ -74,7 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User saveUserWithoutPassword(User user) {
         user.setPassword(getUser(user.getEmail()).getPassword());
         user.setName(stringUtil.titleCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(user.getName())));
-        user.setAddress(addressUtil.reparseToLegalAddress(user.getAddress()));
+        user.setAddress(addressUtil.parseToLegalAddress(user.getAddress()));
         log.info("Saving user with id: {}", user.getId());
         return userRepository.save(user);
     }

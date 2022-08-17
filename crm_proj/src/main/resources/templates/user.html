@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Midterm Project">
     <meta name="author" content="Yami An Nephilim">
-    <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
+    <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
     <title>
         User | CRM Project
     </title>
@@ -21,7 +21,7 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
-    <link href="/css/colors/blue-dark.css" rel="stylesheet" id="theme">
+    <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
     <link href="/css/custom.css" rel="stylesheet">
     <!-- Toastify CSS -->
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet" type="text/css">
@@ -170,6 +170,9 @@
                                                 Điện Thoại
                                             </th>
                                             <th>
+                                                Địa Chỉ
+                                            </th>
+                                            <th>
                                                 Vai Trò
                                             </th>
                                             <th>
@@ -191,19 +194,22 @@
                                             <td th:text="${person.phone}">
                                                 Phone
                                             </td>
+                                            <td th:text="${person.address}">
+                                                Address
+                                            </td>
                                             <td th:text="${person.role.name}">
                                                 Role
                                             </td>
                                             <td>
-                                                <a th:href="@{/user/findBy/(email=${person.email},action='/edit')}"
+                                                <a th:href="@{/user/findBy/(id=${person.id},action='/edit')}"
                                                     class="btn btn-sm btn-primary">
                                                     Sửa
                                                 </a>
-                                                <a th:href="@{/user/delete/(email=${person.email})}"
+                                                <a th:href="@{/user/delete/(id=${person.id})}"
                                                     class="btn btn-sm btn-danger">
                                                     Xóa
                                                 </a>
-                                                <a th:href="@{/user/findBy/(email=${person.email},action='/details')}"
+                                                <a th:href="@{/user/findBy/(id=${person.id},action='/details')}"
                                                     class="btn btn-sm btn-info">
                                                     Xem
                                                 </a>
@@ -241,7 +247,13 @@
     </script>
     <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js" type="text/javascript"></script>
-    <script src="/js/script.js"></script>
+    <script th:inline="javascript">
+        var flag = /*[[${flag}]]*/ false;
+        var message = /*[[${message}]]*/ null;
+        if (flag) {
+            Toastify({ text: message, position: "center" }).showToast();
+        }
+    </script>
 </body>
 
 </html>

@@ -12,6 +12,8 @@ import com.yan.crm_proj.util.*;
 
 import lombok.extern.slf4j.*;
 
+import static org.springframework.util.StringUtils.*;
+
 @Service
 @Transactional
 @Slf4j
@@ -21,6 +23,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private StringUtil stringUtil;
+
+    @Autowired
+    private TextUtil textUtil;
 
     @Override
     public Iterable<Project> getProjects() {
@@ -36,9 +41,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveProject(Project project) {
-        project.setName(stringUtil.titleCase(stringUtil.removeSpCharsBeginAndEnd(project.getName())));
-        project.setDescription(
-                stringUtil.sentenceCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(project.getDescription())));
+        project.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(project.getName())));
+        project.setDescription(textUtil.parseToLegalText(project.getDescription()));
         log.info("Saving project with name: {}", project.getName());
         return projectRepository.save(project);
     }

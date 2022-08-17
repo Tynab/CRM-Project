@@ -5,6 +5,8 @@ import com.yan.crm_proj.model.*;
 public interface UserService {
     public Iterable<User> getUsers();
 
+    public User getUser(int id);
+
     public User getUser(String email);
 
     public User saveUser(User user);

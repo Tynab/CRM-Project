@@ -46,7 +46,7 @@ public class User {
     private int roleId;
 
     @JoinColumn(name = "id_loai_thanh_vien", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     private Role role;
 
     @OneToMany(mappedBy = "doer")

@@ -20,7 +20,7 @@
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
-    <link href="/css/colors/blue-dark.css" id="theme" rel="stylesheet">
+    <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
 </head>
 
 <body>
@@ -199,7 +199,7 @@
                                         Trạng Thái
                                     </label>
                                     <div class="col-md-12">
-                                        <select name="projectId" class="form-control form-control-line">
+                                        <select name="statusId" class="form-control form-control-line">
                                             <option th:each="taskStatus : ${taskStatuses}" th:value="${taskStatus.id}"
                                                 th:text="${taskStatus.name}"
                                                 th:selected="${taskStatus.id}==${task.statusId}">

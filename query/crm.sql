@@ -77,7 +77,7 @@ CREATE TABLE
 
 INSERT INTO
     loai_thanh_vien (ten, mo_ta)
-VALUES ('Admin', 'Quản lý'), ('Leader', 'Trưởng nhóm'), ('Member', 'Nhân viên');
+VALUES ('Admin', 'Quản trị viên'), ('Leader', 'Quản lý dự án'), ('Member', 'Thành viên');
 
 -- add data to nguoi_dung
 

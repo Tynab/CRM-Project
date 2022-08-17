@@ -7,6 +7,21 @@ import static org.springframework.util.StringUtils.*;
 
 @Component
 public class StringUtil {
+    // Search word
+    public boolean isWordContains(String s, String word) {
+        return !hasText(s) ? false : s.toUpperCase().contains(word.toUpperCase());
+    }
+
+    // Replace word found by keyword
+    public String replaceWordFoundByKeyword(String s, String word, String keyword) {
+        return !hasText(s) ? s : s.replaceAll("(?i)" + word + "", keyword);
+    }
+
+    // Replace multi by single whitespace
+    public String replaceMultiBySingleWhitespace(String s) {
+        return !hasText(s) ? s : s.replaceAll("\\s+", " ");
+    }
+
     // Convert to lower case advanced
     public String lowerCase(String s) {
         return !hasText(s) ? s : s.toLowerCase();
@@ -19,12 +34,23 @@ public class StringUtil {
 
     // Convert to upper case advanced
     public String sentenceCase(String s) {
-        return !hasText(s) ? s : capitalize(s);
+        return !hasText(s) ? s : capitalize(s.toLowerCase());
     }
 
     // Convert to title case advanced
     public String titleCase(String s) {
         return !hasText(s) ? s : StringUtils.capitalizeWords(s.toLowerCase());
+    }
+
+    // Capitalize after character
+    public String capitalizeAfterChar(String s, String character) {
+        if (hasText(s)) {
+            var index = s.indexOf(character);
+            if (index != -1) {
+                s = s.substring(0, index) + character + StringUtils.capitalize(s.substring(index + 1));
+            }
+        }
+        return s;
     }
 
     // Remove all whitespace at begin
@@ -72,53 +98,18 @@ public class StringUtil {
         return !hasText(s) ? s : s.replaceAll("^[0-9\\s]+|[0-9\\s]+$", "");
     }
 
-    // Remove all special characters before comma
-    public String removeSpCharsBeforeComma(String s) {
-        return !hasText(s) ? s : s.replaceAll("[^a-zA-Z0-9]+,", ",");
+    // Remove all whitespace before character
+    public String removeWhiteSpaceBeforeChar(String s, String character) {
+        return !hasText(s) ? s : s.replaceAll("\\s+" + character, character);
     }
 
-    // Remove all special characters after comma
-    public String removeSpCharsAfterComma(String s) {
-        return !hasText(s) ? s : s.replaceAll(",[^a-zA-Z0-9]+", ",");
+    // Remove all whitespace after character
+    public String removeWhiteSpaceAfterChar(String s, String character) {
+        return !hasText(s) ? s : s.replaceAll(character + "\\s+", character);
     }
 
-    // Remove all special characters before and after comma
-    public String removeSpCharsBeforeAndAfterComma(String s) {
-        return !hasText(s) ? s : removeSpCharsBeforeComma(removeSpCharsAfterComma(s)); // query warning
-    }
-
-    // Remove all special characters before dot
-    public String removeSpCharsBeforeDot(String s) {
-        return !hasText(s) ? s : s.replaceAll("[^a-zA-Z0-9]+\\.", ".");
-    }
-
-    // Remove all special characters after dot
-    public String removeSpCharsAfterDot(String s) {
-        return !hasText(s) ? s : s.replaceAll("\\.[^a-zA-Z0-9]+", ".");
-    }
-
-    // Remove all special characters before and after dot
-    public String removeSpCharsBeforeAndAfterDot(String s) {
-        return !hasText(s) ? s : removeSpCharsBeforeDot(removeSpCharsAfterDot(s)); // query warning
-    }
-
-    // Remove all special characters before slash
-    public String removeSpCharsBeforeSlash(String s) {
-        return !hasText(s) ? s : s.replaceAll("[^a-zA-Z0-9]+/", "/");
-    }
-
-    // Remove all special characters after slash
-    public String removeSpCharsAfterSlash(String s) {
-        return !hasText(s) ? s : s.replaceAll("/[^a-zA-Z0-9]+", "/");
-    }
-
-    // Remove all special characters before and after slash
-    public String removeSpCharsBeforeAndAfterSlash(String s) {
-        return !hasText(s) ? s : removeSpCharsBeforeSlash(removeSpCharsAfterSlash(s)); // query warning
-    }
-
-    // Replace multi by single whitespace
-    public String replaceMultiBySingleWhitespace(String s) {
-        return !hasText(s) ? s : s.replaceAll("\\s+", " ");
+    // Remove all whitespace before and after character
+    public String removeWhiteSpaceBeforeAndAfterChar(String s, String character) {
+        return !hasText(s) ? s : s.replaceAll("\\s*" + character + "\\s*", character);
     }
 }

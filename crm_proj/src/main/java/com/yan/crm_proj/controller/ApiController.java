@@ -15,7 +15,7 @@ import com.yan.crm_proj.service.*;
 
 import static com.auth0.jwt.JWT.*;
 import static com.auth0.jwt.algorithms.Algorithm.*;
-import static com.yan.crm_proj.constant.ApplicationConstant.*;
+import static com.yan.crm_proj.constant.AppConstant.*;
 import static com.yan.crm_proj.constant.AttributeConstant.*;
 import static com.yan.crm_proj.constant.ViewConstant.*;
 import static java.lang.System.*;

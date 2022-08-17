@@ -5,7 +5,7 @@ import com.yan.crm_proj.model.*;
 public interface TaskStatusService {
     public Iterable<TaskStatus> getTaskStatuses();
 
-    public TaskStatus getTaskStatus(String name);
+    public TaskStatus getTaskStatus(int id);
 
     public TaskStatus saveTaskStatus(TaskStatus taskStatus);
 

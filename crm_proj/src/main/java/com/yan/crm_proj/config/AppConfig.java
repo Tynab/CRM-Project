@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.savedrequest.*;
 
 @Configuration
-public class ApplicationConfig {
+public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

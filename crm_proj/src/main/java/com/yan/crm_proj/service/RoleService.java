@@ -5,6 +5,8 @@ import com.yan.crm_proj.model.*;
 public interface RoleService {
     public Iterable<Role> getRoles();
 
+    public Role getRole(int id);
+
     public Role getRole(String name);
 
     public Role saveRole(Role role);

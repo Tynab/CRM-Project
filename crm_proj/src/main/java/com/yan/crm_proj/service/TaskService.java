@@ -5,7 +5,7 @@ import java.util.*;
 import com.yan.crm_proj.model.*;
 
 public interface TaskService {
-    public Iterable<Task> getTasks();
+    public List<Task> getTasks();
 
     public Task getTask(int id);
 
@@ -13,7 +13,9 @@ public interface TaskService {
 
     public void deleteTask(int id);
 
-    public List<Task> getTasksByDoer(String email);
+    public List<Task> getTasksByDoer(String doerEmail);
 
-    public List<Task> getTasksByDoerAndTaskStatus(String email, String taskStatusName);
+    public List<Task> getTasksByStatus(String statusName);
+
+    public List<Task> getTasksByDoerAndStatus(String doerEmail, String statusName);
 }
