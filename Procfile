@@ -1,0 +1,1 @@
+web: java -jar target/crm_project-0.0.1-SNAPSHOT.war
