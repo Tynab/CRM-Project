@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
-    <title>Task | CRM Project</title>
+    <meta name="description" content="Midterm Project">
+    <meta name="author" content="Yami An Nephilim">
+    <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
+    <title>
+        Task | CRM Project
+    </title>
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
@@ -19,28 +21,6 @@
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
     <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
-    <!-- Date picker -->
-    <link rel="stylesheet prefetch"
-        href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
-    <!-- Toastify JS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        #datepicker-from,
-        #datepicker-to {
-            padding: 0px 10px;
-        }
-
-        #datepicker-from>span:hover,
-        #datepicker-to>span:hover {
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body>
@@ -80,114 +60,158 @@
                     <li>
                         <div class="dropdown">
                             <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img src="/plugins/images/users/1.jpg" alt="user-img" width="36" class="img-circle" />
-                                <strong class="hidden-xs">Nguyễn Văn A</strong>
+                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
+                                    class="img-circle" />
+                                <strong th:text="${user.name}" class="hidden-xs">
+                                    Name
+                                </strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a th:href="@{/profile}">Thông tin cá nhân</a></li>
+                                <li>
+                                    <a th:href="@{/profile}">
+                                        Thông tin cá nhân
+                                    </a>
+                                </li>
                                 <li class="divider"></li>
-                                <li><a th:href="@{/logout}">Đăng xuất</a></li>
+                                <li>
+                                    <a th:href="@{/logout}">
+                                        Đăng xuất
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-header -->
-            <!-- /.navbar-top-links -->
-            <!-- /.navbar-static-side -->
         </nav>
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
                     <li style="padding: 10px 0 0;">
-                        <a th:href="@{/index}" class="waves-effect"><i class="fa fa-clock-o fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
+                        <a th:href="@{/index}" class="waves-effect">
+                            <i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dashboard
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/user}" class="waves-effect"><i class="fa fa-user fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Thành viên</span></a>
+                        <a th:href="@{/user}" class="waves-effect">
+                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Thành viên
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/role}" class="waves-effect"><i class="fa fa-modx fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Vai Trò</span></a>
+                        <a th:href="@{/role}" class="waves-effect">
+                            <i class="fa fa-modx fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Vai Trò
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/project}" class="waves-effect"><i class="fa fa-calendar fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Dự án</span></a>
+                        <a th:href="@{/project}" class="waves-effect">
+                            <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
+                            <span class="hide-menu">
+                                Dự án
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a th:href="@{/task}" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i><span class="hide-menu">Công việc</span></a>
+                        <a th:href="@{/task}" class="waves-effect">
+                            <i class="fa fa-table fa-fw" aria-hidden="true">
+                            </i><span class="hide-menu">
+                                Công việc
+                            </span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
+        <!-- Page content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Cập nhật công việc</h4>
+                        <h4 class="page-title">
+                            Cập nhật công việc
+                        </h4>
                     </div>
                 </div>
-                <!-- /.row -->
-                <!-- .row -->
                 <div class="row">
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form class="form-horizontal form-material">
+                            <form th:action="@{/task/add/save}" method="post" class="form-horizontal form-material">
                                 <div class="form-group">
-                                    <label class="col-md-12">Dự Án</label>
+                                    <label class="col-md-12">
+                                        Dự Án
+                                    </label>
                                     <div class="col-md-12">
-                                        <select class="form-control form-control-line">
-                                            <option>Dự án 1</option>
-                                            <option>Dự án 2</option>
+                                        <select name="projectId" class="form-control form-control-line">
+                                            <option th:each="project : ${projects}" th:value="${project.id}"
+                                                th:text="${project.name}" th:selected="${project.id}==0">
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Công Việc</label>
+                                    <label class="col-md-12">
+                                        Công Việc
+                                    </label>
                                     <div class="col-md-12">
-                                        <input type="text" placeholder="Tên công việc"
-                                            class="form-control form-control-line" required>
+                                        <input type="text" name="name" placeholder="Chi tiết công việc"
+                                            class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Người Thực Hiện</label>
+                                    <label class="col-md-12">
+                                        Mô Tả
+                                    </label>
                                     <div class="col-md-12">
-                                        <select class="form-control form-control-line">
-                                            <option>Nguyễn Văn A</option>
-                                            <option>Trần Thị B</option>
+                                        <input type="text" name="description" placeholder="Tên công việc"
+                                            class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">
+                                        Người Thực Hiện
+                                    </label>
+                                    <div class="col-md-12">
+                                        <select name="doerId" class="form-control form-control-line">
+                                            <option th:each="person : ${users}" th:value="${person.id}"
+                                                th:text="${person.name}" th:selected="${person.id}==0">
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Ngày Bắt Đầu</label>
-                                    <div id="datepicker-from" class="input-group date col-md-12"
-                                        data-date-format="dd/mm/yyyy">
-                                        <input class="form-control" readonly="" type="text">
-                                        <span class="input-group-addon">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </span>
+                                    <label class="col-md-12">
+                                        Ngày Bắt Đầu
+                                    </label>
+                                    <div class="col-md-12">
+                                        <input id="start-date" type="date" class="form-control form-control-line"
+                                            data-date="" data-date-format="DD/MM/YYYY" name="startDate" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ngày Kết Thúc</label>
-                                    <div id="datepicker-to" class="input-group date col-md-12"
-                                        data-date-format="dd/mm/yyyy">
-                                        <input class="form-control" readonly="" type="text">
-                                        <span class="input-group-addon">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </span>
+                                    <div class="col-md-12">
+                                        <input id="end-date" type="date" class="form-control form-control-line"
+                                            data-date="" data-date-format="DD/MM/YYYY" name="endDate" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-success">Lưu lại</button>
-                                        <a th:href="@{/task}" class="btn btn-primary">Quay lại</a>
+                                        <button type="submit" class="btn btn-success">
+                                            Lưu lại
+                                        </button>
+                                        <a th:href="@{/task}" class="btn btn-primary">
+                                            Quay lại
+                                        </a>
                                     </div>
                                 </div>
                             </form>
@@ -195,37 +219,41 @@
                     </div>
                     <div class="col-md-2 col-12"></div>
                 </div>
-                <!-- /.row -->
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2022 &copy; cybersoft.com </footer>
+            <footer class="footer text-center">
+                2022 &copy; cybersoft.com
+            </footer>
         </div>
-        <!-- /#page-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <!-- jQuery -->
+    <!-- jQuery JS -->
     <script src="/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
+    <!-- Bootstrap Core JS -->
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Menu Plugin JavaScript -->
+    <!-- Menu Plugin JS -->
     <script src="/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
-    <!-- Slimscroll JavaScript -->
+    <!-- Slimscroll JS -->
     <script src="/js/jquery.slimscroll.js"></script>
-    <!-- Wave Effects -->
+    <!-- Wave Effects JS -->
     <script src="/js/waves.js"></script>
-    <!-- Custom Theme JavaScript -->
+    <!-- Custom Theme JS -->
     <script src="/js/custom.min.js"></script>
-    <!-- Date picker -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-    <!-- Toastify JS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $("#datepicker-from, #datepicker-to").datepicker({
-                autoclose: true,
-                todayHighlight: true
-            }).datepicker('update', new Date());
-        });
+    <!-- Date Picker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <script>
+        $("input").on("change", function () {
+            this.setAttribute(
+                "data-date",
+                moment(this.value, "YYYY-MM-DD")
+                    .format(this.getAttribute("data-date-format"))
+            )
+        }).trigger("change")
+    </script>
+    <!-- Default Date -->
+    <script>
+        var currentDate = (new Date()).toISOString().slice(0, 10);
+        document.getElementById('start-date').value = currentDate;
+        document.getElementById('end-date').value = currentDate;
     </script>
 </body>
 

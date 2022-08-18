@@ -8,6 +8,7 @@ public class AppConstant {
 
     public static final String DEFAULT_AVATAR = "0.jpg";
     public static final String DEFAULT_ROLE = "MEMBER";
+    public static final String DEFAULT_STATUS = "Chưa bắt đầu";
 
     public class Role {
         public static final String ADMIN = "ADMIN";

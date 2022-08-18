@@ -36,9 +36,9 @@ public class UserController {
     // Fields
     private User mCurrentAccount;
     private User mChoosenOne;
-    private String mMessage;
+    private String mMsg;
     private boolean mIsByPass;
-    private boolean mIsFlag;
+    private boolean mIsMsgShow;
 
     // Load user list
     @GetMapping("")
@@ -65,9 +65,9 @@ public class UserController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(USER_ADD_TEMP);
-            mav.addObject("defaultRoleId", roleService.getRole(DEFAULT_ROLE).getId());
-            mav.addObject(ROLES_PARAM, roleService.getRoles());
             mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(ROLES_PARAM, roleService.getRoles());
+            mav.addObject(DEFAULT_ROLE_ID_PARAM, roleService.getRole(DEFAULT_ROLE).getId());
             showMessageBox(mav);
             mIsByPass = false;
             return mav;
@@ -82,16 +82,16 @@ public class UserController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsFlag = true;
+            mIsMsgShow = true;
             mIsByPass = true;
             // check email is already exist
             if (userService.getUser(user.getEmail()) != null) {
-                mMessage = "Tài khoản email này đã được đăng ký!";
+                mMsg = "Tài khoản email này đã được đăng ký!";
                 return REDIRECT_PREFIX + USER_VIEW + ADD_VIEW;
             } else {
                 user.setImage(DEFAULT_AVATAR);
                 userService.saveUser(user);
-                mMessage = "Tài khoản đã được tạo thành công!";
+                mMsg = "Tài khoản đã được tạo thành công!";
                 return REDIRECT_PREFIX + USER_VIEW;
             }
         }
@@ -108,8 +108,8 @@ public class UserController {
             mIsByPass = true;
             // check if user is exist
             if (mChoosenOne == null) {
-                mIsFlag = true;
-                mMessage = "Tài khoản không tồn tại!";
+                mIsMsgShow = true;
+                mMsg = "Tài khoản không tồn tại!";
                 return REDIRECT_PREFIX + USER_VIEW;
             } else {
                 // check action
@@ -153,24 +153,23 @@ public class UserController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsFlag = true;
-            mIsByPass = true;
-            // check user still exist
+            mIsMsgShow = true;
+            // check user is exist
             if (!isAliveChoosenOne()) {
-                mMessage = "Tài khoản không tồn tại!";
-                return REDIRECT_PREFIX + USER_VIEW;
+                mMsg = "Tài khoản không tồn tại!";
             } else {
                 user.setId(mChoosenOne.getId());
                 user.setImage(mChoosenOne.getImage());
                 // check new password
-                if (!hasText(user.getPassword())) {
-                    userService.saveUserWithoutPassword(user);
-                } else {
+                if (hasText(user.getPassword())) {
                     userService.saveUser(user);
+                } else {
+                    userService.saveUserWithoutPassword(user);
                 }
-                mMessage = "Tài khoản đã được cập nhật thành công!";
-                return REDIRECT_PREFIX + USER_VIEW;
+                mMsg = "Tài khoản đã được cập nhật thành công!";
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + USER_VIEW;
         }
     }
 
@@ -183,17 +182,16 @@ public class UserController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             mChoosenOne = userService.getUser(id);
-            mIsFlag = true;
-            mIsByPass = true;
+            mIsMsgShow = true;
             // check if user is exist
             if (mChoosenOne == null) {
-                mMessage = "Tài khoản không tồn tại!";
-                return REDIRECT_PREFIX + USER_VIEW;
+                mMsg = "Tài khoản không tồn tại!";
             } else {
-                userService.deleteUser(mChoosenOne.getId());
-                mMessage = "Tài khoản đã được xóa thành công!";
-                return REDIRECT_PREFIX + USER_VIEW;
+                userService.deleteUser(id);
+                mMsg = "Tài khoản đã được xóa thành công!";
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + USER_VIEW;
         }
     }
 
@@ -210,14 +208,14 @@ public class UserController {
             var tasksInProgress = taskService.getTasksByDoerAndStatus(choosenOneEmail, IN_PROGRESS);
             var tasksCompleted = taskService.getTasksByDoerAndStatus(choosenOneEmail, COMPLETED);
             var tasksCount = taskService.getTasksByDoer(choosenOneEmail).size();
+            mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(PERSON_PARAM, mChoosenOne);
+            mav.addObject(TASKS_NOT_STARTED_PARAM, tasksNotStarted);
+            mav.addObject(TASKS_IN_PROGRESS_PARAM, tasksInProgress);
+            mav.addObject(TASKS_COMPLETED_PARAM, tasksCompleted);
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStarted.size() * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgress.size() * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompleted.size() * 100 / tasksCount);
-            mav.addObject("taskNotStarted", tasksNotStarted);
-            mav.addObject("taskInProgress", tasksInProgress);
-            mav.addObject("taskCompleted", tasksCompleted);
-            mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(PERSON_PARAM, mChoosenOne);
             mIsByPass = false;
             return mav;
         }
@@ -248,10 +246,10 @@ public class UserController {
     // Show message
     private void showMessageBox(ModelAndView mav) {
         // check flag
-        if (mIsFlag) {
-            mav.addObject(FLAG_PARAM, true);
-            mav.addObject(MESSAGE_PARAM, mMessage);
-            mIsFlag = false;
+        if (mIsMsgShow) {
+            mav.addObject(FLAG_MSG_PARAM, true);
+            mav.addObject(MSG_PARAM, mMsg);
+            mIsMsgShow = false;
         }
     }
 }

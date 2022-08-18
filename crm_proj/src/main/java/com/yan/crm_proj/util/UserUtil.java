@@ -17,11 +17,7 @@ public class UserUtil {
     // Get current user account from SecurityContextHolder
     public User getAccount() {
         var authentication = getContext().getAuthentication();
-        // check authentication exists
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return userService.getUser(authentication.getName());
-        } else {
-            return null;
-        }
+        return authentication instanceof AnonymousAuthenticationToken ? null
+                : userService.getUser(authentication.getName());
     }
 }

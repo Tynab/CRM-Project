@@ -18,10 +18,10 @@ import static com.yan.crm_proj.constant.ViewConstant.*;
 @RequestMapping("")
 public class AppController {
     @Autowired
-    private TaskService taskService;
+    private UserUtil userUtil;
 
     @Autowired
-    private UserUtil userUtil;
+    private TaskService taskService;
 
     // Fields
     private User mCurrentAccount;
@@ -34,7 +34,6 @@ public class AppController {
         if (!isValidAccount()) {
             return LOGIN_TEMP;
         } else {
-            // redirect instantly
             mIsByPass = true;
             return REDIRECT_PREFIX + INDEX_VIEW;
         }
@@ -52,13 +51,13 @@ public class AppController {
             var tasksInProgressCount = taskService.getTasksByStatus(IN_PROGRESS).size();
             var tasksCompletedCount = taskService.getTasksByStatus(COMPLETED).size();
             var tasksCount = taskService.getTasks().size();
+            mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(NOT_STARTED_SIZE_PARAM, tasksNotStartedCount);
             mav.addObject(IN_PROGRESS_SIZE_PARAM, tasksInProgressCount);
             mav.addObject(COMPLETED_SIZE_PARAM, tasksCompletedCount);
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStartedCount * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
-            mav.addObject(USER_PARAM, mCurrentAccount);
             return mav;
         }
     }

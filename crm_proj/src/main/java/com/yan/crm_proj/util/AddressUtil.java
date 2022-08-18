@@ -24,7 +24,7 @@ public class AddressUtil {
 
     // Insert keyword "tỉnh" or "thành phố" before city name
     private String insertKeywordTinhThanh(String s) {
-        return !hasText(s) ? s : s.replaceAll(",(?!.*,)", ",TP.");
+        return hasText(s) ? s.replaceAll(",(?!.*,)", ",TP.") : s;
     }
 
     // Parse string to legal address

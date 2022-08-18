@@ -30,12 +30,12 @@ public class Task {
     private String description;
 
     @NonNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "ngay_bat_dau")
     private Date startDate;
 
     @NonNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "ngay_ket_thuc")
     private Date endDate;
 

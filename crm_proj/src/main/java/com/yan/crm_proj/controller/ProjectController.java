@@ -26,9 +26,9 @@ public class ProjectController {
     // Fields
     private User mCurrentAccount;
     private Project mChoosenOne;
-    private String mMessage;
+    private String mMsg;
     private boolean mIsByPass;
-    private boolean mIsFlag;
+    private boolean mIsMsgShow;
 
     // Load project list
     @GetMapping("")
@@ -69,9 +69,9 @@ public class ProjectController {
         } else {
             project.setOriginatorId(mCurrentAccount.getId());
             projectService.saveProject(project);
-            mIsFlag = true;
+            mIsMsgShow = true;
+            mMsg = "Thêm dự án thành công!";
             mIsByPass = true;
-            mMessage = "Cập nhật dự án thành công!";
             return REDIRECT_PREFIX + PROJECT_VIEW;
         }
     }
@@ -85,10 +85,10 @@ public class ProjectController {
         } else {
             mChoosenOne = projectService.getProject(id);
             mIsByPass = true;
-            // check if task is exist
+            // check if project is exist
             if (mChoosenOne == null) {
-                mIsFlag = true;
-                mMessage = "Dự án không tồn tại!";
+                mIsMsgShow = true;
+                mMsg = "Dự án không tồn tại!";
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             } else {
                 return REDIRECT_PREFIX + PROJECT_VIEW + EDIT_VIEW;
@@ -118,19 +118,18 @@ public class ProjectController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsFlag = true;
-            mIsByPass = true;
-            // check project still exist
+            mIsMsgShow = true;
+            // check project is exist
             if (!isAliveChoosenOne()) {
-                mMessage = "Dự án không tồn tại!";
-                return REDIRECT_PREFIX + PROJECT_VIEW;
+                mMsg = "Dự án không tồn tại!";
             } else {
                 project.setId(mChoosenOne.getId());
                 project.setOriginatorId(mChoosenOne.getOriginatorId());
                 projectService.saveProject(project);
-                mMessage = "Cập nhật dự án thành công!";
-                return REDIRECT_PREFIX + PROJECT_VIEW;
+                mMsg = "Cập nhật dự án thành công!";
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + PROJECT_VIEW;
         }
     }
 
@@ -142,17 +141,16 @@ public class ProjectController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             mChoosenOne = projectService.getProject(id);
-            mIsFlag = true;
-            mIsByPass = true;
+            mIsMsgShow = true;
             // check if project is exist
             if (mChoosenOne == null) {
-                mMessage = "Dự án không tồn tại!";
-                return REDIRECT_PREFIX + PROJECT_VIEW;
+                mMsg = "Dự án không tồn tại!";
             } else {
                 projectService.deleteProject(id);
-                mMessage = "Xóa dự án thành công!";
-                return REDIRECT_PREFIX + PROJECT_VIEW;
+                mMsg = "Xóa dự án thành công!";
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + PROJECT_VIEW;
         }
     }
 
@@ -181,10 +179,10 @@ public class ProjectController {
     // Show message
     private void showMessageBox(ModelAndView mav) {
         // check flag
-        if (mIsFlag) {
-            mav.addObject(FLAG_PARAM, true);
-            mav.addObject(MESSAGE_PARAM, mMessage);
-            mIsFlag = false;
+        if (mIsMsgShow) {
+            mav.addObject(FLAG_MSG_PARAM, true);
+            mav.addObject(MSG_PARAM, mMsg);
+            mIsMsgShow = false;
         }
     }
 }

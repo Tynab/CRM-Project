@@ -266,7 +266,7 @@
                                 Chưa thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${taskNotStarted}" th:href="@{/task/edit}">
+                                <a th:each="task : ${tasksNotStarted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -293,7 +293,7 @@
                                 Đang thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${taskInProgress}" th:href="@{/task/edit}">
+                                <a th:each="task : ${tasksInProgress}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -320,7 +320,7 @@
                                 Đã hoàn thành
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${taskCompleted}" th:href="@{/task/edit}">
+                                <a th:each="task : ${tasksCompleted}" th:href="@{/task/edit}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task

@@ -41,9 +41,9 @@ public class ProfileController {
     // Fields
     private User mCurrentAccount;
     private Task mChoosenOne;
-    private String mMessage;
+    private String mMsg;
     private boolean mIsByPass;
-    private boolean mIsFlag;
+    private boolean mIsMsgShow;
 
     // Load profile page
     @GetMapping("")
@@ -56,14 +56,14 @@ public class ProfileController {
             var email = mCurrentAccount.getEmail();
             var tasks = taskService.getTasksByDoer(email);
             var tasksCount = tasks.size();
+            mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(TASKS_PARAM, tasks);
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
                     : taskService.getTasksByDoerAndStatus(email, NOT_STARTED).size() * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
                     : taskService.getTasksByDoerAndStatus(email, IN_PROGRESS).size() * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
                     : taskService.getTasksByDoerAndStatus(email, COMPLETED).size() * 100 / tasksCount);
-            mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(TASKS_PARAM, tasks);
             showMessageBox(mav);
             mIsByPass = false;
             return mav;
@@ -77,24 +77,20 @@ public class ProfileController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsFlag = true;
-            mIsByPass = true;
+            mIsMsgShow = true;
             // check file is valid
             if (avatar.isEmpty()) {
-                mMessage = "Tệp không xác định!";
-                return REDIRECT_PREFIX + PROFILE_VIEW;
+                mMsg = "Tệp không xác định!";
             } else {
                 fileUploadService.init();
                 var file = fileUploadService.upload(avatar);
                 // check file is image
                 if (file == null) {
-                    mMessage = "Tệp không hợp lệ!";
-                    return REDIRECT_PREFIX + PROFILE_VIEW;
+                    mMsg = "Tệp không hợp lệ!";
                 } else {
                     // try to modify avatar
                     if (!imageService.resizeImage(file, mCurrentAccount.getId() + ".jpg")) {
-                        mMessage = "Có lỗi xảy ra khi cập nhật ảnh đại diện!";
-                        return REDIRECT_PREFIX + PROFILE_VIEW;
+                        mMsg = "Cập nhật ảnh đại diện thất bại!";
                     } else {
                         // clean up template image
                         if (!mCurrentAccount.getImage().equals(file.getName())) {
@@ -102,15 +98,16 @@ public class ProfileController {
                         }
                         mCurrentAccount.setImage(mCurrentAccount.getId() + ".jpg");
                         userService.saveUserWithoutPassword(mCurrentAccount);
-                        mMessage = "Cập nhật ảnh đại diện thành công!";
-                        return REDIRECT_PREFIX + PROFILE_VIEW;
+                        mMsg = "Cập nhật ảnh đại diện thành công!";
                     }
                 }
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
 
-    // Load edit info form
+    // Load edit info input form
     @GetMapping(EDIT_VIEW + INFO_VIEW)
     public ModelAndView profileEditInfo() {
         // check current account still valid
@@ -140,9 +137,9 @@ public class ProfileController {
             } else {
                 userService.saveUser(user);
             }
-            mIsFlag = true;
+            mIsMsgShow = true;
+            mMsg = "Cập nhật thông tin thành công!";
             mIsByPass = true;
-            mMessage = "Cập nhật thông tin thành công!";
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
@@ -158,8 +155,8 @@ public class ProfileController {
             mIsByPass = true;
             // check if task is exist
             if (mChoosenOne == null) {
-                mIsFlag = true;
-                mMessage = "Không tìm thấy công việc!";
+                mIsMsgShow = true;
+                mMsg = "Công việc không tồn tại!";
                 return REDIRECT_PREFIX + PROFILE_VIEW;
             } else {
                 return REDIRECT_PREFIX + PROFILE_VIEW + EDIT_VIEW + TASK_VIEW;
@@ -167,7 +164,7 @@ public class ProfileController {
         }
     }
 
-    // Load edit task form
+    // Load edit task input form
     @GetMapping(EDIT_VIEW + TASK_VIEW)
     public ModelAndView profileEditTask() {
         // check current account still valid
@@ -190,12 +187,10 @@ public class ProfileController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsFlag = true;
-            mIsByPass = true;
-            // check task still exist
+            mIsMsgShow = true;
+            // check task is exist
             if (!isAliveChoosenOne()) {
-                mMessage = "Không tìm thấy công việc!";
-                return REDIRECT_PREFIX + PROFILE_VIEW;
+                mMsg = "Công việc không tồn tại!";
             } else {
                 mChoosenOne.setId(mChoosenOne.getId());
                 mChoosenOne.setName(mChoosenOne.getName());
@@ -206,9 +201,10 @@ public class ProfileController {
                 mChoosenOne.setProjectId(mChoosenOne.getProjectId());
                 mChoosenOne.setStatusId(statusId);
                 taskService.saveTask(mChoosenOne);
-                mMessage = "Cập nhật trạng thái công việc thành công!";
-                return REDIRECT_PREFIX + PROFILE_VIEW;
+                mMsg = "Cập nhật trạng thái công việc thành công!";
             }
+            mIsByPass = true;
+            return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
 
@@ -237,10 +233,10 @@ public class ProfileController {
     // Show message
     private void showMessageBox(ModelAndView mav) {
         // check flag
-        if (mIsFlag) {
-            mav.addObject(FLAG_PARAM, true);
-            mav.addObject(MESSAGE_PARAM, mMessage);
-            mIsFlag = false;
+        if (mIsMsgShow) {
+            mav.addObject(FLAG_MSG_PARAM, true);
+            mav.addObject(MSG_PARAM, mMsg);
+            mIsMsgShow = false;
         }
     }
 }

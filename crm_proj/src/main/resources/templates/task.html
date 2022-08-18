@@ -23,6 +23,8 @@
     <!-- Color CSS -->
     <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
     <link href="/css/custom.css" rel="stylesheet">
+    <!-- Toastify CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -155,41 +157,70 @@
                                 <table class="table" id="example">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Công Việc</th>
-                                            <th>Dự Án</th>
-                                            <th>Người Thực Hiện</th>
-                                            <th>Ngày Bắt Đầu</th>
-                                            <th>Ngày Kết Thúc</th>
-                                            <th>Trạng Thái</th>
-                                            <th>Hành Động</th>
+                                            <th>
+                                                STT
+                                            </th>
+                                            <th>
+                                                Công Việc
+                                            </th>
+                                            <th>
+                                                Mô Tả
+                                            </th>
+                                            <th>
+                                                Dự Án
+                                            </th>
+                                            <th>
+                                                Người Thực Hiện
+                                            </th>
+                                            <th>
+                                                Ngày Bắt Đầu
+                                            </th>
+                                            <th>
+                                                Ngày Kết Thúc
+                                            </th>
+                                            <th>
+                                                Trạng Thái
+                                            </th>
+                                            <th>
+                                                Hành Động
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Công việc 1</td>
-                                            <td>Dự án 1</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>dd/mm/yyy</td>
-                                            <td>dd/mm/yyyy</td>
-                                            <td>Đã hoàn thành</td>
-                                            <td>
-                                                <a th:href="@{/task/edit}" class="btn btn-sm btn-primary">Sửa</a>
-                                                <a th:href="@{/task/delete}" class="btn btn-sm btn-danger">Xóa</a>
+                                        <tr th:each="task,i : ${tasks}">
+                                            <td th:text="${i.index+1}">
+                                                No.
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Công việc 2</td>
-                                            <td>Dự án 2</td>
-                                            <td>Trần Thị B</td>
-                                            <td>dd/mm/yyy</td>
-                                            <td>dd/mm/yyyy</td>
-                                            <td>Đang thực hiện</td>
+                                            <td th:text="${task.name}">
+                                                Task
+                                            </td>
+                                            <td th:text="${task.description}">
+                                                Description
+                                            </td>
+                                            <td th:text="${task.project.name}">
+                                                Project
+                                            </td>
+                                            <td th:text="${task.doer.name}">
+                                                Doer
+                                            </td>
+                                            <td th:text="${#dates.format(task.startDate,'dd/MM/yyyy')}">
+                                                Start date
+                                            </td>
+                                            <td th:text="${#dates.format(task.endDate,'dd/MM/yyyy')}">
+                                                End date
+                                            </td>
+                                            <td th:text="${task.status.name}">
+                                                Status
+                                            </td>
                                             <td>
-                                                <a th:href="@{/task/edit}" class="btn btn-sm btn-primary">Sửa</a>
-                                                <a th:href="@{/task/delete}" class="btn btn-sm btn-danger">Xóa</a>
+                                                <a th:href="@{/task/findBy/(id=${task.id})}"
+                                                    class="btn btn-sm btn-primary">
+                                                    Sửa
+                                                </a>
+                                                <a th:href="@{/task/delete/(id=${task.id})}"
+                                                    class="btn btn-sm btn-danger">
+                                                    Xóa
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -198,31 +229,38 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.row -->
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2022 &copy; cybersoft.com </footer>
+            <footer class="footer text-center">
+                2022 &copy; cybersoft.com
+            </footer>
         </div>
-        <!-- /#page-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <!-- jQuery -->
+    <!-- jQuery JS -->
     <script src="/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
+    <!-- Bootstrap Core JS -->
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Menu Plugin JavaScript -->
+    <!-- Menu Plugin JS -->
     <script src="/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
-    <!-- Slimscroll JavaScript -->
+    <!-- Slimscroll JS -->
     <script src="/js/jquery.slimscroll.js"></script>
     <script src="/js/jquery.dataTables.js"></script>
-    <!-- Wave Effects -->
+    <!-- Wave Effects JS -->
     <script src="/js/waves.js"></script>
-    <!-- Custom Theme JavaScript -->
+    <!-- Custom Theme JS -->
     <script src="/js/custom.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#example').DataTable();
         });
+    </script>
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js" type="text/javascript"></script>
+    <script th:inline="javascript">
+        var flag = /*[[${flag}]]*/ false;
+        var msg = /*[[${msg}]]*/ null;
+        if (flag) {
+            Toastify({ text: msg, position: "center" }).showToast();
+        }
     </script>
 </body>
 

@@ -7,6 +7,8 @@ public interface TaskStatusService {
 
     public TaskStatus getTaskStatus(int id);
 
+    public TaskStatus getTaskStatus(String name);
+
     public TaskStatus saveTaskStatus(TaskStatus taskStatus);
 
     public void deleteTaskStatus(int id);
