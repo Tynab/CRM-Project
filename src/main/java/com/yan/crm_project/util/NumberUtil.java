@@ -6,7 +6,7 @@ import static java.lang.Integer.*;
 
 @Component
 public class NumberUtil {
-    // Is numeric
+    // Check string is number or not
     public boolean isNumeric(String s) {
         try {
             parseInt(s);

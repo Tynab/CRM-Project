@@ -45,16 +45,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         var user = (User) authResult.getPrincipal();
         var algorithm = HMAC256(SECRET_KEY.getBytes());
         var tokens = new HashMap<>();
+        var userName = user.getUsername();
+        var requestUrl = request.getRequestURL().toString();
         tokens.put(ACCESS_TOKEN_KEY,
-                create().withSubject(user.getUsername()).withExpiresAt(new Date(currentTimeMillis() + EXPIRATION_TIME))
-                        .withIssuer(request.getRequestURL().toString())
+                create().withSubject(userName).withExpiresAt(new Date(currentTimeMillis() + EXPIRATION_TIME))
+                        .withIssuer(requestUrl)
                         .withClaim(ROLE_CLAIM_KEY,
                                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
                         .sign(algorithm));
         tokens.put(REFRESH_TOKEN_KEY,
-                create().withSubject(user.getUsername())
-                        .withExpiresAt(new Date(currentTimeMillis() + EXPIRATION_TIME * 24))
-                        .withIssuer(request.getRequestURL().toString()).sign(algorithm));
+                create().withSubject(userName).withExpiresAt(new Date(currentTimeMillis() + EXPIRATION_TIME * 24))
+                        .withIssuer(requestUrl).sign(algorithm));
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }

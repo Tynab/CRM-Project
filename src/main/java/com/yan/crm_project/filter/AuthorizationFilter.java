@@ -31,8 +31,8 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getServletPath().equals(API_VIEW + LOGIN_VIEW)
-                || request.getServletPath().equals(PROFILE_VIEW + REFRESH_VIEW)) {
+        var servletPath = request.getServletPath();
+        if (servletPath.equals(API_VIEW + LOGIN_VIEW) || servletPath.equals(PROFILE_VIEW + REFRESH_VIEW)) {
             filterChain.doFilter(request, response);
             return;
         } else {
@@ -48,11 +48,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(decodedJwt.getSubject(), null, authorities));
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    log.error("Error logging in: {}", e.getMessage());
-                    response.setHeader(ERROR_HEADER_KEY, e.getMessage());
+                    var errorMsg = e.getMessage();
+                    log.error("Error logging in: {}", errorMsg);
+                    response.setHeader(ERROR_HEADER_KEY, errorMsg);
                     response.setStatus(FORBIDDEN.value());
                     var error = new HashMap<>();
-                    error.put(ERROR_MESSAGE_KEY, e.getMessage());
+                    error.put(ERROR_MESSAGE_KEY, errorMsg);
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
                 }

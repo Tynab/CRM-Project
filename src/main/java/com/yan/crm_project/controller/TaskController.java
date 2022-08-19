@@ -212,8 +212,8 @@ public class TaskController {
 
     // Check permission leader for task
     private boolean isPermissionLeader() {
-        System.out.println(roleService.getRole(mCurrentAccount.getRoleId()).getName());
-        return roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase().equals(LEADER)
+        var currentAccountRole = roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase();
+        return (currentAccountRole.equals(LEADER) || currentAccountRole.equals(ADMIN))
                 && userService.getUser(mChoosenOne.getProject().getOriginatorId()).getId() == mCurrentAccount.getId();
     }
 
