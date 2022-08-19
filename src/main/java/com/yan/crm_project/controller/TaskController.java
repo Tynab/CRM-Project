@@ -9,9 +9,8 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import lombok.*;
-
-import static com.yan.crm_project.constant.AppConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -24,6 +23,9 @@ public class TaskController {
     private UserService userService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private ProjectService projectService;
 
     @Autowired
@@ -33,7 +35,7 @@ public class TaskController {
     private TaskStatusService taskStatusService;
 
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -68,7 +70,7 @@ public class TaskController {
             var mav = new ModelAndView(TASK_ADD_TEMP);
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(PROJECTS_PARAM, projectService.getProjects());
+            mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getEmail()));
             mIsByPass = false;
             return mav;
         }
@@ -105,7 +107,7 @@ public class TaskController {
                 mMsg = "Không tìm thấy công việc!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                return REDIRECT_PREFIX + TASK_VIEW + EDIT_VIEW;
+                return isPermissionLeader() ? REDIRECT_PREFIX + TASK_VIEW + EDIT_VIEW : FORWARD_PREFIX + FORBIDDEN_VIEW;
             }
         }
     }
@@ -117,13 +119,17 @@ public class TaskController {
         if (!isValidAccount()) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
-            var mav = new ModelAndView(TASK_EDIT_TEMP);
-            mav.addObject(USERS_PARAM, userService.getUsers());
-            mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(PROJECTS_PARAM, projectService.getProjects());
-            mav.addObject(TASK_PARAM, mChoosenOne);
-            mIsByPass = false;
-            return mav;
+            if (isPermissionLeader()) {
+                var mav = new ModelAndView(TASK_EDIT_TEMP);
+                mav.addObject(USERS_PARAM, userService.getUsers());
+                mav.addObject(USER_PARAM, mCurrentAccount);
+                mav.addObject(PROJECTS_PARAM, projectService.getProjects());
+                mav.addObject(TASK_PARAM, mChoosenOne);
+                mIsByPass = false;
+                return mav;
+            } else {
+                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
+            }
         }
     }
 
@@ -134,18 +140,24 @@ public class TaskController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsMsgShow = true;
+            mIsByPass = true;
             // check task is exist
             if (!isAliveChoosenOne()) {
+                mIsMsgShow = true;
                 mMsg = "Công việc không tồn tại!";
+                return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                task.setId(mChoosenOne.getId());
-                task.setStatusId(mChoosenOne.getStatusId());
-                taskService.saveTask(task);
-                mMsg = "Cập nhật công việc thành công!";
+                if (isPermissionLeader()) {
+                    task.setId(mChoosenOne.getId());
+                    task.setStatusId(mChoosenOne.getStatusId());
+                    taskService.saveTask(task);
+                    mIsMsgShow = true;
+                    mMsg = "Cập nhật công việc thành công!";
+                    return REDIRECT_PREFIX + TASK_VIEW;
+                } else {
+                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                }
             }
-            mIsByPass = true;
-            return REDIRECT_PREFIX + TASK_VIEW;
         }
     }
 
@@ -157,16 +169,22 @@ public class TaskController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             mChoosenOne = taskService.getTask(id);
-            mIsMsgShow = true;
+            mIsByPass = true;
             // check task is exist
             if (mChoosenOne == null) {
+                mIsMsgShow = true;
                 mMsg = "Công việc không tồn tại!";
+                return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                taskService.deleteTask(id);
-                mMsg = "Xóa công việc thành công!";
+                if (isPermissionLeader()) {
+                    taskService.deleteTask(id);
+                    mIsMsgShow = true;
+                    mMsg = "Xóa công việc thành công!";
+                    return REDIRECT_PREFIX + TASK_VIEW;
+                } else {
+                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                }
             }
-            mIsByPass = true;
-            return REDIRECT_PREFIX + TASK_VIEW;
         }
     }
 
@@ -176,7 +194,7 @@ public class TaskController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }
@@ -190,6 +208,13 @@ public class TaskController {
             mChoosenOne = taskService.getTask(mChoosenOne.getId());
             return mChoosenOne != null;
         }
+    }
+
+    // Check permission leader for task
+    private boolean isPermissionLeader() {
+        System.out.println(roleService.getRole(mCurrentAccount.getRoleId()).getName());
+        return roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase().equals(LEADER)
+                && userService.getUser(mChoosenOne.getProject().getOriginatorId()).getId() == mCurrentAccount.getId();
     }
 
     // Show message

@@ -10,7 +10,7 @@ import com.yan.crm_project.service.*;
 import static org.springframework.security.core.context.SecurityContextHolder.*;
 
 @Component
-public class UserUtil {
+public class AuthenticationUtil {
     @Autowired
     private UserService userService;
 

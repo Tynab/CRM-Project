@@ -18,7 +18,7 @@ import lombok.extern.slf4j.*;
 
 import static com.auth0.jwt.JWT.*;
 import static com.auth0.jwt.algorithms.Algorithm.*;
-import static com.yan.crm_project.constant.AppConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static java.lang.System.*;
 import static java.util.stream.Collectors.*;
@@ -26,7 +26,7 @@ import static org.springframework.http.MediaType.*;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenFilter extends UsernamePasswordAuthenticationFilter {
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
     @Override

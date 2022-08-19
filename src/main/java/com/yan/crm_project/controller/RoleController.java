@@ -9,8 +9,6 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import lombok.*;
-
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -23,7 +21,7 @@ public class RoleController {
     private RoleService roleService;
 
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -153,8 +151,13 @@ public class RoleController {
             if (mChoosenOne == null) {
                 mMsg = "Quyền không tồn tại";
             } else {
-                roleService.deleteRole(id);
-                mMsg = "Xóa quyền thành công";
+                // check role disconnect
+                if (mChoosenOne.getUsers().size() > 0) {
+                    mMsg = "Quyền này đang được sử dụng, không thể xóa";
+                } else {
+                    roleService.deleteRole(id);
+                    mMsg = "Xóa quyền thành công";
+                }
             }
             mIsByPass = true;
             return REDIRECT_PREFIX + ROLE_VIEW;
@@ -167,7 +170,7 @@ public class RoleController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }

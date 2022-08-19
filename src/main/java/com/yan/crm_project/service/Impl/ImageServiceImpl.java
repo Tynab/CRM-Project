@@ -8,7 +8,7 @@ import com.yan.crm_project.service.*;
 
 import lombok.extern.slf4j.*;
 
-import static com.yan.crm_project.constant.AppConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static java.nio.file.Paths.*;
 import static javax.imageio.ImageIO.*;

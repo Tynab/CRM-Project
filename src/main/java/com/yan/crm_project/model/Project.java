@@ -47,5 +47,5 @@ public class Project {
     private User originator;
 
     @OneToMany(mappedBy = "project")
-    private Set<Task> tasks;
+    private List<Task> tasks;
 }

@@ -9,16 +9,16 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.AppConstant.TaskStatus.*;
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
 
 @Controller
 @RequestMapping("")
-public class AppController {
+public class ApplicationController {
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     @Autowired
     private TaskService taskService;
@@ -74,7 +74,7 @@ public class AppController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }

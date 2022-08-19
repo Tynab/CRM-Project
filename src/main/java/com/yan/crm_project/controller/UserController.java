@@ -10,8 +10,8 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.AppConstant.*;
-import static com.yan.crm_project.constant.AppConstant.TaskStatus.*;
+import static com.yan.crm_project.constant.ApplicationConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -31,7 +31,7 @@ public class UserController {
     private TaskService taskService;
 
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -187,8 +187,15 @@ public class UserController {
             if (mChoosenOne == null) {
                 mMsg = "Tài khoản không tồn tại!";
             } else {
-                userService.deleteUser(id);
-                mMsg = "Tài khoản đã được xóa thành công!";
+                // check user disconnect
+                if (mChoosenOne.getProjects().size() > 0) {
+                    mMsg = "Tài khoản này đang có dự án, không thể xóa!";
+                } else if (mChoosenOne.getTasks().size() > 0) {
+                    mMsg = "Tài khoản này đang có công việc, không thể xóa!";
+                } else {
+                    userService.deleteUser(id);
+                    mMsg = "Tài khoản đã được xóa thành công!";
+                }
             }
             mIsByPass = true;
             return REDIRECT_PREFIX + USER_VIEW;
@@ -227,7 +234,7 @@ public class UserController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }

@@ -1,6 +1,6 @@
 package com.yan.crm_project.constant;
 
-public class AppConstant {
+public class ApplicationConstant {
     public static final int AVATAR_SIZE = 128;
 
     public static final long EXPIRATION_TIME = 60 * 60 * 1000;

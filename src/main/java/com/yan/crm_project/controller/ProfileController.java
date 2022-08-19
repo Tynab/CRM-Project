@@ -10,7 +10,7 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.AppConstant.TaskStatus.*;
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -36,7 +36,7 @@ public class ProfileController {
     private ImageService imageService;
 
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -88,16 +88,17 @@ public class ProfileController {
                 if (file == null) {
                     mMsg = "Tệp không hợp lệ!";
                 } else {
+                    var defaultAvatarName = mCurrentAccount.getId() + ".jpg";
                     // try to modify avatar
-                    if (!imageService.resizeImage(file, mCurrentAccount.getId() + ".jpg")) {
+                    if (!imageService.resizeImage(file, defaultAvatarName)) {
                         mMsg = "Cập nhật ảnh đại diện thất bại!";
                     } else {
-                        // clean up template image
+                        mCurrentAccount.setImage(defaultAvatarName);
+                        userService.saveUserWithoutPassword(mCurrentAccount);
+                        // clean up temp image
                         if (!mCurrentAccount.getImage().equals(file.getName())) {
                             fileUploadService.remove(file.getName());
                         }
-                        mCurrentAccount.setImage(mCurrentAccount.getId() + ".jpg");
-                        userService.saveUserWithoutPassword(mCurrentAccount);
                         mMsg = "Cập nhật ảnh đại diện thành công!";
                     }
                 }
@@ -214,7 +215,7 @@ public class ProfileController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }

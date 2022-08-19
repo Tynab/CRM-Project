@@ -52,4 +52,10 @@ public class ProjectServiceImpl implements ProjectService {
         log.info("Deleting project with id: {}", id);
         projectRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Project> getProjectsByOriginator(String originatorEmail) {
+        log.info("Fetching projects by originator with email: {}", originatorEmail);
+        return projectRepository.findAllByOriginatorEmail(originatorEmail);
+    }
 }

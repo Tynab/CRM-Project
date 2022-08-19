@@ -49,6 +49,9 @@ public class User {
     @ManyToOne(fetch = LAZY)
     private Role role;
 
+    @OneToMany(mappedBy = "originator")
+    private List<Project> projects;
+
     @OneToMany(mappedBy = "doer")
-    private Set<Task> tasks;
+    private List<Task> tasks;
 }

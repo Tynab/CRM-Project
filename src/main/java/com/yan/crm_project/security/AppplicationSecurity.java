@@ -13,15 +13,16 @@ import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.savedrequest.*;
 
 import com.yan.crm_project.filter.*;
+import com.yan.crm_project.filter.AuthenticationFilter;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.AppConstant.Role.*;
+import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
+public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -38,8 +39,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        var jwtAuthenFilter = new JwtAuthenFilter(authenticationManagerBean());
-        jwtAuthenFilter.setFilterProcessesUrl(API_VIEW + LOGIN_VIEW);
+        var authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
+        authenticationFilter.setFilterProcessesUrl(API_VIEW + LOGIN_VIEW);
         http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests() // replace
                                                                                                              // stateless
                 .antMatchers(API_VIEW + LOGIN_VIEW, API_VIEW + TOKEN_VIEW + REFRESH_VIEW, "/css/login.css").permitAll()
@@ -52,8 +53,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl(LOGIN_VIEW).permitAll().and()
                 .logout()
                 .invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl(LOGIN_VIEW).permitAll().and()
-                .exceptionHandling().accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(jwtAuthenFilter)
-                .addFilterBefore(new JwtAuthorFilter(), UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling().accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(authenticationFilter)
+                .addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

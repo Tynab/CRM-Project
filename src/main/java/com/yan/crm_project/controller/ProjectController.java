@@ -21,7 +21,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @Autowired
-    private UserUtil userUtil;
+    private AuthenticationUtil authenticationUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -146,8 +146,13 @@ public class ProjectController {
             if (mChoosenOne == null) {
                 mMsg = "Dự án không tồn tại!";
             } else {
-                projectService.deleteProject(id);
-                mMsg = "Xóa dự án thành công!";
+                // check project disconnect
+                if (mChoosenOne.getTasks().size() > 0) {
+                    mMsg = "Dự án đang có công việc, không thể xóa!";
+                } else {
+                    projectService.deleteProject(id);
+                    mMsg = "Xóa dự án thành công!";
+                }
             }
             mIsByPass = true;
             return REDIRECT_PREFIX + PROJECT_VIEW;
@@ -160,7 +165,7 @@ public class ProjectController {
         if (mIsByPass) {
             return true;
         } else {
-            mCurrentAccount = userUtil.getAccount();
+            mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
         }
     }

@@ -17,7 +17,7 @@ import lombok.extern.slf4j.*;
 
 import static com.auth0.jwt.JWT.*;
 import static com.auth0.jwt.algorithms.Algorithm.*;
-import static com.yan.crm_project.constant.AppConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
 import static java.util.Arrays.*;
@@ -27,7 +27,7 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.security.core.context.SecurityContextHolder.*;
 
 @Slf4j
-public class JwtAuthorFilter extends OncePerRequestFilter {
+public class AuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
