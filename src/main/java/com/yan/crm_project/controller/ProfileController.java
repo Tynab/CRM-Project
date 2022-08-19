@@ -10,13 +10,10 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
-import static java.lang.Integer.*;
-import static org.apache.commons.io.FilenameUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -40,9 +37,6 @@ public class ProfileController {
 
     @Autowired
     private AuthenticationUtil authenticationUtil;
-
-    @Autowired
-    private NumberUtil numberUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -101,13 +95,7 @@ public class ProfileController {
                     } else {
                         mCurrentAccount.setImage(defaultAvatarName);
                         userService.saveUserWithoutPassword(mCurrentAccount);
-                        var fileFullName = file.getName();
-                        var fileName = getName(fileFullName);
-                        // clean up temp image
-                        if (!fileFullName.equals(DEFAULT_AVATAR) && numberUtil.isNumeric(fileName)
-                                && userService.getUser(parseInt(fileName)) == null) {
-                            fileUploadService.remove(fileFullName);
-                        }
+                        fileUploadService.remove(file.getName());
                         mMsg = "Cập nhật ảnh đại diện thành công!";
                     }
                 }

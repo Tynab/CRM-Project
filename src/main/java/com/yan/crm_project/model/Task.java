@@ -43,7 +43,7 @@ public class Task {
     private int doerId;
 
     @JoinColumn(name = "id_nguoi_thuc_hien", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private User doer;
 
     @Column(name = "id_du_an")

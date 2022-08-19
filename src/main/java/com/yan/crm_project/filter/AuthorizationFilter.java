@@ -32,7 +32,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var servletPath = request.getServletPath();
-        if (servletPath.equals(API_VIEW + LOGIN_VIEW) || servletPath.equals(PROFILE_VIEW + REFRESH_VIEW)) {
+        if (servletPath.equals(API_VIEW + LOGIN_VIEW) || servletPath.equals(API_VIEW + TOKEN_VIEW + REFRESH_VIEW)) {
             filterChain.doFilter(request, response);
             return;
         } else {

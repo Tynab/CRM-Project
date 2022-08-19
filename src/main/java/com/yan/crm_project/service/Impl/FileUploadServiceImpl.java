@@ -31,7 +31,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public File upload(MultipartFile file) {
         try {
-            var filePath = Paths.get(AVATAR_PATH, file.getOriginalFilename());
+            var filePath = Paths.get(AVATAR_PATH, "a" + file.getOriginalFilename());
             write(filePath, file.getBytes());
             return filePath.toFile();
         } catch (IOException e) {

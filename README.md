@@ -84,16 +84,10 @@
 ```
 
 ### TÍCH HỢP
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/temp/pic/3.png" align="left" width="3%" height="3%"></img>
-<div style="display:flex;">
-
-- Java JWT » 4.0.0
-
-</div>
 <img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/temp/pic/1.png" align="left" width="3%" height="3%"></img>
 <div style="display:flex;">
 
-- Apache Commons IO » 2.11.0
+- Java JWT » 4.0.0
 
 </div>
 <img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/temp/pic/2.png" align="left" width="3%" height="3%"></img>
