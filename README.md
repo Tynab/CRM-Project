@@ -30,6 +30,11 @@
         - Xem danh sách tất cả nhân viên
         - Đăng nhập hệ thống
         - Quản lý tài khoản cá nhân
+    - Thành viên (member)
+        - Đăng nhập hệ thống
+        - Cập nhật tiến độ công việc
+        - Xem thống kê công việc (cá nhân)
+        - Quản lý tài khoản cá nhân
 
 ## LINK DEMO
 [Click vào đây để xem](https://crm-project.herokuapp.com/login)
