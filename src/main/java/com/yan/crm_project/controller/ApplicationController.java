@@ -18,24 +18,54 @@ import static com.yan.crm_project.constant.ViewConstant.*;
 @RequestMapping("")
 public class ApplicationController {
     @Autowired
-    private AuthenticationUtil authenticationUtil;
+    public UserController userController;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private AuthenticationUtil authenticationUtil;
+
     // Fields
     private User mCurrentAccount;
+    private String mMsg;
     private boolean mIsByPass;
+    private boolean mIsMsgShow;
 
     // Check login
     @GetMapping(LOGIN_VIEW)
-    public String login() {
+    public ModelAndView login(boolean error) {
         // check current account still valid
         if (!isValidAccount()) {
-            return LOGIN_TEMP;
+            var mav = new ModelAndView(LOGIN_VIEW);
+            if (error) {
+                mIsMsgShow = true;
+                mMsg = "Tài khoản đăng nhập chưa đúng!";
+                showMessageBox(mav);
+            }
+            return mav;
         } else {
             mIsByPass = true;
-            return REDIRECT_PREFIX + INDEX_VIEW;
+            return new ModelAndView(REDIRECT_PREFIX + INDEX_VIEW);
+        }
+    }
+
+    // Search user
+    @GetMapping(SEARCH_VIEW)
+    public String search(String name) {
+        if (!isValidAccount()) {
+            return REDIRECT_PREFIX + LOGOUT_VIEW;
+        } else {
+            var users = userService.getUsers(name);
+            mIsByPass = true;
+            if (users.size() > 0) {
+                return userController.findUser(users.get(0).getId(), DETAILS_VIEW);
+            } else {
+                return REDIRECT_PREFIX + BLANK_VIEW;
+            }
         }
     }
 
@@ -62,6 +92,19 @@ public class ApplicationController {
         }
     }
 
+    // Load blank page
+    @GetMapping(BLANK_VIEW)
+    public ModelAndView blank() {
+        // check current account still valid
+        if (!isValidAccount()) {
+            return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
+        } else {
+            var mav = new ModelAndView(BLANK_TEMP);
+            mav.addObject(USER_PARAM, mCurrentAccount);
+            return mav;
+        }
+    }
+
     // Load forbidden page
     @GetMapping(FORBIDDEN_VIEW)
     public String forbidden() {
@@ -76,6 +119,16 @@ public class ApplicationController {
         } else {
             mCurrentAccount = authenticationUtil.getAccount();
             return mCurrentAccount != null;
+        }
+    }
+
+    // Show message
+    private void showMessageBox(ModelAndView mav) {
+        // check flag
+        if (mIsMsgShow) {
+            mav.addObject(FLAG_MSG_PARAM, true);
+            mav.addObject(MSG_PARAM, mMsg);
+            mIsMsgShow = false;
         }
     }
 }

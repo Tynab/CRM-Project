@@ -1,9 +1,13 @@
 package com.yan.crm_project.service;
 
+import java.util.*;
+
 import com.yan.crm_project.model.*;
 
 public interface UserService {
     public Iterable<User> getUsers();
+
+    public List<User> getUsers(String name);
 
     public User getUser(int id);
 

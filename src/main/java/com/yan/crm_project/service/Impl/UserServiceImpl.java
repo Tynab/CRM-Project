@@ -1,5 +1,7 @@
 package com.yan.crm_project.service.Impl;
 
+import java.util.*;
+
 import javax.transaction.*;
 
 import org.springframework.beans.factory.annotation.*;
@@ -52,6 +54,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Iterable<User> getUsers() {
         log.info("Fetching all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> getUsers(String name) {
+        log.info("Fetching all users by name: {}", name);
+        return userRepository.findAllByName(name);
     }
 
     @Override

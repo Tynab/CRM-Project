@@ -15,7 +15,5 @@ public interface TaskService {
 
     public List<Task> getTasksByDoer(String doerEmail);
 
-    public List<Task> getTasksByStatus(String statusName);
-
-    public List<Task> getTasksByDoerAndStatus(String doerEmail, String statusName);
+    public List<Task> getTasksByStatus(int statusId);
 }

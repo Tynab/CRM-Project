@@ -21,6 +21,12 @@
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
     <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
+    <!-- Hide button search -->
+    <style>
+        #search {
+            display: none
+        }
+    </style>
 </head>
 
 <body>
@@ -48,9 +54,10 @@
                 </div>
                 <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
                     <li>
-                        <form role="search" class="app-search hidden-xs">
-                            <input type="text" placeholder="Tìm kiếm..." class="form-control">
-                            <a th:href="@{/search}">
+                        <form th:action="@{/search}" method="get" role="search" class="app-search hidden-xs">
+                            <input name="name" type="text" placeholder="Tìm kiếm..." class="form-control" required>
+                            <button type="submit" id="search"></button>
+                            <a href="" id="search-link">
                                 <i class="fa fa-search"></i>
                             </a>
                         </form>
@@ -70,6 +77,11 @@
                                 <li>
                                     <a th:href="@{/profile}">
                                         Thông tin cá nhân
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/job}">
+                                        Thống kê công việc
                                     </a>
                                 </li>
                                 <li class="divider"></li>
@@ -229,6 +241,15 @@
     <script src="/js/waves.js"></script>
     <!-- Custom Theme JS -->
     <script src="/js/custom.min.js"></script>
+    <!-- Link icon to button search -->
+    <script>
+        $(function () {
+            $("#search-link").on('click', function (e) {
+                e.preventDefault();
+                $("#search:hidden").trigger('click');
+            });
+        });
+    </script>
 </body>
 
 </html>

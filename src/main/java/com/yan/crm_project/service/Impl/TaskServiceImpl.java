@@ -62,14 +62,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByStatus(String statusName) {
-        log.info("Fetching tasks by task status: {}", statusName);
-        return taskRepository.findAllByStatusName(statusName);
-    }
-
-    @Override
-    public List<Task> getTasksByDoerAndStatus(String doerEmail, String statusName) {
-        log.info("Fetching tasks by doer: {} and task status: {}", doerEmail, statusName);
-        return taskRepository.findAllByDoerEmailAndStatusName(doerEmail, statusName);
+    public List<Task> getTasksByStatus(int statusId) {
+        log.info("Fetching tasks by status: {}", statusId);
+        return taskRepository.findAllByStatusId(statusId);
     }
 }

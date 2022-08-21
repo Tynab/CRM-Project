@@ -4,12 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Midterm Project">
     <meta name="author" content="Yami An Nephilim">
-    <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
-    <title th:text="${person.name+' | CRM Project'}">
-        User | CRM Project
+    <link rel="icon" type="image/png" sizes="16x16" href="/plugins/images/favicon.png">
+    <title>
+        Job | CRM Project
     </title>
     <!-- Bootstrap Core CSS -->
     <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,16 +22,7 @@
     <link href="/css/style.css" rel="stylesheet">
     <!-- Color CSS -->
     <link href="/css/colors/megna-dark.css" rel="stylesheet" id="theme">
-    <style>
-        .center {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
-        }
-    </style>
+    <link href="/css/custom.css" rel="stylesheet">
     <!-- Hide button search -->
     <style>
         #search {
@@ -159,123 +151,102 @@
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">
-                            Chi tiết thành viên
+                            Chi tiết công việc
                         </h4>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="white-box">
-                            <div class="user-bg"> <img class="center" width="100%" alt="user"
-                                    src="/plugins/images/large/img1.jpg">
-                                <div class="overlay-box">
-                                    <div class="user-content">
-                                        <a>
-                                            <img th:src="@{${'/plugins/images/users/'+person.image}}"
-                                                class="thumb-lg img-circle" alt="img">
-                                        </a>
-                                        <h4 th:text="${person.name}" class="text-white">
-                                            Name
-                                        </h4>
-                                        <h5 th:text="${person.email}" class="text-white">
-                                            Email
-                                        </h5>
-                                    </div>
+                            <div class="col-in row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <i data-icon="E" class="linea-icon linea-basic">
+                                    </i>
+                                    <h5 class="text-muted vb">
+                                        CHƯA BẮT ĐẦU
+                                    </h5>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8 col-xs-12">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                <div class="white-box">
-                                    <div class="col-in row">
-                                        <div class="col-xs-12">
-                                            <h3 th:text="${notStartedPecent+'%'}"
-                                                class="counter text-right m-t-15 text-danger">
-                                                0%
-                                            </h3>
-                                        </div>
-                                        <div class="col-xs-12">
-                                            <i data-icon="E" class="linea-icon linea-basic"></i>
-                                            <h5 class="text-muted vb text-center">
-                                                CHƯA BẮT ĐẦU
-                                            </h5>
-                                        </div>
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-danger" role="progressbar"
-                                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    th:style="'width:' + ${notStartedPecent} + '%;'">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <h3 th:text="${notStartedPecent+'%'}" class="counter text-right m-t-15 text-danger">
+                                        0%
+                                    </h3>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                <div class="white-box">
-                                    <div class="col-in row">
-                                        <div class="col-xs-12">
-                                            <h3 th:text="${inProgressPecent+'%'}"
-                                                class="counter text-right m-t-15 text-megna">
-                                                0%
-                                            </h3>
-                                        </div>
-                                        <div class="col-xs-12">
-                                            <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
-                                            <h5 class="text-muted vb text-center">
-                                                ĐANG THỰC HIỆN
-                                            </h5>
-                                        </div>
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-megna" role="progressbar"
-                                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    th:style="'width:' + ${inProgressPecent} + '%'">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                <div class="white-box">
-                                    <div class="col-in row">
-                                        <div class="col-xs-12">
-                                            <h3 th:text="${completedPercent+'%'}"
-                                                class="counter text-right m-t-15 text-primary">
-                                                0%
-                                            </h3>
-                                        </div>
-                                        <div class="col-xs-12">
-                                            <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-                                            <h5 class="text-muted vb text-center">
-                                                ĐÃ HOÀN THÀNH
-                                            </h5>
-                                        </div>
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-primary" role="progressbar"
-                                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                    th:style="'width:' + ${completedPercent} + '%'">
-                                                </div>
-                                            </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar"
+                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                            th:style="'width:' + ${notStartedPecent} + '%;'">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div><br />
-                <h4>
-                    DANH SÁCH CÔNG VIỆC
-                </h4>
-                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="white-box">
+                            <div class="col-in row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                                    <h5 class="text-muted vb">
+                                        ĐANG THỰC HIỆN
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <h3 th:text="${inProgressPecent+'%'}" class="counter text-right m-t-15 text-megna">
+                                        0%
+                                    </h3>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-megna" role="progressbar"
+                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                            th:style="'width:' + ${inProgressPecent} + '%'">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="white-box">
+                            <div class="col-in row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                                    <h5 class="text-muted vb">
+                                        ĐÃ HOÀN THÀNH
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <h3 th:text="${completedPercent+'%'}"
+                                        class="counter text-right m-t-15 text-primary">
+                                        0%
+                                    </h3>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-primary" role="progressbar"
+                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                            th:style="'width:' + ${completedPercent} + '%'">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:each="person : ${users}" class="row">
+                    <div class="col-xs-12">
+                        <a th:href="@{/user/details}" class="group-title">
+                            <img width="30" th:src="@{${'/plugins/images/users/'+person.image}}" class="img-circle" />
+                            <span th:text="${person.name}">
+                                User
+                            </span>
+                        </a>
+                    </div>
                     <div class="col-md-4">
                         <div class="white-box">
                             <h3 class="box-title">
-                                Chưa thực hiện
+                                Chưa bắt đầu
                             </h3>
                             <div class="message-center">
                                 <a th:each="task : ${person.tasksNotStarted}" th:href="@{/task/findBy/(id=${task.id})}">
@@ -289,9 +260,7 @@
                                         <span th:text="${task.description}" class="mail-desc">
                                             Description
                                         </span>
-                                        <span
-                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
-                                            class="time">
+                                        <span th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}" class="time">
                                             Start date - End date
                                         </span>
                                     </div>
@@ -316,9 +285,7 @@
                                         <span th:text="${task.description}" class="mail-desc">
                                             Description
                                         </span>
-                                        <span
-                                            th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}"
-                                            class="time">
+                                        <span th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}" class="time">
                                             Start date - End date
                                         </span>
                                     </div>
@@ -343,9 +310,7 @@
                                         <span th:text="${task.description}" class="mail-desc">
                                             Description
                                         </span>
-                                        <span
-                                            th:text="${#dates.format(task.startDate,'dd/MM/yyyy')+' - '+#dates.format(task.endDate,'dd/MM/yyyy')}"
-                                            class="time">
+                                        <span th:text="${#dates.format(task.startDate, 'dd/MM/yyyy')+' - '+#dates.format(task.endDate, 'dd/MM/yyyy')}" class="time">
                                             Start date - End date
                                         </span>
                                     </div>

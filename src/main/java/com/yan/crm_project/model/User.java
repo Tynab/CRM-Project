@@ -3,6 +3,9 @@ package com.yan.crm_project.model;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+
+import org.hibernate.annotations.*;
 
 import lombok.*;
 
@@ -49,9 +52,21 @@ public class User {
     @ManyToOne(fetch = LAZY)
     private Role role;
 
-    @OneToMany(mappedBy = "originator")
+    @OneToMany(mappedBy = "originator", fetch = LAZY)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "doer")
+    @OneToMany(mappedBy = "doer", fetch = LAZY)
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "doer", fetch = EAGER)
+    @Where(clause = "id_trang_thai_cong_viec = 1")
+    private List<Task> tasksNotStarted;
+
+    @OneToMany(mappedBy = "doer", fetch = EAGER)
+    @Where(clause = "id_trang_thai_cong_viec = 2")
+    private List<Task> tasksInProgress;
+
+    @OneToMany(mappedBy = "doer", fetch = EAGER)
+    @Where(clause = "id_trang_thai_cong_viec = 3")
+    private List<Task> tasksCompleted;
 }

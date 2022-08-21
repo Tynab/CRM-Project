@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity(name = "trang_thai_cong_viec")
@@ -23,6 +24,6 @@ public class TaskStatus {
     @Column(name = "ten")
     private String name;
 
-    @OneToMany(mappedBy = "status")
+    @OneToMany(mappedBy = "status", fetch = LAZY)
     private Set<Task> tasks;
 }

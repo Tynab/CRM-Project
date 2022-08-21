@@ -5,7 +5,7 @@ import org.springframework.stereotype.*;
 
 import static org.springframework.util.StringUtils.*;
 
-//Ex: " ai?đứng như bóng dừa!tóc(dài )bay( trong gió).  có phải,người còn đó:là con gái của 7.1. "
+//Ex: " ai?đứng như bóng dừa!tóc(dài )bay( trong gió).  có phải,người còn đó:là con gái của Bến Tre thời 4.0. "
 @Component
 public class TextUtil {
     @Autowired

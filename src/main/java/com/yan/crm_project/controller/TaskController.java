@@ -32,9 +32,6 @@ public class TaskController {
     private TaskService taskService;
 
     @Autowired
-    private TaskStatusService taskStatusService;
-
-    @Autowired
     private AuthenticationUtil authenticationUtil;
 
     // Fields
@@ -70,7 +67,12 @@ public class TaskController {
             var mav = new ModelAndView(TASK_ADD_TEMP);
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getEmail()));
+            var currentAccountRole = getCurrentAccountRole();
+            if (currentAccountRole.equals(ADMIN)) {
+                mav.addObject(PROJECTS_PARAM, projectService.getProjects());
+            } else {
+                mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getEmail()));
+            }
             mIsByPass = false;
             return mav;
         }
@@ -83,7 +85,7 @@ public class TaskController {
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            task.setStatusId(taskStatusService.getTaskStatus(DEFAULT_STATUS).getId());
+            task.setStatusId(DEFAULT_STATUS);
             taskService.saveTask(task);
             mIsMsgShow = true;
             mMsg = "Thêm công việc thành công!";
@@ -210,11 +212,17 @@ public class TaskController {
         }
     }
 
+    // Get role of current account
+    private String getCurrentAccountRole() {
+        return roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase();
+    }
+
     // Check permission leader for task
     private boolean isPermissionLeader() {
-        var currentAccountRole = roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase();
-        return (currentAccountRole.equals(LEADER) || currentAccountRole.equals(ADMIN))
-                && userService.getUser(mChoosenOne.getProject().getOriginatorId()).getId() == mCurrentAccount.getId();
+        var currentAccountRole = getCurrentAccountRole();
+        return currentAccountRole.equals(LEADER)
+                && userService.getUser(mChoosenOne.getProject().getOriginatorId()).getId() == mCurrentAccount.getId()
+                || currentAccountRole.equals(ADMIN);
     }
 
     // Show message

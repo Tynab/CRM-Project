@@ -5,7 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import lombok.*;
-
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity(name = "loai_thanh_vien")
@@ -26,6 +26,6 @@ public class Role {
     @Column(name = "mo_ta")
     private String description;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = LAZY)
     private List<User> users;
 }

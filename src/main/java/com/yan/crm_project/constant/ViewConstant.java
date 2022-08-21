@@ -6,10 +6,12 @@ public class ViewConstant {
     public static final String INDEX_VIEW = "/index";
     public static final String FORBIDDEN_VIEW = "/403";
     public static final String NOT_FOUND_VIEW = "/404";
+    public static final String BLANK_VIEW = "/blank";
     public static final String API_VIEW = "/api";
     public static final String FREE_VIEW = "/**";
 
     public static final String PROFILE_VIEW = "/profile";
+    public static final String JOB_VIEW = "/job";
     public static final String USER_VIEW = "/user";
     public static final String ROLE_VIEW = "/role";
     public static final String PROJECT_VIEW = "/project";
@@ -33,4 +35,6 @@ public class ViewConstant {
     public static final String FIND_VIEW = "/findBy";
 
     public static final String REFRESH_VIEW = "/refresh";
+
+    public static final String SEARCH_VIEW = "/search";
 }

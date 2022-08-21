@@ -43,11 +43,12 @@ public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
         // use requestCache replace for sessionCreationPolicy stateless when formLogin
         http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests()
                 .antMatchers(API_VIEW + LOGIN_VIEW, API_VIEW + TOKEN_VIEW + REFRESH_VIEW, "/css/login.css").permitAll()
-                .antMatchers(INDEX_VIEW, PROFILE_VIEW + FREE_VIEW).hasAnyRole(MEMBER, LEADER, ADMIN)
+                .antMatchers(INDEX_VIEW, PROFILE_VIEW + FREE_VIEW, BLANK_VIEW, JOB_VIEW)
+                .hasAnyRole(MEMBER, LEADER, ADMIN)
                 .antMatchers(TASK_VIEW + FREE_VIEW, PROJECT_VIEW + FREE_VIEW, USER_VIEW + FREE_VIEW)
                 .hasAnyRole(LEADER, ADMIN).antMatchers(ROLE_VIEW + FREE_VIEW).hasRole(ADMIN).anyRequest()
                 .authenticated().and().formLogin().loginPage(LOGIN_VIEW).loginProcessingUrl(LOGIN_VIEW)
-                .defaultSuccessUrl(INDEX_VIEW).failureUrl(LOGIN_VIEW).permitAll().and().logout()
+                .defaultSuccessUrl(INDEX_VIEW).failureUrl(LOGIN_VIEW + "?error=true").permitAll().and().logout()
                 .invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl(LOGIN_VIEW).permitAll().and()
                 .exceptionHandling().accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(authenticationFilter)
                 .addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

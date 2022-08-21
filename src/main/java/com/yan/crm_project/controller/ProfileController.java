@@ -10,10 +10,10 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
+import static java.util.stream.Stream.*;
 import static org.springframework.util.StringUtils.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -53,17 +53,17 @@ public class ProfileController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(PROFILE_TEMP);
-            var email = mCurrentAccount.getEmail();
-            var tasks = taskService.getTasksByDoer(email);
+            var tasksNotStarted = mCurrentAccount.getTasksNotStarted();
+            var tasksInProgress = mCurrentAccount.getTasksInProgress();
+            var tasksCompleted = mCurrentAccount.getTasksCompleted();
+            var tasks = concat(concat(tasksCompleted.stream(), tasksInProgress.stream()), tasksNotStarted.stream())
+                    .toList();
             var tasksCount = tasks.size();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(TASKS_PARAM, tasks);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : taskService.getTasksByDoerAndStatus(email, NOT_STARTED).size() * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : taskService.getTasksByDoerAndStatus(email, IN_PROGRESS).size() * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : taskService.getTasksByDoerAndStatus(email, COMPLETED).size() * 100 / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStarted.size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgress.size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompleted.size() * 100 / tasksCount);
             showMessageBox(mav);
             mIsByPass = false;
             return mav;
@@ -72,7 +72,7 @@ public class ProfileController {
 
     // Upload new avatar
     @PostMapping(EDIT_VIEW + AVATAR_VIEW)
-    public String profileEditAvatar(MultipartFile avatar) {
+    public String profileAvatarEdit(MultipartFile avatar) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
@@ -107,7 +107,7 @@ public class ProfileController {
 
     // Load edit info input form
     @GetMapping(EDIT_VIEW + INFO_VIEW)
-    public ModelAndView profileEditInfo() {
+    public ModelAndView profileInfoEdit() {
         // check current account still valid
         if (!isValidAccount()) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
@@ -121,7 +121,7 @@ public class ProfileController {
 
     // Edit user
     @RequestMapping(value = EDIT_VIEW + INFO_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String profileEditInfoSave(User user) {
+    public String profileInfoEditSave(User user) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
@@ -164,7 +164,7 @@ public class ProfileController {
 
     // Load edit task input form
     @GetMapping(EDIT_VIEW + TASK_VIEW)
-    public ModelAndView profileEditTask() {
+    public ModelAndView profileTaskEdit() {
         // check current account still valid
         if (!isValidAccount()) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
@@ -180,7 +180,7 @@ public class ProfileController {
 
     // Edit task
     @RequestMapping(value = EDIT_VIEW + TASK_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String profileEditTaskSave(int statusId) {
+    public String profileTaskEditSave(int statusId) {
         // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
