@@ -7,5 +7,4 @@ import com.yan.crm_project.model.*;
 
 @Repository
 public interface TaskStatusRepository extends JpaRepository<TaskStatus, Integer> {
-    public TaskStatus findByName(String name);
 }

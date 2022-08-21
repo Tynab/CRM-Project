@@ -76,20 +76,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(User user) {
-        user.setEmail(stringUtil.removeSpCharsBeginAndEnd(user.getEmail()).toLowerCase());
+        var email = user.getEmail();
+        user.setEmail(stringUtil.removeSpCharsBeginAndEnd(email).toLowerCase());
         user.setPassword(passwordEncoder.encode(stringUtil.removeWhiteSpaceBeginAndEnd(user.getPassword())));
         user.setName(stringUtil.titleCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(user.getName())));
         user.setAddress(addressUtil.parseToLegalAddress(user.getAddress()));
-        log.info("Saving user with email: {}", user.getEmail());
+        log.info("Saving user with email: {}", email);
         return userRepository.save(user);
     }
 
     @Override
     public User saveUserWithoutPassword(User user) {
-        user.setPassword(getUser(user.getEmail()).getPassword());
+        var email = user.getEmail();
+        user.setPassword(getUser(email).getPassword());
         user.setName(stringUtil.titleCase(stringUtil.removeNumAndWhiteSpaceBeginAndEnd(user.getName())));
         user.setAddress(addressUtil.parseToLegalAddress(user.getAddress()));
-        log.info("Saving user with id: {}", user.getId());
+        log.info("Saving user with email: {}", email);
         return userRepository.save(user);
     }
 

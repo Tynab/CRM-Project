@@ -43,9 +43,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        task.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(task.getName())));
+        var name = task.getName();
+        task.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(name)));
         task.setDescription(textUtil.parseToLegalText(task.getDescription()));
-        log.info("Saving task with name: {}", task.getName());
+        log.info("Saving task with name: {}", name);
         return taskRepository.save(task);
     }
 
@@ -53,12 +54,6 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(int id) {
         log.info("Deleting task with id: {}", id);
         taskRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Task> getTasksByDoer(String doerEmail) {
-        log.info("Fetching tasks by doer: {}", doerEmail);
-        return taskRepository.findAllByDoerEmail(doerEmail);
     }
 
     @Override

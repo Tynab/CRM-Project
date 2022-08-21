@@ -47,9 +47,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role saveRole(Role role) {
-        role.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
+        var name = role.getName();
+        role.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(name)));
         role.setDescription(textUtil.parseToLegalText(role.getDescription()));
-        log.info("Saving role with name: {}", role.getName());
+        log.info("Saving role with name: {}", name);
         return roleRepository.save(role);
     }
 

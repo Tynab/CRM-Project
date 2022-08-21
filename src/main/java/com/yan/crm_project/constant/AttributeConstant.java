@@ -27,6 +27,7 @@ public class AttributeConstant {
     public static final String FLAG_MSG_PARAM = "flag";
     public static final String MSG_PARAM = "msg";
 
+    public static final String AVATAR_PREFIX = "avatar_";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String REDIRECT_PREFIX = "redirect:";

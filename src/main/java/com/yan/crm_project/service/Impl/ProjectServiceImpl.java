@@ -41,9 +41,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveProject(Project project) {
-        project.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(project.getName())));
+        var name = project.getName();
+        project.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(name)));
         project.setDescription(textUtil.parseToLegalText(project.getDescription()));
-        log.info("Saving project with name: {}", project.getName());
+        log.info("Saving project with name: {}", name);
         return projectRepository.save(project);
     }
 

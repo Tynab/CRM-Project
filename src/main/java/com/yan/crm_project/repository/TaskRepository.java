@@ -9,7 +9,5 @@ import com.yan.crm_project.model.*;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
-    public List<Task> findAllByDoerEmail(String doerEmail);
-
     public List<Task> findAllByStatusId(int id);
 }

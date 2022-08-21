@@ -80,7 +80,7 @@ public class ApplicationController {
             var tasksNotStartedCount = taskService.getTasksByStatus(NOT_STARTED).size();
             var tasksInProgressCount = taskService.getTasksByStatus(IN_PROGRESS).size();
             var tasksCompletedCount = taskService.getTasksByStatus(COMPLETED).size();
-            var tasksCount = taskService.getTasks().size();
+            var tasksCount = tasksNotStartedCount + tasksInProgressCount + tasksCompletedCount;
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(NOT_STARTED_SIZE_PARAM, tasksNotStartedCount);
             mav.addObject(IN_PROGRESS_SIZE_PARAM, tasksInProgressCount);
