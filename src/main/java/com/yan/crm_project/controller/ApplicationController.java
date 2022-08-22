@@ -37,21 +37,29 @@ public class ApplicationController {
 
     // Check login
     @GetMapping(LOGIN_VIEW)
-    public ModelAndView login(boolean error) {
+    public String login() {
         // check current account still valid
-        if (!isValidAccount()) {
-            var mav = new ModelAndView(LOGIN_VIEW);
-            if (error) {
-                mIsMsgShow = true;
-                mMsg = "Tài khoản đăng nhập chưa đúng!";
-                showMessageBox(mav);
-            }
-            return mav;
-        } else {
-            mIsByPass = true;
-            return new ModelAndView(REDIRECT_PREFIX + INDEX_VIEW);
+        if(!isValidAccount()) {
+            return LOGIN_TEMP;
+        }else{
+            return REDIRECT_PREFIX + INDEX_VIEW;
         }
     }
+    // public ModelAndView login(boolean error) {
+    //     // check current account still valid
+    //     if (!isValidAccount()) {
+    //         var mav = new ModelAndView(LOGIN_VIEW);
+    //         if (error) {
+    //             mIsMsgShow = true;
+    //             mMsg = "Tài khoản đăng nhập chưa đúng!";
+    //             showMessageBox(mav);
+    //         }
+    //         return mav;
+    //     } else {
+    //         mIsByPass = true;
+    //         return new ModelAndView(REDIRECT_PREFIX + INDEX_VIEW);
+    //     }
+    // }
 
     // Search user
     @GetMapping(SEARCH_VIEW)
