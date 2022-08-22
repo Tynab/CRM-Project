@@ -10,5 +10,6 @@
     "java.sources.organizeImports.starThreshold": 1,
     "java.sources.organizeImports.staticStarThreshold": 1,
     "java.saveActions.organizeImports": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "editor.detectIndentation": false
 }
