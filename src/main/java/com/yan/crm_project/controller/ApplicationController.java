@@ -37,13 +37,15 @@ public class ApplicationController {
 
     // Check login
     @GetMapping(LOGIN_VIEW)
-    public ModelAndView login() {
+    public ModelAndView login(boolean error) {
         // check current account still valid
         if (!isValidAccount()) {
             var mav = new ModelAndView(LOGIN_VIEW);
-            mIsMsgShow = true;
-            mMsg = "Tài khoản đăng nhập chưa đúng!";
-            showMessageBox(mav);
+            if (error) {
+                mIsMsgShow = true;
+                mMsg = "Tài khoản đăng nhập chưa đúng!";
+                showMessageBox(mav);
+            }
             return mav;
         } else {
             mIsByPass = true;
