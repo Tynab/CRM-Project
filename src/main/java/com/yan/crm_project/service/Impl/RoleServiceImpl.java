@@ -12,17 +12,12 @@ import com.yan.crm_project.util.*;
 
 import lombok.extern.slf4j.*;
 
-import static org.springframework.util.StringUtils.*;
-
 @Service
 @Transactional
 @Slf4j
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
-    private StringUtil stringUtil;
 
     @Autowired
     private TextUtil textUtil;
@@ -47,10 +42,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role saveRole(Role role) {
-        var name = role.getName();
-        role.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(name)));
         role.setDescription(textUtil.parseToLegalText(role.getDescription()));
-        log.info("Saving role with name: {}", name);
+        log.info("Saving role with name: {}", role.getName());
         return roleRepository.save(role);
     }
 

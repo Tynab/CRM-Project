@@ -12,6 +12,7 @@ import com.yan.crm_project.util.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
+import static org.springframework.util.StringUtils.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
@@ -22,6 +23,9 @@ public class RoleController {
 
     @Autowired
     private AuthenticationUtil authenticationUtil;
+
+    @Autowired
+    private StringUtil stringUtil;
 
     // Fields
     private User mCurrentAccount;
@@ -70,8 +74,9 @@ public class RoleController {
         } else {
             mIsMsgShow = true;
             mIsByPass = true;
+            var trueRole = capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName()));
             // check name is already exist
-            if (roleService.getRole(role.getName()) != null) {
+            if (roleService.getRole(trueRole) != null) {
                 mMsg = "Tên quyền này đã tồn tại";
                 return REDIRECT_PREFIX + ROLE_VIEW + ADD_VIEW;
             } else {

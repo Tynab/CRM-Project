@@ -29,6 +29,9 @@ public class UserController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
+    @Autowired
+    private StringUtil stringUtil;
+
     // Fields
     private User mCurrentAccount;
     private User mChoosenOne;
@@ -80,11 +83,13 @@ public class UserController {
         } else {
             mIsMsgShow = true;
             mIsByPass = true;
+            var trueEmail = stringUtil.removeSpCharsBeginAndEnd(user.getEmail()).toLowerCase();
             // check email is already exist
-            if (userService.getUser(user.getEmail()) != null) {
+            if (userService.getUser(trueEmail) != null) {
                 mMsg = "Tài khoản email này đã được đăng ký!";
                 return REDIRECT_PREFIX + USER_VIEW + ADD_VIEW;
             } else {
+                user.setEmail(trueEmail);
                 user.setImage(DEFAULT_AVATAR);
                 userService.saveUser(user);
                 mMsg = "Tài khoản đã được tạo thành công!";
