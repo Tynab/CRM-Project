@@ -100,7 +100,7 @@ public class ProfileController {
                     }
                 }
             }
-            mIsByPass = true;
+            mIsByPass = false;
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
