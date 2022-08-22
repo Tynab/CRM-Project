@@ -74,12 +74,13 @@ public class RoleController {
         } else {
             mIsMsgShow = true;
             mIsByPass = true;
-            var trueRole = capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName()));
+            var trueName = capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName()));
             // check name is already exist
-            if (roleService.getRole(trueRole) != null) {
+            if (roleService.getRole(trueName) != null) {
                 mMsg = "Tên quyền này đã tồn tại";
                 return REDIRECT_PREFIX + ROLE_VIEW + ADD_VIEW;
             } else {
+                role.setName(trueName);
                 roleService.saveRole(role);
                 mMsg = "Thêm quyền thành công";
                 return REDIRECT_PREFIX + ROLE_VIEW;
