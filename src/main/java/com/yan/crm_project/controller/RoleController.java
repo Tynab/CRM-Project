@@ -74,7 +74,8 @@ public class RoleController {
         } else {
             mIsMsgShow = true;
             mIsByPass = true;
-            var trueName = capitalize(stringUtil.removeSpCharsBeginAndEnd(role.getName()));
+            var trueName = capitalize(
+                    stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeSpCharsBeginAndEnd(role.getName())));
             // check name is already exist
             if (roleService.getRole(trueName) != null) {
                 mMsg = "Tên quyền này đã tồn tại";

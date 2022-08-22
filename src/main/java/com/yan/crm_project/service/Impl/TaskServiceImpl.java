@@ -44,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task saveTask(Task task) {
         var name = task.getName();
-        task.setName(capitalize(stringUtil.removeSpCharsBeginAndEnd(name)));
+        task.setName(capitalize(stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeSpCharsBeginAndEnd(name))));
         task.setDescription(textUtil.parseToLegalText(task.getDescription()));
         log.info("Saving task with name: {}", name);
         return taskRepository.save(task);
