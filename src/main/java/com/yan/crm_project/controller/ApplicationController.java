@@ -27,6 +27,9 @@ public class ApplicationController {
     private TaskService taskService;
 
     @Autowired
+    private ApplicationUtil applicationUtil;
+
+    @Autowired
     private AuthenticationUtil authenticationUtil;
 
     // Fields
@@ -79,9 +82,9 @@ public class ApplicationController {
             var mav = new ModelAndView(INDEX_TEMP);
             var tasks = taskService.getTasks();
             var tasksCount = tasks.size();
-            var tasksNotStartedCount = tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).count();
-            var tasksInProgressCount = tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).count();
-            var tasksCompletedCount = tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).count();
+            var tasksNotStartedCount = applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size();
+            var tasksInProgressCount = applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size();
+            var tasksCompletedCount = applicationUtil.splitTasksByStatus(tasks, COMPLETED).size();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(NOT_STARTED_SIZE_PARAM, tasksNotStartedCount);
             mav.addObject(IN_PROGRESS_SIZE_PARAM, tasksInProgressCount);

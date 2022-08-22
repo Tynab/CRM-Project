@@ -12,6 +12,7 @@ import com.yan.crm_project.util.*;
 
 import lombok.*;
 
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -37,6 +38,9 @@ public class ProfileController {
     private ImageService imageService;
 
     @Autowired
+    private ApplicationUtil applicationUtil;
+
+    @Autowired
     private AuthenticationUtil authenticationUtil;
 
     // Fields
@@ -54,16 +58,16 @@ public class ProfileController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(PROFILE_TEMP);
-            var tasks = mCurrentAccount.getTasks();
+            var tasks = taskService.getTasksByDoer(mCurrentAccount.getId());
             var tasksCount = tasks.size();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(TASKS_PARAM, tasks);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM,
-                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksNotStarted().size() * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM,
-                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksInProgress().size() * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM,
-                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksCompleted().size() * 100 / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : applicationUtil.splitTasksByStatus(tasks, COMPLETED).size() * 100 / tasksCount);
             showMessageBox(mav);
             mIsByPass = false;
             return mav;
@@ -100,7 +104,7 @@ public class ProfileController {
                     }
                 }
             }
-            mIsByPass = false;
+            mIsByPass = true;
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
@@ -201,7 +205,7 @@ public class ProfileController {
                 taskService.saveTask(mChoosenOne);
                 mMsg = "Cập nhật trạng thái công việc thành công!";
             }
-            mIsByPass = false;
+            mIsByPass = true;
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }

@@ -24,6 +24,9 @@ public class JobController {
     private TaskService taskService;
 
     @Autowired
+    private ApplicationUtil applicationUtil;
+
+    @Autowired
     private AuthenticationUtil authenticationUtil;
 
     // Fields
@@ -41,16 +44,12 @@ public class JobController {
             var tasksCount = tasks.size();
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM,
-                    tasksCount == 0 ? 0
-                            : tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).count() * 100
-                                    / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM,
-                    tasksCount == 0 ? 0
-                            : tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).count() * 100
-                                    / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size() * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).count() * 100 / tasksCount);
+                    : applicationUtil.splitTasksByStatus(tasks, COMPLETED).size() * 100 / tasksCount);
             return mav;
         }
     }

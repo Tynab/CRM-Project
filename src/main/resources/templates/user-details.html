@@ -278,7 +278,7 @@
                                 Chưa thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${person.getTasksNotStarted()}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksNotStarted}" th:href="@{/task/findBy/(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -305,7 +305,7 @@
                                 Đang thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${person.getTasksInProgress()}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksInProgress}" th:href="@{/task/findBy/(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -332,7 +332,7 @@
                                 Đã hoàn thành
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${person.getTasksCompleted()}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksCompleted}" th:href="@{/task/findBy/(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task

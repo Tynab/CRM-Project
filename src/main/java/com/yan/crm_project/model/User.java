@@ -8,7 +8,6 @@ import lombok.*;
 
 import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static java.util.stream.Collectors.*;
-import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
@@ -55,7 +54,7 @@ public class User {
     @OneToMany(mappedBy = "originator")
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "doer", cascade = ALL)
+    @OneToMany(mappedBy = "doer")
     private List<Task> tasks;
 
     // Get all tasks with status not started

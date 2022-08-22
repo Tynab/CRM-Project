@@ -16,7 +16,7 @@ public class AttributeConstant {
     public static final String TASKSTATUSES_PARAM = "taskStatuses";
     public static final String TASKS_NOT_STARTED_PARAM = "tasksNotStarted";
     public static final String TASKS_IN_PROGRESS_PARAM = "tasksInProgress";
-    public static final String TASKS_COMPLETED_PARAM = "tasksInProgress";
+    public static final String TASKS_COMPLETED_PARAM = "tasksCompleted";
     public static final String NOT_STARTED_PERCENT_PARAM = "notStartedPecent";
     public static final String IN_PROGRESS_PERCENT_PARAM = "inProgressPecent";
     public static final String COMPLETED_PERCENT_PARAM = "completedPercent";

@@ -36,6 +36,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> getTasksByDoer(int doerId) {
+        log.info("Fetching all tasks by doer id: {}", doerId);
+        return taskRepository.findAllByDoerId(doerId);
+    }
+
+    @Override
     public Task getTask(int id) {
         log.info("Fetching task with id: {}", id);
         return taskRepository.findById(id).orElse(null);

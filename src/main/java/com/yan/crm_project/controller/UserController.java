@@ -11,6 +11,7 @@ import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
 import static com.yan.crm_project.constant.ApplicationConstant.*;
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -25,6 +26,12 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private ApplicationUtil applicationUtil;
 
     @Autowired
     private AuthenticationUtil authenticationUtil;
@@ -211,16 +218,19 @@ public class UserController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(USER_DETAILS_TEMP);
-            mChoosenOne = userService.getUser(mChoosenOne.getId()); // re-get tasks persistence context
-            var tasksNotStartedCount = mChoosenOne.getTasksNotStarted().size();
-            var tasksInProgressCount = mChoosenOne.getTasksInProgress().size();
-            var tasksCompletedCount = mChoosenOne.getTasksCompleted().size();
-            var tasksCount = tasksNotStartedCount + tasksInProgressCount + tasksCompletedCount;
+            var tasks = taskService.getTasksByDoer(mChoosenOne.getId());
+            var tasksNotStarted = applicationUtil.splitTasksByStatus(tasks, NOT_STARTED);
+            var tasksInProgress = applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS);
+            var tasksCompleted = applicationUtil.splitTasksByStatus(tasks, COMPLETED);
+            var tasksCount = tasks.size();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(PERSON_PARAM, mChoosenOne);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStartedCount * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
+            mav.addObject(TASKS_NOT_STARTED_PARAM, tasksNotStarted);
+            mav.addObject(TASKS_IN_PROGRESS_PARAM, tasksInProgress);
+            mav.addObject(TASKS_COMPLETED_PARAM, tasksCompleted);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStarted.size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgress.size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompleted.size() * 100 / tasksCount);
             mIsByPass = false;
             return mav;
         }
