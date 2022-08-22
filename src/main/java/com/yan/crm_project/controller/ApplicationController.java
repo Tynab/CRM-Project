@@ -36,17 +36,17 @@ public class ApplicationController {
     private boolean mIsMsgShow;
 
     // Check login
-    @GetMapping(LOGIN_VIEW)
-    public String login() {
-        // check current account still valid
-        if (!isValidAccount()) {
-            return LOGIN_TEMP;
-        } else {
-            return REDIRECT_PREFIX + INDEX_VIEW;
-        }
-    }
+    // @GetMapping(LOGIN_VIEW)
+    // public String login() {
+    //     // check current account still valid
+    //     if (!isValidAccount()) {
+    //         return LOGIN_TEMP;
+    //     } else {
+    //         return REDIRECT_PREFIX + INDEX_VIEW;
+    //     }
+    // }
 
-    @GetMapping(LOGIN_VIEW)
+    @RequestMapping(LOGIN_VIEW)
     public ModelAndView login(boolean error) {
         // check current account still valid
         if (!isValidAccount()) {
