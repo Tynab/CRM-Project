@@ -55,8 +55,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Iterable<Project> getProjectsByOriginator(String originatorEmail) {
-        log.info("Fetching projects by originator with email: {}", originatorEmail);
-        return projectRepository.findAllByOriginatorEmail(originatorEmail);
+    public Iterable<Project> getProjectsByOriginator(int originatorId) {
+        log.info("Fetching projects with originator id: {}", originatorId);
+        return projectRepository.findAllByOriginatorId(originatorId);
     }
 }

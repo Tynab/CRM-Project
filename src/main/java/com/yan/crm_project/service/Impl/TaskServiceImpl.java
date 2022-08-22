@@ -55,10 +55,4 @@ public class TaskServiceImpl implements TaskService {
         log.info("Deleting task with id: {}", id);
         taskRepository.deleteById(id);
     }
-
-    @Override
-    public List<Task> getTasksByStatus(int statusId) {
-        log.info("Fetching tasks by status: {}", statusId);
-        return taskRepository.findAllByStatusId(statusId);
-    }
 }

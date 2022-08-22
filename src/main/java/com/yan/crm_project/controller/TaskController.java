@@ -71,7 +71,7 @@ public class TaskController {
             if (currentAccountRole.equals(ADMIN)) {
                 mav.addObject(PROJECTS_PARAM, projectService.getProjects());
             } else {
-                mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getEmail()));
+                mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getId()));
             }
             mIsByPass = false;
             return mav;

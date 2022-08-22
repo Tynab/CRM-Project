@@ -42,19 +42,19 @@ public class Task {
     @Column(name = "id_nguoi_thuc_hien")
     private int doerId;
 
+    @Column(name = "id_du_an")
+    private int projectId;
+
+    @Column(name = "id_trang_thai_cong_viec")
+    private int statusId;
+
     @JoinColumn(name = "id_nguoi_thuc_hien", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = LAZY)
     private User doer;
 
-    @Column(name = "id_du_an")
-    private int projectId;
-
     @JoinColumn(name = "id_du_an", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     private Project project;
-
-    @Column(name = "id_trang_thai_cong_viec")
-    private int statusId;
 
     @JoinColumn(name = "id_trang_thai_cong_viec", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(fetch = LAZY)

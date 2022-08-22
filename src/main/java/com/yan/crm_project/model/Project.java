@@ -46,6 +46,6 @@ public class Project {
     @ManyToOne(fetch = LAZY)
     private User originator;
 
-    @OneToMany(mappedBy = "project", fetch = LAZY)
+    @OneToMany(mappedBy = "project")
     private List<Task> tasks;
 }

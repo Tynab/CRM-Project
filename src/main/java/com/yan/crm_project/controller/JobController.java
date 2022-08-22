@@ -37,15 +37,20 @@ public class JobController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(JOB_TEMP);
-            var tasksNotStartedCount = taskService.getTasksByStatus(NOT_STARTED).size();
-            var tasksInProgressCount = taskService.getTasksByStatus(IN_PROGRESS).size();
-            var tasksCompletedCount = taskService.getTasksByStatus(COMPLETED).size();
-            var tasksCount = tasksNotStartedCount + tasksInProgressCount + tasksCompletedCount;
+            var tasks = taskService.getTasks();
+            var tasksCount = tasks.size();
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStartedCount * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM,
+                    tasksCount == 0 ? 0
+                            : tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).count() * 100
+                                    / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM,
+                    tasksCount == 0 ? 0
+                            : tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).count() * 100
+                                    / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
+                    : tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).count() * 100 / tasksCount);
             return mav;
         }
     }

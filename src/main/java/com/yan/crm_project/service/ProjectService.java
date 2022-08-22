@@ -11,5 +11,5 @@ public interface ProjectService {
 
     public void deleteProject(int id);
 
-    public Iterable<Project> getProjectsByOriginator(String originatorEmail);
+    public Iterable<Project> getProjectsByOriginator(int originatorId);
 }

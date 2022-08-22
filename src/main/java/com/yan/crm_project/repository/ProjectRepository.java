@@ -7,5 +7,5 @@ import com.yan.crm_project.model.*;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
-    public Iterable<Project> findAllByOriginatorEmail(String originatorEmail);
+    public Iterable<Project> findAllByOriginatorId(int originatorId);
 }

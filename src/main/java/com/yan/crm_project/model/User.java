@@ -3,12 +3,12 @@ package com.yan.crm_project.model;
 import java.util.*;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-
-import org.hibernate.annotations.*;
 
 import lombok.*;
 
+import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
+import static java.util.stream.Collectors.*;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
@@ -52,21 +52,24 @@ public class User {
     @ManyToOne(fetch = LAZY)
     private Role role;
 
-    @OneToMany(mappedBy = "originator", fetch = LAZY)
+    @OneToMany(mappedBy = "originator")
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "doer", fetch = LAZY)
+    @OneToMany(mappedBy = "doer", cascade = ALL)
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "doer", fetch = EAGER)
-    @Where(clause = "id_trang_thai_cong_viec = 1")
-    private List<Task> tasksNotStarted;
+    // Get all tasks with status not started
+    public List<Task> getTasksNotStarted() {
+        return tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).collect(toList());
+    }
 
-    @OneToMany(mappedBy = "doer", fetch = EAGER)
-    @Where(clause = "id_trang_thai_cong_viec = 2")
-    private List<Task> tasksInProgress;
+    // Get all tasks with status in progress
+    public List<Task> getTasksInProgress() {
+        return tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).collect(toList());
+    }
 
-    @OneToMany(mappedBy = "doer", fetch = EAGER)
-    @Where(clause = "id_trang_thai_cong_viec = 3")
-    private List<Task> tasksCompleted;
+    // Get all tasks with status completed
+    public List<Task> getTasksCompleted() {
+        return tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).collect(toList());
+    }
 }

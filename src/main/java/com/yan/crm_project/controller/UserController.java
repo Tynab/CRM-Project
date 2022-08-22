@@ -206,6 +206,7 @@ public class UserController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(USER_DETAILS_TEMP);
+            mChoosenOne = userService.getUser(mChoosenOne.getId()); // re-get tasks persistence context
             var tasksNotStartedCount = mChoosenOne.getTasksNotStarted().size();
             var tasksInProgressCount = mChoosenOne.getTasksInProgress().size();
             var tasksCompletedCount = mChoosenOne.getTasksCompleted().size();
@@ -237,7 +238,7 @@ public class UserController {
         if (mChoosenOne == null) {
             return false;
         } else {
-            mChoosenOne = userService.getUser(mChoosenOne.getEmail());
+            mChoosenOne = userService.getUser(mChoosenOne.getId());
             return mChoosenOne != null;
         }
     }

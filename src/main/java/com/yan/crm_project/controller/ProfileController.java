@@ -10,10 +10,11 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import lombok.*;
+
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
-import static java.util.stream.Stream.*;
 import static org.springframework.util.StringUtils.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -53,17 +54,16 @@ public class ProfileController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(PROFILE_TEMP);
-            var tasksNotStarted = mCurrentAccount.getTasksNotStarted();
-            var tasksInProgress = mCurrentAccount.getTasksInProgress();
-            var tasksCompleted = mCurrentAccount.getTasksCompleted();
-            var tasks = concat(concat(tasksCompleted.stream(), tasksInProgress.stream()), tasksNotStarted.stream())
-                    .toList();
+            var tasks = mCurrentAccount.getTasks();
             var tasksCount = tasks.size();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(TASKS_PARAM, tasks);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStarted.size() * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgress.size() * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompleted.size() * 100 / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM,
+                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksNotStarted().size() * 100 / tasksCount);
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM,
+                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksInProgress().size() * 100 / tasksCount);
+            mav.addObject(COMPLETED_PERCENT_PARAM,
+                    tasksCount == 0 ? 0 : mCurrentAccount.getTasksCompleted().size() * 100 / tasksCount);
             showMessageBox(mav);
             mIsByPass = false;
             return mav;
@@ -137,7 +137,7 @@ public class ProfileController {
             }
             mIsMsgShow = true;
             mMsg = "Cập nhật thông tin thành công!";
-            mIsByPass = true;
+            mIsByPass = false;
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
@@ -201,7 +201,7 @@ public class ProfileController {
                 taskService.saveTask(mChoosenOne);
                 mMsg = "Cập nhật trạng thái công việc thành công!";
             }
-            mIsByPass = true;
+            mIsByPass = false;
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }

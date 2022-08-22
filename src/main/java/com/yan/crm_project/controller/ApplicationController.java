@@ -77,10 +77,11 @@ public class ApplicationController {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(INDEX_TEMP);
-            var tasksNotStartedCount = taskService.getTasksByStatus(NOT_STARTED).size();
-            var tasksInProgressCount = taskService.getTasksByStatus(IN_PROGRESS).size();
-            var tasksCompletedCount = taskService.getTasksByStatus(COMPLETED).size();
-            var tasksCount = tasksNotStartedCount + tasksInProgressCount + tasksCompletedCount;
+            var tasks = taskService.getTasks();
+            var tasksCount = tasks.size();
+            var tasksNotStartedCount = tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).count();
+            var tasksInProgressCount = tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).count();
+            var tasksCompletedCount = tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).count();
             mav.addObject(USER_PARAM, mCurrentAccount);
             mav.addObject(NOT_STARTED_SIZE_PARAM, tasksNotStartedCount);
             mav.addObject(IN_PROGRESS_SIZE_PARAM, tasksInProgressCount);
