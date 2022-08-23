@@ -193,6 +193,7 @@
                                     </label>
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Số di động"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                             class="form-control form-control-line" name="phone"
                                             th:value="${user.phone}">
                                     </div>

@@ -49,8 +49,8 @@ public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
                 .hasAnyRole(LEADER, ADMIN).antMatchers(ROLE_VIEW + FREE_VIEW).hasRole(ADMIN).anyRequest()
                 .authenticated().and().formLogin().loginPage(LOGIN_VIEW).loginProcessingUrl(LOGIN_VIEW)
                 .defaultSuccessUrl(INDEX_VIEW).failureUrl(LOGIN_VIEW + "?error=true").permitAll().and().logout()
-                .invalidateHttpSession(true).clearAuthentication(true).logoutSuccessUrl(LOGIN_VIEW).permitAll().and()
-                .exceptionHandling().accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(authenticationFilter)
+                .invalidateHttpSession(true).clearAuthentication(true).permitAll().and().exceptionHandling()
+                .accessDeniedPage(FORBIDDEN_VIEW).and().addFilter(authenticationFilter)
                 .addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -202,7 +202,7 @@ public class UserController {
                     mMsg = "Tài khoản này đang có công việc, không thể xóa!";
                 } else {
                     userService.deleteUser(id);
-                    mMsg = "Tài khoản đã được xóa thành công!";
+                    mMsg = "Xóa tài khoản thành công!";
                 }
             }
             mIsByPass = true;
