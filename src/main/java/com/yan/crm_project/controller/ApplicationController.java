@@ -92,6 +92,7 @@ public class ApplicationController {
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStartedCount * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
+            mIsByPass = false;
             return mav;
         }
     }
@@ -105,6 +106,7 @@ public class ApplicationController {
         } else {
             var mav = new ModelAndView(BLANK_TEMP);
             mav.addObject(USER_PARAM, mCurrentAccount);
+            mIsByPass = false;
             return mav;
         }
     }
@@ -112,6 +114,7 @@ public class ApplicationController {
     // Load forbidden page
     @GetMapping(FORBIDDEN_VIEW)
     public String forbidden() {
+        mIsByPass = false;
         return FORBIDDEN_TEMP;
     }
 

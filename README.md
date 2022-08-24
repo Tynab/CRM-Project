@@ -37,7 +37,11 @@
         - Quản lý tài khoản cá nhân
 
 ## LINK DEMO
-[Click vào đây để xem](https://crm-project.herokuapp.com/login)
+<div align="center">
+
+[Click vào đây để xem chi tiết](https://crm-project.herokuapp.com/login)
+
+</div>
 
 ## HÌNH ẢNH DEMO
 <p align="center">
@@ -45,7 +49,11 @@
 </p>
 
 ## VIDEO DEMO
-[Click vào đây để xem](https://crm-project.herokuapp.com/login)
+<div align="center">
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/3W1kdSJdITo/0.jpg)](https://youtu.be/3W1kdSJdITo)
+
+</div>
 
 ## CẤU HÌNH API REFRESH TOKEN
 ```java
