@@ -41,7 +41,8 @@ public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
         var authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
         authenticationFilter.setFilterProcessesUrl(API_VIEW + LOGIN_VIEW);
         // use requestCache replace for sessionCreationPolicy stateless when formLogin
-        http.csrf().disable().requestCache().requestCache(httpSessionRequestCache).and().authorizeRequests()
+        http.csrf().disable().cors().disable().requestCache().requestCache(httpSessionRequestCache).and()
+                .authorizeRequests()
                 .antMatchers(API_VIEW + LOGIN_VIEW, API_VIEW + TOKEN_VIEW + REFRESH_VIEW, "/css/login.css").permitAll()
                 .antMatchers(INDEX_VIEW, PROFILE_VIEW + FREE_VIEW, BLANK_VIEW, JOB_VIEW)
                 .hasAnyRole(MEMBER, LEADER, ADMIN)
