@@ -27,6 +27,7 @@ import static org.springframework.http.MediaType.*;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    // Fields
     private final AuthenticationManager authenticationManager;
 
     @Override
