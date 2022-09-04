@@ -68,6 +68,7 @@ public class TaskController {
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(USER_PARAM, mCurrentAccount);
             var currentAccountRole = getCurrentAccountRole();
+            // check admin
             if (currentAccountRole.equals(ADMIN)) {
                 mav.addObject(PROJECTS_PARAM, projectService.getProjects());
             } else {
@@ -109,7 +110,8 @@ public class TaskController {
                 mMsg = "Không tìm thấy công việc!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                return isPermissionLeader() ? REDIRECT_PREFIX + TASK_VIEW + EDIT_VIEW : FORWARD_PREFIX + FORBIDDEN_VIEW;
+                return !isPermissionLeader() ? FORWARD_PREFIX + FORBIDDEN_VIEW
+                        : REDIRECT_PREFIX + TASK_VIEW + EDIT_VIEW;
             }
         }
     }
@@ -121,7 +123,10 @@ public class TaskController {
         if (!isValidAccount()) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
-            if (isPermissionLeader()) {
+            // check permission
+            if (!isPermissionLeader()) {
+                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
+            } else {
                 var mav = new ModelAndView(TASK_EDIT_TEMP);
                 mav.addObject(USERS_PARAM, userService.getUsers());
                 mav.addObject(USER_PARAM, mCurrentAccount);
@@ -129,8 +134,6 @@ public class TaskController {
                 mav.addObject(TASK_PARAM, mChoosenOne);
                 mIsByPass = false;
                 return mav;
-            } else {
-                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
             }
         }
     }
@@ -149,15 +152,16 @@ public class TaskController {
                 mMsg = "Công việc không tồn tại!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                if (isPermissionLeader()) {
+                // check permission
+                if (!isPermissionLeader()) {
+                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                } else {
                     task.setId(mChoosenOne.getId());
                     task.setStatusId(mChoosenOne.getStatusId());
                     taskService.saveTask(task);
                     mIsMsgShow = true;
                     mMsg = "Cập nhật công việc thành công!";
                     return REDIRECT_PREFIX + TASK_VIEW;
-                } else {
-                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
                 }
             }
         }
@@ -178,13 +182,14 @@ public class TaskController {
                 mMsg = "Công việc không tồn tại!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
-                if (isPermissionLeader()) {
+                // check permission
+                if (!isPermissionLeader()) {
+                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                } else {
                     taskService.deleteTask(id);
                     mIsMsgShow = true;
                     mMsg = "Xóa công việc thành công!";
                     return REDIRECT_PREFIX + TASK_VIEW;
-                } else {
-                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
                 }
             }
         }

@@ -32,11 +32,13 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var servletPath = request.getServletPath();
+        // Pass api
         if (servletPath.equals(API_VIEW + LOGIN_VIEW) || servletPath.equals(API_VIEW + TOKEN_VIEW + REFRESH_VIEW)) {
             filterChain.doFilter(request, response);
             return;
         } else {
             var header = request.getHeader(AUTHORIZATION);
+            // check header
             if (header != null && header.startsWith(TOKEN_PREFIX)) {
                 try {
                     var decodedJwt = require(HMAC256(SECRET_KEY.getBytes())).build()

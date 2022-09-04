@@ -44,6 +44,7 @@ public class ApplicationController {
         // check current account still valid
         if (!isValidAccount()) {
             var mav = new ModelAndView(LOGIN_TEMP);
+            // login failed
             if (error) {
                 mIsMsgShow = true;
                 mMsg = "Tài khoản đăng nhập chưa đúng!";
@@ -59,11 +60,13 @@ public class ApplicationController {
     // Search user
     @GetMapping(SEARCH_VIEW)
     public String search(String name) {
+        // check current account still valid
         if (!isValidAccount()) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             var users = userService.getUsers(name);
             mIsByPass = true;
+            // match user
             if (users.size() > 0) {
                 return userController.findUser(users.get(0).getId(), DETAILS_VIEW);
             } else {

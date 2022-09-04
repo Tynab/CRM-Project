@@ -7,11 +7,13 @@ import org.springframework.security.web.savedrequest.*;
 
 @Configuration
 public class ApplicationConfig {
+    // Passord encode BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Request cache
     @Bean
     public HttpSessionRequestCache getHttpSessionRequestCache() {
         var httpSessionRequestCache = new HttpSessionRequestCache();

@@ -98,8 +98,8 @@ public class ProjectController {
                 mMsg = "Dự án không tồn tại!";
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             } else {
-                return isPermissionLeader() ? REDIRECT_PREFIX + PROJECT_VIEW + EDIT_VIEW
-                        : FORWARD_PREFIX + FORBIDDEN_VIEW;
+                return !isPermissionLeader() ? FORWARD_PREFIX + FORBIDDEN_VIEW
+                        : REDIRECT_PREFIX + PROJECT_VIEW + EDIT_VIEW;
             }
         }
     }
@@ -111,14 +111,15 @@ public class ProjectController {
         if (!isValidAccount()) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
-            if (isPermissionLeader()) {
+            // check permission
+            if (!isPermissionLeader()) {
+                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
+            } else {
                 var mav = new ModelAndView(PROJECT_EDIT_TEMP);
                 mav.addObject(USER_PARAM, mCurrentAccount);
                 mav.addObject(PROJECT_PARAM, mChoosenOne);
                 mIsByPass = false;
                 return mav;
-            } else {
-                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
             }
         }
     }
@@ -137,15 +138,16 @@ public class ProjectController {
                 mMsg = "Dự án không tồn tại!";
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             } else {
-                if (isPermissionLeader()) {
+                // check permission
+                if (!isPermissionLeader()) {
+                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                } else {
                     project.setId(mChoosenOne.getId());
                     project.setOriginatorId(mChoosenOne.getOriginatorId());
                     projectService.saveProject(project);
                     mIsMsgShow = true;
                     mMsg = "Cập nhật dự án thành công!";
                     return REDIRECT_PREFIX + PROJECT_VIEW;
-                } else {
-                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
                 }
             }
         }
@@ -172,13 +174,14 @@ public class ProjectController {
                     mMsg = "Dự án đang có công việc, không thể xóa!";
                     return REDIRECT_PREFIX + PROJECT_VIEW;
                 } else {
-                    if (isPermissionLeader()) {
+                    // check permission
+                    if (!isPermissionLeader()) {
+                        return FORWARD_PREFIX + FORBIDDEN_VIEW;
+                    } else {
                         projectService.deleteProject(id);
                         mIsMsgShow = true;
                         mMsg = "Xóa dự án thành công!";
                         return REDIRECT_PREFIX + PROJECT_VIEW;
-                    } else {
-                        return FORWARD_PREFIX + FORBIDDEN_VIEW;
                     }
                 }
             }

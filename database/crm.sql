@@ -1,3 +1,7 @@
+-- dispose db
+
+DROP DATABASE IF EXISTS crm_project;
+
 -- create db
 
 CREATE DATABASE IF NOT EXISTS crm_project;

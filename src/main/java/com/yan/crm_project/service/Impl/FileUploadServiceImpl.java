@@ -19,6 +19,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public void init() {
         var folderPath = Paths.get(AVATAR_PATH);
+        // check exists path
         if (!exists(folderPath)) {
             try {
                 createDirectory(folderPath);
