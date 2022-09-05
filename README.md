@@ -39,7 +39,7 @@
 ## LINK DEMO
 <div align="center">
 
-[Click vào đây để xem chi tiết](https://crm-project.herokuapp.com/login)
+[Click vào đây để xem chi tiết](https://crm-project.herokuapp.com)
 
 </div>
 
