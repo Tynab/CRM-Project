@@ -45,7 +45,7 @@
 
 ## HÌNH ẢNH DEMO
 <p align="center">
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/temp/pic/0.jpg"></img>
+<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/pic/0.jpg"></img>
 </p>
 
 ## VIDEO DEMO
@@ -98,7 +98,7 @@
 
 ## EER Diagram
 <p align="center">
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/temp/design/EER%20Diagram.png"></img>
+<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/design/EER%20Diagram.png"></img>
 </p>
 
 ### TÍCH HỢP
