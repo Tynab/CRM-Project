@@ -98,7 +98,7 @@
 
 ## EER Diagram
 <p align="center">
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/design/EER%20Diagram.png"></img>
+<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/design/EER%20Diagram.jpg"></img>
 </p>
 
 ### TÍCH HỢP
