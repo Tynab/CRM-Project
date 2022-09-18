@@ -40,8 +40,6 @@ public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         var authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
         authenticationFilter.setFilterProcessesUrl(API_VIEW + LOGIN_VIEW);
-        // session shouldn't be created when authentication fails
-        // link: https://github.com/spring-projects/spring-security/issues/4242
         http.csrf().disable().cors().disable().requestCache().requestCache(httpSessionRequestCache).and()
                 .authorizeRequests()
                 .antMatchers(API_VIEW + LOGIN_VIEW, API_VIEW + TOKEN_VIEW + REFRESH_VIEW, "/css/login.css").permitAll()
