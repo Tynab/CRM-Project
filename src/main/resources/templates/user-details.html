@@ -8,7 +8,7 @@
     <meta name="description" content="Midterm Project">
     <meta name="author" content="Yami An Nephilim">
     <link href="/plugins/images/favicon.png" rel="icon" type="image/png" sizes="16x16">
-    <title th:text="${person.name+' | CRM Project'}">
+    <title th:text="${user.name+' | CRM Project'}">
         User | CRM Project
     </title>
     <!-- Bootstrap Core CSS -->
@@ -40,119 +40,10 @@
 </head>
 
 <body>
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="cssload-speeding-wheel"></div>
-    </div>
+    <div th:replace="fragments/preloader :: preloader"></div>
     <div id="wrapper">
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top m-b-0">
-            <div class="navbar-header">
-                <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse"
-                    data-target=".navbar-collapse">
-                    <i class="fa fa-bars"></i>
-                </a>
-                <div class="top-left-part">
-                    <a class="logo" th:href="@{/index}">
-                        <b>
-                            <img src="/plugins/images/pixeladmin-logo.png" alt="home" />
-                        </b>
-                        <span class="hidden-xs">
-                            <img src="/plugins/images/pixeladmin-text.png" alt="home" />
-                        </span>
-                    </a>
-                </div>
-                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
-                    <li>
-                        <form th:action="@{/search}" method="get" role="search" class="app-search hidden-xs">
-                            <input name="name" type="text" placeholder="Tìm kiếm..." class="form-control" required>
-                            <button type="submit" id="search"></button>
-                            <a href="" id="search-link">
-                                <i class="fa fa-search"></i>
-                            </a>
-                        </form>
-                    </li>
-                </ul>
-                <ul class="nav navbar-top-links navbar-right pull-right">
-                    <li>
-                        <div class="dropdown">
-                            <a class="profile-pic dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img th:src="@{${'/plugins/images/users/'+user.image}}" alt="user-img" width="36"
-                                    class="img-circle" />
-                                <strong th:text="${user.name}" class="hidden-xs">
-                                    Name
-                                </strong>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a th:href="@{/profile}">
-                                        Thông tin cá nhân
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/job}">
-                                        Thống kê công việc
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a th:href="@{/logout}">
-                                        Đăng xuất
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <!-- Left navbar-header -->
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
-                <ul class="nav" id="side-menu">
-                    <li style="padding: 10px 0 0;">
-                        <a th:href="@{/index}" class="waves-effect">
-                            <i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
-                            <span class="hide-menu">
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/user}" class="waves-effect">
-                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>
-                            <span class="hide-menu">
-                                Thành viên
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/role}" class="waves-effect">
-                            <i class="fa fa-modx fa-fw" aria-hidden="true"></i>
-                            <span class="hide-menu">
-                                Vai Trò
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/project}" class="waves-effect">
-                            <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
-                            <span class="hide-menu">
-                                Dự án
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/task}" class="waves-effect">
-                            <i class="fa fa-table fa-fw" aria-hidden="true">
-                            </i><span class="hide-menu">
-                                Công việc
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div th:replace="fragments/navigation :: navigation"></div>
+        <div th:replace="fragments/header :: header"></div>
         <!-- Page content -->
         <div id="page-wrapper">
             <div class="container-fluid">
@@ -171,13 +62,13 @@
                                 <div class="overlay-box">
                                     <div class="user-content">
                                         <a>
-                                            <img th:src="@{${'/plugins/images/users/'+person.image}}"
+                                            <img th:src="@{${'/plugins/images/users/'+user.image}}"
                                                 class="thumb-lg img-circle" alt="img">
                                         </a>
-                                        <h4 th:text="${person.name}" class="text-white">
+                                        <h4 th:text="${user.name}" class="text-white">
                                             Name
                                         </h4>
-                                        <h5 th:text="${person.email}" class="text-white">
+                                        <h5 th:text="${user.email}" class="text-white">
                                             Email
                                         </h5>
                                     </div>
@@ -278,7 +169,7 @@
                                 Chưa thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${tasksNotStarted}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksNotStarted}" th:href="@{/task/edit(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -305,7 +196,7 @@
                                 Đang thực hiện
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${tasksInProgress}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksInProgress}" th:href="@{/task/edit(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -332,7 +223,7 @@
                                 Đã hoàn thành
                             </h3>
                             <div class="message-center">
-                                <a th:each="task : ${tasksCompleted}" th:href="@{/task/findBy/(id=${task.id})}">
+                                <a th:each="task : ${tasksCompleted}" th:href="@{/task/edit(id=${task.id})}">
                                     <div class="mail-contnet">
                                         <h5 th:text="${task.name}">
                                             Task
@@ -355,9 +246,7 @@
                     </div>
                 </div>
             </div>
-            <footer class="footer text-center">
-                2022 &copy; cybersoft.com
-            </footer>
+            <div th:replace="fragments/footer :: footer"></div>
         </div>
     </div>
     <!-- jQuery JS -->

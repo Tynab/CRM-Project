@@ -12,17 +12,12 @@ import com.yan.crm_project.util.*;
 
 import lombok.extern.slf4j.*;
 
-import static org.springframework.util.StringUtils.*;
-
 @Service
 @Transactional
 @Slf4j
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
-
-    @Autowired
-    private StringUtil stringUtil;
 
     @Autowired
     private TextUtil textUtil;
@@ -41,11 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveProject(Project project) {
-        var name = project.getName();
-        project.setName(
-                capitalize(stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeSpCharsBeginAndEnd(name))));
+        project.setName(textUtil.parseToLegalText(project.getName()));
         project.setDescription(textUtil.parseToLegalText(project.getDescription()));
-        log.info("Saving project with name: {}", name);
+        log.info("Saving project with name: {}", project.getName());
         return projectRepository.save(project);
     }
 
@@ -53,11 +46,5 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(int id) {
         log.info("Deleting project with id: {}", id);
         projectRepository.deleteById(id);
-    }
-
-    @Override
-    public Iterable<Project> getProjectsByOriginator(int originatorId) {
-        log.info("Fetching projects with originator id: {}", originatorId);
-        return projectRepository.findAllByOriginatorId(originatorId);
     }
 }

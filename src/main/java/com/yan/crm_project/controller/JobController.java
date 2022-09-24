@@ -5,7 +5,6 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
-import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
@@ -29,21 +28,19 @@ public class JobController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private User mCurrentAccount;
-
     // Load job page
     @GetMapping("")
     public ModelAndView job() {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(JOB_TEMP);
             var tasks = taskService.getTasks();
             var tasksCount = tasks.size();
             mav.addObject(USERS_PARAM, userService.getUsers());
-            mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
                     : applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size() * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
@@ -52,11 +49,5 @@ public class JobController {
                     : applicationUtil.splitTasksByStatus(tasks, COMPLETED).size() * 100 / tasksCount);
             return mav;
         }
-    }
-
-    // Check valid account
-    private boolean isValidAccount() {
-        mCurrentAccount = authenticationUtil.getAccount();
-        return mCurrentAccount != null;
     }
 }

@@ -32,27 +32,27 @@ public class TaskController {
     private TaskService taskService;
 
     @Autowired
+    private ApplicationUtil applicationUtil;
+
+    @Autowired
     private AuthenticationUtil authenticationUtil;
 
     // Fields
-    private User mCurrentAccount;
-    private Task mChoosenOne;
     private String mMsg;
-    private boolean mIsByPass;
     private boolean mIsMsgShow;
 
     // Load task list
     @GetMapping("")
     public ModelAndView task() {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(TASK_TEMP);
-            mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(TASKS_PARAM, taskService.getTasks());
-            showMessageBox(mav);
-            mIsByPass = false;
+            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
             return mav;
         }
     }
@@ -60,21 +60,20 @@ public class TaskController {
     // Load new task input form
     @GetMapping(ADD_VIEW)
     public ModelAndView taskAdd() {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(TASK_ADD_TEMP);
             mav.addObject(USERS_PARAM, userService.getUsers());
-            mav.addObject(USER_PARAM, mCurrentAccount);
-            var currentAccountRole = getCurrentAccountRole();
+            mav.addObject(ACCOUNT_PARAM, account);
             // check admin
-            if (currentAccountRole.equals(ADMIN)) {
+            if (getCurrentAccountRole(account.getRoleId()).equals(ADMIN)) {
                 mav.addObject(PROJECTS_PARAM, projectService.getProjects());
             } else {
-                mav.addObject(PROJECTS_PARAM, projectService.getProjectsByOriginator(mCurrentAccount.getId()));
+                mav.addObject(PROJECTS_PARAM, account.getProjects());
             }
-            mIsByPass = false;
             return mav;
         }
     }
@@ -83,86 +82,63 @@ public class TaskController {
     @PostMapping(ADD_VIEW + SAVE_VIEW)
     public String taskAddSave(Task task) {
         // check current account still valid
-        if (!isValidAccount()) {
+        if (authenticationUtil.getAccount() == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             task.setStatusId(DEFAULT_STATUS);
             taskService.saveTask(task);
             mIsMsgShow = true;
             mMsg = "Thêm công việc thành công!";
-            mIsByPass = true;
             return REDIRECT_PREFIX + TASK_VIEW;
-        }
-    }
-
-    // Get task
-    @RequestMapping(FIND_VIEW)
-    public String findTask(int id) {
-        // check current account still valid
-        if (!isValidAccount()) {
-            return REDIRECT_PREFIX + LOGOUT_VIEW;
-        } else {
-            mChoosenOne = taskService.getTask(id);
-            mIsByPass = true;
-            // check if task is exist
-            if (mChoosenOne == null) {
-                mIsMsgShow = true;
-                mMsg = "Không tìm thấy công việc!";
-                return REDIRECT_PREFIX + TASK_VIEW;
-            } else {
-                return !isPermissionLeader() ? FORWARD_PREFIX + FORBIDDEN_VIEW
-                        : REDIRECT_PREFIX + TASK_VIEW + EDIT_VIEW;
-            }
         }
     }
 
     // Load edit task input form
     @GetMapping(EDIT_VIEW)
-    public ModelAndView taskEdit() {
+    public ModelAndView taskEdit(int id) {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
-            // check permission
-            if (!isPermissionLeader()) {
-                return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
+            var task = taskService.getTask(id);
+            // check if task is exist
+            if (task == null) {
+                mIsMsgShow = true;
+                mMsg = "Không tìm thấy công việc!";
+                return new ModelAndView(REDIRECT_PREFIX + TASK_VIEW);
             } else {
-                var mav = new ModelAndView(TASK_EDIT_TEMP);
-                mav.addObject(USERS_PARAM, userService.getUsers());
-                mav.addObject(USER_PARAM, mCurrentAccount);
-                mav.addObject(PROJECTS_PARAM, projectService.getProjects());
-                mav.addObject(TASK_PARAM, mChoosenOne);
-                mIsByPass = false;
-                return mav;
+                // check permission
+                if (!isPermissionLeader(account, task.getProject().getOriginatorId())) {
+                    return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
+                } else {
+                    var mav = new ModelAndView(TASK_EDIT_TEMP);
+                    mav.addObject(USERS_PARAM, userService.getUsers());
+                    mav.addObject(ACCOUNT_PARAM, account);
+                    mav.addObject(PROJECTS_PARAM, projectService.getProjects());
+                    mav.addObject(TASK_PARAM, task);
+                    return mav;
+                }
             }
         }
     }
 
     // Edit task
     @RequestMapping(value = EDIT_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String taskEditSave(Task task) {
+    public String taskEditSave(Task task, int originatorId) {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsByPass = true;
-            // check task is exist
-            if (!isAliveChoosenOne()) {
-                mIsMsgShow = true;
-                mMsg = "Công việc không tồn tại!";
-                return REDIRECT_PREFIX + TASK_VIEW;
+            // check permission
+            if (!isPermissionLeader(account, originatorId)) {
+                return FORWARD_PREFIX + FORBIDDEN_VIEW;
             } else {
-                // check permission
-                if (!isPermissionLeader()) {
-                    return FORWARD_PREFIX + FORBIDDEN_VIEW;
-                } else {
-                    task.setId(mChoosenOne.getId());
-                    task.setStatusId(mChoosenOne.getStatusId());
-                    taskService.saveTask(task);
-                    mIsMsgShow = true;
-                    mMsg = "Cập nhật công việc thành công!";
-                    return REDIRECT_PREFIX + TASK_VIEW;
-                }
+                taskService.saveTask(task);
+                mIsMsgShow = true;
+                mMsg = "Cập nhật công việc thành công!";
+                return REDIRECT_PREFIX + TASK_VIEW;
             }
         }
     }
@@ -170,20 +146,20 @@ public class TaskController {
     // Delete task
     @RequestMapping(value = DELETE_VIEW, method = { GET, DELETE })
     public String taskDelete(int id) {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mChoosenOne = taskService.getTask(id);
-            mIsByPass = true;
+            var task = taskService.getTask(id);
             // check task is exist
-            if (mChoosenOne == null) {
+            if (task == null) {
                 mIsMsgShow = true;
                 mMsg = "Công việc không tồn tại!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
                 // check permission
-                if (!isPermissionLeader()) {
+                if (!isPermissionLeader(account, task.getProject().getOriginatorId())) {
                     return FORWARD_PREFIX + FORBIDDEN_VIEW;
                 } else {
                     taskService.deleteTask(id);
@@ -195,48 +171,15 @@ public class TaskController {
         }
     }
 
-    // Check valid account
-    private boolean isValidAccount() {
-        // check bypass
-        if (mIsByPass) {
-            return true;
-        } else {
-            mCurrentAccount = authenticationUtil.getAccount();
-            return mCurrentAccount != null;
-        }
-    }
-
-    // Re-check choosen one
-    private boolean isAliveChoosenOne() {
-        // check the task has been declared
-        if (mChoosenOne == null) {
-            return false;
-        } else {
-            mChoosenOne = taskService.getTask(mChoosenOne.getId());
-            return mChoosenOne != null;
-        }
-    }
-
     // Get role of current account
-    private String getCurrentAccountRole() {
-        return roleService.getRole(mCurrentAccount.getRoleId()).getName().toUpperCase();
+    private String getCurrentAccountRole(int roleId) {
+        return roleService.getRole(roleId).getName().toUpperCase();
     }
 
     // Check permission leader for task
-    private boolean isPermissionLeader() {
-        var currentAccountRole = getCurrentAccountRole();
-        return currentAccountRole.equals(LEADER)
-                && userService.getUser(mChoosenOne.getProject().getOriginatorId()).getId() == mCurrentAccount.getId()
+    private boolean isPermissionLeader(User user, int originatorId) {
+        var currentAccountRole = getCurrentAccountRole(user.getRoleId());
+        return currentAccountRole.equals(LEADER) && userService.getUser(originatorId).getId() == user.getId()
                 || currentAccountRole.equals(ADMIN);
-    }
-
-    // Show message
-    private void showMessageBox(ModelAndView mav) {
-        // check flag
-        if (mIsMsgShow) {
-            mav.addObject(FLAG_MSG_PARAM, true);
-            mav.addObject(MSG_PARAM, mMsg);
-            mIsMsgShow = false;
-        }
     }
 }

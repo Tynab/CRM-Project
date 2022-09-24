@@ -5,7 +5,6 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
-import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
@@ -33,26 +32,23 @@ public class ApplicationController {
     private AuthenticationUtil authenticationUtil;
 
     // Fields
-    private User mCurrentAccount;
     private String mMsg;
-    private boolean mIsByPass;
     private boolean mIsMsgShow;
 
     // Check login
     @GetMapping(LOGIN_VIEW)
     public ModelAndView login(boolean error) {
         // check current account still valid
-        if (!isValidAccount()) {
+        if (authenticationUtil.getAccount() == null) {
             var mav = new ModelAndView(LOGIN_TEMP);
             // login failed
             if (error) {
                 mIsMsgShow = true;
                 mMsg = "Tài khoản đăng nhập chưa đúng!";
-                showMessageBox(mav);
+                mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
             }
             return mav;
         } else {
-            mIsByPass = true;
             return new ModelAndView(REDIRECT_PREFIX + INDEX_VIEW);
         }
     }
@@ -61,14 +57,13 @@ public class ApplicationController {
     @GetMapping(SEARCH_VIEW)
     public String search(String name) {
         // check current account still valid
-        if (!isValidAccount()) {
+        if (authenticationUtil.getAccount() == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             var users = userService.getUsers(name);
-            mIsByPass = true;
             // match user
             if (users.size() > 0) {
-                return userController.findUser(users.get(0).getId(), DETAILS_VIEW);
+                return REDIRECT_PREFIX + USER_VIEW + DETAILS_VIEW + "?id=" + users.get(0).getId();
             } else {
                 return REDIRECT_PREFIX + BLANK_VIEW;
             }
@@ -78,8 +73,9 @@ public class ApplicationController {
     // Load dashboard
     @GetMapping(value = { INDEX_VIEW, "/", "" })
     public ModelAndView index() {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(INDEX_TEMP);
@@ -88,14 +84,13 @@ public class ApplicationController {
             var tasksNotStartedCount = applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size();
             var tasksInProgressCount = applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size();
             var tasksCompletedCount = applicationUtil.splitTasksByStatus(tasks, COMPLETED).size();
-            mav.addObject(USER_PARAM, mCurrentAccount);
+            mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(NOT_STARTED_SIZE_PARAM, tasksNotStartedCount);
             mav.addObject(IN_PROGRESS_SIZE_PARAM, tasksInProgressCount);
             mav.addObject(COMPLETED_SIZE_PARAM, tasksCompletedCount);
             mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksNotStartedCount * 100 / tasksCount);
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
-            mIsByPass = false;
             return mav;
         }
     }
@@ -103,13 +98,13 @@ public class ApplicationController {
     // Load blank page
     @GetMapping(BLANK_VIEW)
     public ModelAndView blank() {
+        var account = authenticationUtil.getAccount();
         // check current account still valid
-        if (!isValidAccount()) {
+        if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(BLANK_TEMP);
-            mav.addObject(USER_PARAM, mCurrentAccount);
-            mIsByPass = false;
+            mav.addObject(ACCOUNT_PARAM, account);
             return mav;
         }
     }
@@ -117,28 +112,6 @@ public class ApplicationController {
     // Load forbidden page
     @GetMapping(FORBIDDEN_VIEW)
     public String forbidden() {
-        mIsByPass = false;
         return FORBIDDEN_TEMP;
-    }
-
-    // Check valid account
-    private boolean isValidAccount() {
-        // check bypass
-        if (mIsByPass) {
-            return true;
-        } else {
-            mCurrentAccount = authenticationUtil.getAccount();
-            return mCurrentAccount != null;
-        }
-    }
-
-    // Show message
-    private void showMessageBox(ModelAndView mav) {
-        // check flag
-        if (mIsMsgShow) {
-            mav.addObject(FLAG_MSG_PARAM, true);
-            mav.addObject(MSG_PARAM, mMsg);
-            mIsMsgShow = false;
-        }
     }
 }

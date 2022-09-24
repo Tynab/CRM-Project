@@ -4,9 +4,9 @@ public class AttributeConstant {
     public static final String ACCESS_TOKEN_KEY = "access_token";
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
 
+    public static final String ACCOUNT_PARAM = "account";
     public static final String USERS_PARAM = "users";
     public static final String USER_PARAM = "user";
-    public static final String PERSON_PARAM = "person";
     public static final String PROJECTS_PARAM = "projects";
     public static final String PROJECT_PARAM = "project";
     public static final String TASKS_PARAM = "tasks";

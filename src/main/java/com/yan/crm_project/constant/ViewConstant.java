@@ -32,8 +32,6 @@ public class ViewConstant {
 
     public static final String AVATAR_VIEW = "/avatar";
 
-    public static final String FIND_VIEW = "/findBy";
-
     public static final String REFRESH_VIEW = "/refresh";
 
     public static final String SEARCH_VIEW = "/search";

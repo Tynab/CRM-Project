@@ -14,17 +14,12 @@ import com.yan.crm_project.util.*;
 
 import lombok.extern.slf4j.*;
 
-import static org.springframework.util.StringUtils.*;
-
 @Service
 @Transactional
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskRepository taskRepository;
-
-    @Autowired
-    private StringUtil stringUtil;
 
     @Autowired
     private TextUtil textUtil;
@@ -36,12 +31,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByDoer(int doerId) {
-        log.info("Fetching all tasks by doer id: {}", doerId);
-        return taskRepository.findAllByDoerId(doerId);
-    }
-
-    @Override
     public Task getTask(int id) {
         log.info("Fetching task with id: {}", id);
         return taskRepository.findById(id).orElse(null);
@@ -49,10 +38,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        var name = task.getName();
-        task.setName(capitalize(stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeSpCharsBeginAndEnd(name))));
+        task.setName(textUtil.parseToLegalText(task.getName()));
         task.setDescription(textUtil.parseToLegalText(task.getDescription()));
-        log.info("Saving task with name: {}", name);
+        log.info("Saving task with name: {}", task.getName());
         return taskRepository.save(task);
     }
 

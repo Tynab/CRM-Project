@@ -10,6 +10,4 @@ public interface ProjectService {
     public Project saveProject(Project project);
 
     public void deleteProject(int id);
-
-    public Iterable<Project> getProjectsByOriginator(int originatorId);
 }

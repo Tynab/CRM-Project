@@ -43,10 +43,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public void remove(String fileName) {
-        try {
-            delete(Paths.get(AVATAR_PATH, fileName));
-        } catch (IOException e) {
-            log.error("Error deleting file: {}", e.getMessage());
+        var filePath = Paths.get(AVATAR_PATH, fileName);
+        if (exists(filePath)) {
+            try {
+                delete(filePath);
+            } catch (IOException e) {
+                log.error("Error deleting file: {}", e.getMessage());
+            }
         }
     }
 }

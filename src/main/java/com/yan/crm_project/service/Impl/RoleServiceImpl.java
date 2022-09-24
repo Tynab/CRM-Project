@@ -20,6 +20,9 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private StringUtil stringUtil;
+
+    @Autowired
     private TextUtil textUtil;
 
     @Override
@@ -36,12 +39,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRole(String name) {
+        name = stringUtil.parseName(name);
         log.info("Fetching role with name: {}", name);
         return roleRepository.findByName(name);
     }
 
     @Override
     public Role saveRole(Role role) {
+        role.setName(stringUtil.parseName(role.getName()));
         role.setDescription(textUtil.parseToLegalText(role.getDescription()));
         log.info("Saving role with name: {}", role.getName());
         return roleRepository.save(role);

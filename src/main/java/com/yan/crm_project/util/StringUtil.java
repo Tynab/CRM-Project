@@ -22,6 +22,32 @@ public class StringUtil {
         return hasText(s) ? s.replaceAll("\\s+", " ") : s;
     }
 
+    // Parse to name
+    public String parseName(String s) {
+        return hasText(s) ? titleCase(replaceMultiBySingleWhitespace(removeNumAndWhiteSpaceBeginAndEnd(s))) : s;
+    }
+
+    // Parse to international name
+    public String parseNameInternational(String s) {
+        return hasText(s)
+                ? titleCase(
+                        replaceMultiBySingleWhitespace(removeSpCharsBeginAndEnd(removeNumAndWhiteSpaceBeginAndEnd(s))))
+                : s;
+    }
+
+    // Parse to on card name
+    public String parseNameOnCard(String s) {
+        return hasText(s)
+                ? upperCase(
+                        replaceMultiBySingleWhitespace(removeSpCharsBeginAndEnd(removeNumAndWhiteSpaceBeginAndEnd(s))))
+                : s;
+    }
+
+    // Parse to email
+    public String parseEmail(String s) {
+        return hasText(s) ? lowerCase(removeSpCharsBeginAndEnd(removeNumAndWhiteSpaceEnd(s))) : s;
+    }
+
     // Convert to lower case advanced
     public String lowerCase(String s) {
         return hasText(s) ? s.toLowerCase() : s;
@@ -32,7 +58,12 @@ public class StringUtil {
         return hasText(s) ? s.toUpperCase() : s;
     }
 
-    // Convert to upper case advanced
+    // Convert to capitalize case advanced
+    public String capitalizeCase(String s) {
+        return hasText(s) ? capitalize(s) : s;
+    }
+
+    // Convert to sentence case advanced
     public String sentenceCase(String s) {
         return hasText(s) ? capitalize(s.toLowerCase()) : s;
     }
