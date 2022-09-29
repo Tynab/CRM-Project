@@ -7,6 +7,7 @@ import org.springframework.web.servlet.*;
 
 import com.yan.crm_project.model.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static java.util.stream.Collectors.*;
 
@@ -18,11 +19,11 @@ public class ApplicationUtil {
     }
 
     // Show message
-    public boolean showMessageBox(ModelAndView mav, boolean flag, String msg) {
+    public boolean showMessageBox(ModelAndView mav) {
         // check flag
-        if (flag) {
+        if (_isMsgShow) {
             mav.addObject(FLAG_MSG_PARAM, true);
-            mav.addObject(MSG_PARAM, msg);
+            mav.addObject(MSG_PARAM, _msg);
         }
         return false;
     }

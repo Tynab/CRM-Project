@@ -8,6 +8,7 @@ import org.springframework.web.servlet.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
@@ -31,10 +32,6 @@ public class ApplicationController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Check login
     @GetMapping(LOGIN_VIEW)
     public ModelAndView login(boolean error) {
@@ -43,30 +40,13 @@ public class ApplicationController {
             var mav = new ModelAndView(LOGIN_TEMP);
             // login failed
             if (error) {
-                mIsMsgShow = true;
-                mMsg = "Tài khoản đăng nhập chưa đúng!";
-                mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+                _isMsgShow = true;
+                _msg = "Tài khoản đăng nhập chưa đúng!";
+                _isMsgShow = applicationUtil.showMessageBox(mav);
             }
             return mav;
         } else {
             return new ModelAndView(REDIRECT_PREFIX + INDEX_VIEW);
-        }
-    }
-
-    // Search user
-    @GetMapping(SEARCH_VIEW)
-    public String search(String name) {
-        // check current account still valid
-        if (authenticationUtil.getAccount() == null) {
-            return REDIRECT_PREFIX + LOGOUT_VIEW;
-        } else {
-            var users = userService.getUsers(name);
-            // match user
-            if (users.size() > 0) {
-                return REDIRECT_PREFIX + USER_VIEW + DETAILS_VIEW + "?id=" + users.get(0).getId();
-            } else {
-                return REDIRECT_PREFIX + BLANK_VIEW;
-            }
         }
     }
 
@@ -92,6 +72,23 @@ public class ApplicationController {
             mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksInProgressCount * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0 : tasksCompletedCount * 100 / tasksCount);
             return mav;
+        }
+    }
+
+    // Search user
+    @GetMapping(SEARCH_VIEW)
+    public String search(String name) {
+        // check current account still valid
+        if (authenticationUtil.getAccount() == null) {
+            return REDIRECT_PREFIX + LOGOUT_VIEW;
+        } else {
+            var users = userService.getUsers(name);
+            // match user
+            if (users.size() > 0) {
+                return REDIRECT_PREFIX + USER_VIEW + DETAILS_VIEW + "?id=" + users.get(0).getId();
+            } else {
+                return REDIRECT_PREFIX + BLANK_VIEW;
+            }
         }
     }
 

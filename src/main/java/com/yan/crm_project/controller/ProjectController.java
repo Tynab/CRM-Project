@@ -9,6 +9,7 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
@@ -33,10 +34,6 @@ public class ProjectController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Load project list
     @GetMapping("")
     public ModelAndView project() {
@@ -48,7 +45,7 @@ public class ProjectController {
             var mav = new ModelAndView(PROJECT_TEMP);
             mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(PROJECTS_PARAM, projectService.getProjects());
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -77,8 +74,8 @@ public class ProjectController {
         } else {
             project.setOriginatorId(account.getId());
             projectService.saveProject(project);
-            mIsMsgShow = true;
-            mMsg = "Thêm dự án thành công!";
+            _isMsgShow = true;
+            _msg = "Thêm dự án thành công!";
             return REDIRECT_PREFIX + PROJECT_VIEW;
         }
     }
@@ -94,8 +91,8 @@ public class ProjectController {
             var project = projectService.getProject(id);
             // check if project is exist
             if (project == null) {
-                mIsMsgShow = true;
-                mMsg = "Dự án không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Dự án không tồn tại!";
                 return new ModelAndView(REDIRECT_PREFIX + PROJECT_VIEW);
             } else {
                 // check permission
@@ -124,8 +121,8 @@ public class ProjectController {
                 return FORWARD_PREFIX + FORBIDDEN_VIEW;
             } else {
                 projectService.saveProject(project);
-                mIsMsgShow = true;
-                mMsg = "Cập nhật dự án thành công!";
+                _isMsgShow = true;
+                _msg = "Cập nhật dự án thành công!";
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             }
         }
@@ -142,14 +139,14 @@ public class ProjectController {
             var project = projectService.getProject(id);
             // check if project is exist
             if (project == null) {
-                mIsMsgShow = true;
-                mMsg = "Dự án không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Dự án không tồn tại!";
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             } else {
                 // check project disconnect
                 if (project.getTasks().size() > 0) {
-                    mIsMsgShow = true;
-                    mMsg = "Dự án đang có công việc, không thể xóa!";
+                    _isMsgShow = true;
+                    _msg = "Dự án đang có công việc, không thể xóa!";
                     return REDIRECT_PREFIX + PROJECT_VIEW;
                 } else {
                     // check permission
@@ -157,8 +154,8 @@ public class ProjectController {
                         return FORWARD_PREFIX + FORBIDDEN_VIEW;
                     } else {
                         projectService.deleteProject(id);
-                        mIsMsgShow = true;
-                        mMsg = "Xóa dự án thành công!";
+                        _isMsgShow = true;
+                        _msg = "Xóa dự án thành công!";
                         return REDIRECT_PREFIX + PROJECT_VIEW;
                     }
                 }

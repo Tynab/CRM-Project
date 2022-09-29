@@ -10,6 +10,7 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
@@ -36,10 +37,6 @@ public class UserController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Load user list
     @GetMapping("")
     public ModelAndView user() {
@@ -51,7 +48,7 @@ public class UserController {
             var mav = new ModelAndView(USER_TEMP);
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(ACCOUNT_PARAM, account);
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -69,7 +66,7 @@ public class UserController {
             mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(ROLES_PARAM, roleService.getRoles());
             mav.addObject(DEFAULT_ROLE_ID_PARAM, DEFAULT_ROLE);
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -82,15 +79,15 @@ public class UserController {
         if (authenticationUtil.getAccount() == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsMsgShow = true;
+            _isMsgShow = true;
             // check email is already exist
             if (userService.getUser(user.getEmail()) != null) {
-                mMsg = "Tài khoản email này đã được đăng ký!";
+                _msg = "Tài khoản email này đã được đăng ký!";
                 return REDIRECT_PREFIX + USER_VIEW + ADD_VIEW;
             } else {
                 user.setImage(DEFAULT_AVATAR);
                 userService.saveUser(user);
-                mMsg = "Tài khoản đã được tạo thành công!";
+                _msg = "Tài khoản đã được tạo thành công!";
                 return REDIRECT_PREFIX + USER_VIEW;
             }
         }
@@ -108,8 +105,8 @@ public class UserController {
             var user = userService.getUser(id);
             // check user is exist
             if (user == null) {
-                mIsMsgShow = true;
-                mMsg = "Tài khoản không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Tài khoản không tồn tại!";
                 return new ModelAndView(REDIRECT_PREFIX + USER_VIEW);
             } else {
                 var mav = new ModelAndView(USER_EDIT_TEMP);
@@ -135,8 +132,8 @@ public class UserController {
             } else {
                 userService.saveUserWithoutPassword(user);
             }
-            mIsMsgShow = true;
-            mMsg = "Tài khoản đã được cập nhật thành công!";
+            _isMsgShow = true;
+            _msg = "Tài khoản đã được cập nhật thành công!";
             return REDIRECT_PREFIX + USER_VIEW;
         }
     }
@@ -150,20 +147,20 @@ public class UserController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             var user = userService.getUser(id);
-            mIsMsgShow = true;
+            _isMsgShow = true;
             // check if user is exist
             if (user == null) {
-                mMsg = "Tài khoản không tồn tại!";
+                _msg = "Tài khoản không tồn tại!";
             } else {
                 // check user disconnect
                 if (user.getProjects().size() > 0) {
-                    mMsg = "Tài khoản này đang có dự án, không thể xóa!";
+                    _msg = "Tài khoản này đang có dự án, không thể xóa!";
                 } else if (user.getTasks().size() > 0) {
-                    mMsg = "Tài khoản này đang có công việc, không thể xóa!";
+                    _msg = "Tài khoản này đang có công việc, không thể xóa!";
                 } else {
                     userService.deleteUser(id);
                     fileUploadService.remove(id + ".jpg");
-                    mMsg = "Xóa tài khoản thành công!";
+                    _msg = "Xóa tài khoản thành công!";
                 }
             }
             return REDIRECT_PREFIX + USER_VIEW;
@@ -181,8 +178,8 @@ public class UserController {
             var user = userService.getUser(id);
             // check user is exist
             if (user == null) {
-                mIsMsgShow = true;
-                mMsg = "Tài khoản không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Tài khoản không tồn tại!";
                 return new ModelAndView(REDIRECT_PREFIX + USER_VIEW);
             } else {
                 var mav = new ModelAndView(USER_DETAILS_TEMP);

@@ -12,6 +12,7 @@ import com.yan.crm_project.util.*;
 
 import lombok.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.TaskStatus.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
@@ -43,10 +44,6 @@ public class ProfileController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Load profile page
     @GetMapping("")
     public ModelAndView profile() {
@@ -65,7 +62,7 @@ public class ProfileController {
                     : applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size() * 100 / tasksCount);
             mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
                     : applicationUtil.splitTasksByStatus(tasks, COMPLETED).size() * 100 / tasksCount);
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -78,26 +75,26 @@ public class ProfileController {
         if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsMsgShow = true;
+            _isMsgShow = true;
             // check file is valid
             if (avatar.isEmpty()) {
-                mMsg = "Tệp không xác định!";
+                _msg = "Tệp không xác định!";
             } else {
                 fileUploadService.init();
                 var file = fileUploadService.upload(avatar);
                 // check file is image
                 if (file == null) {
-                    mMsg = "Tệp không hợp lệ!";
+                    _msg = "Tệp không hợp lệ!";
                 } else {
                     var defaultAvatarName = account.getId() + ".jpg";
                     // try to modify avatar
                     if (!imageService.resizeImage(file, defaultAvatarName)) {
-                        mMsg = "Cập nhật ảnh đại diện thất bại!";
+                        _msg = "Cập nhật ảnh đại diện thất bại!";
                     } else {
                         account.setImage(defaultAvatarName);
                         userService.saveUserWithoutPassword(account);
                         fileUploadService.remove(file.getName());
-                        mMsg = "Cập nhật ảnh đại diện thành công!";
+                        _msg = "Cập nhật ảnh đại diện thành công!";
                     }
                 }
             }
@@ -133,8 +130,8 @@ public class ProfileController {
             } else {
                 userService.saveUserWithoutPassword(user);
             }
-            mIsMsgShow = true;
-            mMsg = "Cập nhật thông tin thành công!";
+            _isMsgShow = true;
+            _msg = "Cập nhật thông tin thành công!";
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
@@ -150,8 +147,8 @@ public class ProfileController {
             var task = taskService.getTask(id);
             // check if task is exist
             if (task == null) {
-                mIsMsgShow = true;
-                mMsg = "Công việc không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Công việc không tồn tại!";
                 return new ModelAndView(REDIRECT_PREFIX + PROFILE_VIEW);
             } else {
                 var mav = new ModelAndView(PROFILE_TASK_TEMP);
@@ -171,8 +168,8 @@ public class ProfileController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             taskService.saveTask(task);
-            mIsMsgShow = true;
-            mMsg = "Cập nhật trạng thái công việc thành công!";
+            _isMsgShow = true;
+            _msg = "Cập nhật trạng thái công việc thành công!";
             return REDIRECT_PREFIX + PROFILE_VIEW;
         }
     }
