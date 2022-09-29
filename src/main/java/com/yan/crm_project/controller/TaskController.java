@@ -9,6 +9,7 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.*;
 import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
@@ -37,10 +38,6 @@ public class TaskController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Load task list
     @GetMapping("")
     public ModelAndView task() {
@@ -52,7 +49,7 @@ public class TaskController {
             var mav = new ModelAndView(TASK_TEMP);
             mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(TASKS_PARAM, taskService.getTasks());
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -87,8 +84,8 @@ public class TaskController {
         } else {
             task.setStatusId(DEFAULT_STATUS);
             taskService.saveTask(task);
-            mIsMsgShow = true;
-            mMsg = "Thêm công việc thành công!";
+            _isMsgShow = true;
+            _msg = "Thêm công việc thành công!";
             return REDIRECT_PREFIX + TASK_VIEW;
         }
     }
@@ -104,8 +101,8 @@ public class TaskController {
             var task = taskService.getTask(id);
             // check if task is exist
             if (task == null) {
-                mIsMsgShow = true;
-                mMsg = "Không tìm thấy công việc!";
+                _isMsgShow = true;
+                _msg = "Không tìm thấy công việc!";
                 return new ModelAndView(REDIRECT_PREFIX + TASK_VIEW);
             } else {
                 // check permission
@@ -136,8 +133,8 @@ public class TaskController {
                 return FORWARD_PREFIX + FORBIDDEN_VIEW;
             } else {
                 taskService.saveTask(task);
-                mIsMsgShow = true;
-                mMsg = "Cập nhật công việc thành công!";
+                _isMsgShow = true;
+                _msg = "Cập nhật công việc thành công!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             }
         }
@@ -154,8 +151,8 @@ public class TaskController {
             var task = taskService.getTask(id);
             // check task is exist
             if (task == null) {
-                mIsMsgShow = true;
-                mMsg = "Công việc không tồn tại!";
+                _isMsgShow = true;
+                _msg = "Công việc không tồn tại!";
                 return REDIRECT_PREFIX + TASK_VIEW;
             } else {
                 // check permission
@@ -163,8 +160,8 @@ public class TaskController {
                     return FORWARD_PREFIX + FORBIDDEN_VIEW;
                 } else {
                     taskService.deleteTask(id);
-                    mIsMsgShow = true;
-                    mMsg = "Xóa công việc thành công!";
+                    _isMsgShow = true;
+                    _msg = "Xóa công việc thành công!";
                     return REDIRECT_PREFIX + TASK_VIEW;
                 }
             }

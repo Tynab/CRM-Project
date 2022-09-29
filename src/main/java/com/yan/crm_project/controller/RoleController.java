@@ -9,6 +9,7 @@ import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
+import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -26,10 +27,6 @@ public class RoleController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Fields
-    private String mMsg;
-    private boolean mIsMsgShow;
-
     // Load role list
     @GetMapping("")
     public ModelAndView role() {
@@ -41,7 +38,7 @@ public class RoleController {
             var mav = new ModelAndView(ROLE_TEMP);
             mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(ROLES_PARAM, roleService.getRoles());
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -56,7 +53,7 @@ public class RoleController {
         } else {
             var mav = new ModelAndView(ROLE_ADD_TEMP);
             mav.addObject(ACCOUNT_PARAM, account);
-            mIsMsgShow = applicationUtil.showMessageBox(mav, mIsMsgShow, mMsg);
+            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
@@ -68,14 +65,14 @@ public class RoleController {
         if (authenticationUtil.getAccount() == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            mIsMsgShow = true;
+            _isMsgShow = true;
             // check name is already exist
             if (roleService.getRole(role.getName()) != null) {
-                mMsg = "Tên quyền này đã tồn tại";
+                _msg = "Tên quyền này đã tồn tại";
                 return REDIRECT_PREFIX + ROLE_VIEW + ADD_VIEW;
             } else {
                 roleService.saveRole(role);
-                mMsg = "Thêm quyền thành công";
+                _msg = "Thêm quyền thành công";
                 return REDIRECT_PREFIX + ROLE_VIEW;
             }
         }
@@ -92,8 +89,8 @@ public class RoleController {
             var role = roleService.getRole(id);
             // check if role is exist
             if (role == null) {
-                mIsMsgShow = true;
-                mMsg = "Quyền không tồn tại";
+                _isMsgShow = true;
+                _msg = "Quyền không tồn tại";
                 return new ModelAndView(REDIRECT_PREFIX + ROLE_VIEW);
             } else {
                 var mav = new ModelAndView(ROLE_EDIT_TEMP);
@@ -112,8 +109,8 @@ public class RoleController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             roleService.saveRole(role);
-            mIsMsgShow = true;
-            mMsg = "Cập nhật quyền thành công";
+            _isMsgShow = true;
+            _msg = "Cập nhật quyền thành công";
             return REDIRECT_PREFIX + ROLE_VIEW;
         }
     }
@@ -126,17 +123,17 @@ public class RoleController {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             var role = roleService.getRole(id);
-            mIsMsgShow = true;
+            _isMsgShow = true;
             // check role is exist
             if (role == null) {
-                mMsg = "Quyền không tồn tại";
+                _msg = "Quyền không tồn tại";
             } else {
                 // check role disconnect
                 if (role.getUsers().size() > 0) {
-                    mMsg = "Quyền này đang được sử dụng, không thể xóa";
+                    _msg = "Quyền này đang được sử dụng, không thể xóa";
                 } else {
                     roleService.deleteRole(id);
-                    mMsg = "Xóa quyền thành công";
+                    _msg = "Xóa quyền thành công";
                 }
             }
             return REDIRECT_PREFIX + ROLE_VIEW;
