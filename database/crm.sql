@@ -10,6 +10,9 @@ CREATE DATABASE IF NOT EXISTS crm_project;
 
 USE crm_project;
 
+-- fix default
+SET @@auto_increment_increment=1;
+
 -- create table loai_thanh_vien
 
 CREATE TABLE
