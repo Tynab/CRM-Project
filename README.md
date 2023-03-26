@@ -37,19 +37,19 @@
         - Quản lý tài khoản cá nhân
 
 ## LINK DEMO
-<div align="center">
+<div align='center'>
 
 [Click vào đây để xem chi tiết](https://crm-project.herokuapp.com)
 
 </div>
 
 ## HÌNH ẢNH DEMO
-<p align="center">
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/pic/0.jpg"></img>
+<p align='center'>
+<img src='pic/0.jpg'></img>
 </p>
 
 ## VIDEO DEMO
-<div align="center">
+<div align='center'>
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/3W1kdSJdITo/0.jpg)](https://youtu.be/3W1kdSJdITo)
 
@@ -97,19 +97,19 @@
 ```
 
 ## EER Diagram
-<p align="center">
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/master/design/EER%20Diagram.jpg"></img>
+<p align='center'>
+<img src='design/EER%20Diagram.jpg'></img>
 </p>
 
 ### TÍCH HỢP
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/main/pic/1.jpg" align="left" width="3%" height="3%"></img>
-<div style="display:flex;">
+<img src='pic/1.jpg' align='left' width='3%' height='3%'></img>
+<div style='display:flex;'>
 
 - Java JWT » 4.0.0
 
 </div>
-<img src="https://raw.githubusercontent.com/Tynab/CRM-Project/main/pic/2.jpg" align="left" width="3%" height="3%"></img>
-<div style="display:flex;">
+<img src='pic/2.jpg' align='left' width='3%' height='3%'></img>
+<div style='display:flex;'>
 
 - Imgscalr A Java Image Scaling Library » 4.2
 
