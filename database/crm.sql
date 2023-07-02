@@ -1,14 +1,14 @@
 -- dispose db
 
-DROP DATABASE IF EXISTS crm_project;
+DROP DATABASE IF EXISTS crm;
 
 -- create db
 
-CREATE DATABASE IF NOT EXISTS crm_project;
+CREATE DATABASE IF NOT EXISTS crm;
 
 -- use db
 
-USE crm_project;
+USE crm;
 
 -- fix default
 SET @@auto_increment_increment=1;
