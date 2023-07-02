@@ -1,7 +1,3 @@
--- dispose db
-
-DROP DATABASE IF EXISTS crm;
-
 -- create db
 
 CREATE DATABASE IF NOT EXISTS crm;
