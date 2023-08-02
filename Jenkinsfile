@@ -4,11 +4,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t crm:latest .'
+                sh 'docker build -t yamiannephilim/crm:latest .'
             }
         }
 
-        stage('Cleaning') {
+        stage('Clean') {
             steps {
                 script {
                     def containerId = sh(returnStdout: true, script: 'docker ps -aqf "name=crm"').trim()
@@ -22,7 +22,10 @@ pipeline {
 
         stage('Run') {
             steps {
-                sh 'docker run --name crm --network yan --restart=unless-stopped -d crm:latest'
+                sh 'docker container stop crm || echo "this container does not exist"'
+                sh 'docker network create yan || echo "this network exist"'
+                sh 'echo y | docker container prune'
+                sh 'docker run --name crm --network yan --restart=unless-stopped -d yamiannephilim/crm:latest'
             }
         }
     }
