@@ -144,7 +144,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>5.3.27</version>
+            <version>5.3.39</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -155,6 +155,11 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.14</version>
         </dependency>
     </dependencies>
 
