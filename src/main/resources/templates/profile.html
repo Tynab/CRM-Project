@@ -72,7 +72,10 @@
                     <div class="col-md-4 col-xs-12">
                         <div class="white-box">
                             <div class="user-bg">
-                                <img class="center" width="100%" alt="user" src="/plugins/images/large/img1.jpg">
+                                <picture>
+                                    <source srcset="/plugins/images/large/img1.webp" type="image/webp">
+                                    <img class="center" width="100%" alt="user" src="/plugins/images/large/img1.jpg">
+                                </picture>
                                 <div class="overlay-box">
                                     <div class="user-content">
                                         <form name="form-avatar" th:action="@{/profile/edit/avatar}"
