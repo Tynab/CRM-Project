@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Tom tat: Form cap nhat thong tin du an cho admin hoac leader so huu du an. -->
 
 <head>
     <meta charset="utf-8">
@@ -48,9 +49,9 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form th:action="@{/project/edit/save}" method="put" class="form-horizontal form-material">
+                            <!-- Tom tat: Form cap nhat du an; originatorId duoc giu tu DB thay vi tin hidden input. -->
+                            <form th:action="@{/project/edit/save}" method="post" class="form-horizontal form-material">
                                 <input type="hidden" th:value="${project.id}" name="id" readonly>
-                                <input type="hidden" th:value="${project.originatorId}" name="originatorId" readonly>
                                 <div class="form-group">
                                     <label class="col-md-12">
                                         Dự Án

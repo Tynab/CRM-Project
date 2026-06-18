@@ -2,14 +2,17 @@ package com.yan.crm_project.service;
 
 import com.yan.crm_project.model.*;
 
+/**
+ * Tom tat: Khai bao nghiep vu CRUD vai tro nguoi dung.
+ */
 public interface RoleService {
-    public Iterable<Role> getRoles();
+    Iterable<Role> getRoles();
 
-    public Role getRole(int id);
+    Role getRole(int id);
 
-    public Role getRole(String name);
+    Role getRole(String name);
 
-    public Role saveRole(Role role);
+    Role saveRole(Role role);
 
-    public void deleteRole(int id);
+    void deleteRole(int id);
 }

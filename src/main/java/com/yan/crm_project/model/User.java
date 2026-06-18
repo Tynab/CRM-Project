@@ -16,13 +16,22 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+/**
+ * Tom tat: Entity nguoi_dung, dai dien tai khoan dang nhap va cac quan he role,
+ * du an tao, cong viec duoc giao.
+ */
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id")
     private int id;
 
     @NonNull
+    @ToString.Include
     @Column(name = "email")
     private String email;
 
@@ -31,6 +40,7 @@ public class User {
     private String password;
 
     @NonNull
+    @ToString.Include
     @Column(name = "ho_ten")
     private String name;
 
@@ -57,18 +67,27 @@ public class User {
     @OneToMany(mappedBy = "doer")
     private List<Task> tasks;
 
-    // Get all tasks with status not started
+    /**
+     * Lay cac cong viec chua bat dau cua user.
+     */
     public List<Task> getTasksNotStarted() {
-        return tasks.stream().filter(task -> task.getStatus().getId() == NOT_STARTED).collect(toList());
+        return Optional.ofNullable(tasks).orElseGet(Collections::emptyList).stream()
+                .filter(task -> task.getStatus() != null && task.getStatus().getId() == NOT_STARTED).collect(toList());
     }
 
-    // Get all tasks with status in progress
+    /**
+     * Lay cac cong viec dang thuc hien cua user.
+     */
     public List<Task> getTasksInProgress() {
-        return tasks.stream().filter(task -> task.getStatus().getId() == IN_PROGRESS).collect(toList());
+        return Optional.ofNullable(tasks).orElseGet(Collections::emptyList).stream()
+                .filter(task -> task.getStatus() != null && task.getStatus().getId() == IN_PROGRESS).collect(toList());
     }
 
-    // Get all tasks with status completed
+    /**
+     * Lay cac cong viec da hoan thanh cua user.
+     */
     public List<Task> getTasksCompleted() {
-        return tasks.stream().filter(task -> task.getStatus().getId() == COMPLETED).collect(toList());
+        return Optional.ofNullable(tasks).orElseGet(Collections::emptyList).stream()
+                .filter(task -> task.getStatus() != null && task.getStatus().getId() == COMPLETED).collect(toList());
     }
 }

@@ -6,28 +6,42 @@ import org.thymeleaf.util.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component
+/**
+ * Tom tat: Chuan hoa chuoi dau vao cho ten, email va cac thao tac replace/trim
+ * dung lai o service va util khac.
+ */
 public class StringUtil {
-    // Search word
+    /**
+     * Kiem tra chuoi co chua tu khoa, khong phan biet hoa thuong.
+     */
     public boolean isWordContains(String s, String word) {
         return hasText(s) ? s.toUpperCase().contains(word.toUpperCase()) : false;
     }
 
-    // Replace word found by keyword
+    /**
+     * Thay the theo regex khong phan biet hoa thuong.
+     */
     public String replaceWordFoundByKeyword(String s, String word, String keyword) {
         return hasText(s) ? s.replaceAll("(?i)" + word + "", keyword) : s;
     }
 
-    // Replace multi by single whitespace
+    /**
+     * Rut gon nhieu khoang trang lien tiep thanh mot khoang trang.
+     */
     public String replaceMultiBySingleWhitespace(String s) {
         return hasText(s) ? s.replaceAll("\\s+", " ") : s;
     }
 
-    // Parse to name
+    /**
+     * Chuan hoa ho ten tieng Viet o dang title case.
+     */
     public String parseName(String s) {
         return hasText(s) ? titleCase(replaceMultiBySingleWhitespace(removeNumAndWhiteSpaceBeginAndEnd(s))) : s;
     }
 
-    // Parse to international name
+    /**
+     * Chuan hoa ten quoc te bang cach bo ky tu dac biet o hai dau.
+     */
     public String parseNameInternational(String s) {
         return hasText(s)
                 ? titleCase(
@@ -35,7 +49,9 @@ public class StringUtil {
                 : s;
     }
 
-    // Parse to on card name
+    /**
+     * Chuan hoa ten in tren the theo dang viet hoa.
+     */
     public String parseNameOnCard(String s) {
         return hasText(s)
                 ? upperCase(
@@ -43,7 +59,9 @@ public class StringUtil {
                 : s;
     }
 
-    // Parse to email
+    /**
+     * Chuan hoa email ve lowercase va cat ky tu thua o hai dau.
+     */
     public String parseEmail(String s) {
         return hasText(s) ? lowerCase(removeSpCharsBeginAndEnd(removeNumAndWhiteSpaceEnd(s))) : s;
     }

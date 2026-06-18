@@ -1,6 +1,12 @@
 package com.yan.crm_project.constant;
 
-public class ViewConstant {
+/**
+ * Tom tat: Dinh nghia cac route chinh cua ung dung MVC va REST API.
+ */
+public final class ViewConstant {
+    private ViewConstant() {
+    }
+
     public static final String LOGIN_VIEW = "/login";
     public static final String LOGOUT_VIEW = "/logout";
     public static final String INDEX_VIEW = "/index";

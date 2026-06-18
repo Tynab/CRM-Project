@@ -15,6 +15,9 @@ import lombok.extern.slf4j.*;
 @Service
 @Transactional
 @Slf4j
+/**
+ * Tom tat: Hien thuc CRUD du an va chuan hoa text dau vao.
+ */
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;

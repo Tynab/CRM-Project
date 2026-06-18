@@ -17,6 +17,9 @@ import lombok.extern.slf4j.*;
 @Service
 @Transactional
 @Slf4j
+/**
+ * Tom tat: Hien thuc CRUD cong viec va chuan hoa ten/mo ta truoc khi luu.
+ */
 public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskRepository taskRepository;

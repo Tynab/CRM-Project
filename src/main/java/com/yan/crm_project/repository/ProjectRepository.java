@@ -6,5 +6,8 @@ import org.springframework.stereotype.*;
 import com.yan.crm_project.model.*;
 
 @Repository
+/**
+ * Tom tat: Repository JPA cho bang du_an.
+ */
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 }

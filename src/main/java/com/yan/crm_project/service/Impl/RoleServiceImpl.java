@@ -15,6 +15,9 @@ import lombok.extern.slf4j.*;
 @Service
 @Transactional
 @Slf4j
+/**
+ * Tom tat: Hien thuc CRUD vai tro va chuan hoa ten/mo ta truoc khi luu.
+ */
 public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;

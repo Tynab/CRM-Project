@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Tom tat: Form cap nhat thong tin cong viec theo quyen quan ly du an. -->
 
 <head>
     <meta charset="utf-8">
@@ -48,11 +49,10 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form th:action="@{/task/edit/save}" method="put" class="form-horizontal form-material">
+                            <!-- Tom tat: Form cap nhat task; controller doc lai quyen va project tu database. -->
+                            <form th:action="@{/task/edit/save}" method="post" class="form-horizontal form-material">
                                 <input type="hidden" th:value="${task.id}" name="id" readonly>
                                 <input type="hidden" th:value="${task.statusId}" name="statusId" readonly>
-                                <input type="hidden" th:value="${task.project.originatorId}" name="originatorId"
-                                    readonly>
                                 <div class="form-group">
                                     <label class="col-md-12">
                                         Dự Án
@@ -158,12 +158,6 @@
                     .format(this.getAttribute("data-date-format"))
             )
         }).trigger("change")
-    </script>
-    <!-- Default Date -->
-    <script>
-        var currentDate = (new Date()).toISOString().slice(0, 10);
-        document.getElementById('start-date').value = currentDate;
-        document.getElementById('end-date').value = currentDate;
     </script>
     <!-- Link icon to button search -->
     <script>

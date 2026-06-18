@@ -15,6 +15,9 @@ import static com.yan.crm_project.constant.ViewConstant.*;
 
 @Controller
 @RequestMapping(JOB_VIEW)
+/**
+ * Tom tat: Hien thi trang thong ke cong viec tong quan theo tat ca user/task.
+ */
 public class JobController {
     @Autowired
     private UserService userService;
@@ -28,11 +31,12 @@ public class JobController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Load job page
+    /**
+     * Nap dashboard cong viec voi ti le theo tung trang thai.
+     */
     @GetMapping("")
     public ModelAndView job() {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
@@ -41,12 +45,15 @@ public class JobController {
             var tasksCount = tasks.size();
             mav.addObject(USERS_PARAM, userService.getUsers());
             mav.addObject(ACCOUNT_PARAM, account);
-            mav.addObject(NOT_STARTED_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size() * 100 / tasksCount);
-            mav.addObject(IN_PROGRESS_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size() * 100 / tasksCount);
-            mav.addObject(COMPLETED_PERCENT_PARAM, tasksCount == 0 ? 0
-                    : applicationUtil.splitTasksByStatus(tasks, COMPLETED).size() * 100 / tasksCount);
+            mav.addObject(NOT_STARTED_PERCENT_PARAM,
+                    applicationUtil.calculatePercent(applicationUtil.splitTasksByStatus(tasks, NOT_STARTED).size(),
+                            tasksCount));
+            mav.addObject(IN_PROGRESS_PERCENT_PARAM,
+                    applicationUtil.calculatePercent(applicationUtil.splitTasksByStatus(tasks, IN_PROGRESS).size(),
+                            tasksCount));
+            mav.addObject(COMPLETED_PERCENT_PARAM,
+                    applicationUtil.calculatePercent(applicationUtil.splitTasksByStatus(tasks, COMPLETED).size(),
+                            tasksCount));
             return mav;
         }
     }

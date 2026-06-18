@@ -4,12 +4,15 @@ import java.util.*;
 
 import com.yan.crm_project.model.*;
 
+/**
+ * Tom tat: Khai bao nghiep vu CRUD cong viec.
+ */
 public interface TaskService {
-    public List<Task> getTasks();
+    List<Task> getTasks();
 
-    public Task getTask(int id);
+    Task getTask(int id);
 
-    public Task saveTask(Task task);
+    Task saveTask(Task task);
 
-    public void deleteTask(int id);
+    void deleteTask(int id);
 }

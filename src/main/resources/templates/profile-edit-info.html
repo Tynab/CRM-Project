@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Tom tat: Trang cap nhat thong tin ca nhan cua account dang dang nhap. -->
 
 <head>
     <meta charset="utf-8">
@@ -48,8 +49,9 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
+                            <!-- Tom tat: Form cap nhat thong tin ca nhan, controller chi tin account trong session. -->
                             <form class="form-horizontal form-material" th:action="@{/profile/edit/info/save}"
-                                method="put">
+                                method="post">
                                 <input type="hidden" th:value="${account.id}" name="id" readonly>
                                 <input type="hidden" th:value="${account.image}" name="image" readonly>
                                 <input type="hidden" th:value="${account.roleId}" name="roleId" readonly>

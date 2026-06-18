@@ -6,14 +6,21 @@ import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.savedrequest.*;
 
 @Configuration
+/**
+ * Tom tat: Khai bao cac bean ha tang dung chung cho bao mat va request cache.
+ */
 public class ApplicationConfig {
-    // Passord encode BCrypt
+    /**
+     * Ma hoa mat khau nguoi dung bang BCrypt truoc khi luu vao database.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Request cache
+    /**
+     * Khong tao session moi chi de luu request truoc dang nhap.
+     */
     @Bean
     public HttpSessionRequestCache getHttpSessionRequestCache() {
         var httpSessionRequestCache = new HttpSessionRequestCache();

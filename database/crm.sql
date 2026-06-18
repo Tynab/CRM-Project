@@ -1,19 +1,22 @@
--- dispose db
+-- Tom tat: Script khoi tao database CRM gom role, user, du an, trang thai
+-- cong viec va du lieu mau de demo ung dung Spring Boot.
+
+-- Xoa database cu de script co the chay lai tu dau.
 
 DROP DATABASE IF EXISTS crm;
 
--- create db
+-- Tao database crm neu chua ton tai.
 
 CREATE DATABASE IF NOT EXISTS crm;
 
--- use db
+-- Chon database lam viec.
 
 USE crm;
 
--- fix default
+-- Dam bao AUTO_INCREMENT tang tung don vi trong moi lan seed.
 SET @@auto_increment_increment=1;
 
--- create table loai_thanh_vien
+-- Bang vai tro nguoi dung: Admin, Leader, Member.
 
 CREATE TABLE
     IF NOT EXISTS loai_thanh_vien (
@@ -23,7 +26,7 @@ CREATE TABLE
         PRIMARY KEY (id)
     );
 
--- create table nguoi_dung
+-- Bang tai khoan nguoi dung va khoa ngoai den vai tro.
 
 CREATE TABLE
     IF NOT EXISTS nguoi_dung (
@@ -39,7 +42,7 @@ CREATE TABLE
         FOREIGN KEY (id_loai_thanh_vien) REFERENCES loai_thanh_vien(id)
     );
 
--- create table du_an
+-- Bang du an, moi du an co nguoi tao/originator.
 
 CREATE TABLE
     IF NOT EXISTS du_an (
@@ -53,7 +56,7 @@ CREATE TABLE
         FOREIGN KEY (id_nguoi_tao) REFERENCES nguoi_dung(id)
     );
 
--- create table trang_thai_cong_viec
+-- Bang danh muc trang thai cong viec.
 
 CREATE TABLE
     IF NOT EXISTS trang_thai_cong_viec (
@@ -62,7 +65,7 @@ CREATE TABLE
         PRIMARY KEY (id)
     );
 
--- create table cong_viec
+-- Bang cong viec, lien ket user thuc hien, du an va trang thai.
 
 CREATE TABLE
     IF NOT EXISTS cong_viec (
@@ -80,13 +83,13 @@ CREATE TABLE
         FOREIGN KEY (id_trang_thai_cong_viec) REFERENCES trang_thai_cong_viec(id)
     );
 
--- add data to loai_thanh_vien
+-- Seed vai tro mac dinh.
 
 INSERT INTO
     loai_thanh_vien (ten, mo_ta)
 VALUES ('Admin', 'Quản trị viên'), ('Leader', 'Quản lý dự án'), ('Member', 'Thành viên');
 
--- add data to nguoi_dung
+-- Seed user mau; comment sau hash la mat khau plaintext dung cho demo local.
 
 INSERT INTO
     nguoi_dung (
@@ -163,7 +166,7 @@ VALUES (
         3
     );
 
--- add data to du_an
+-- Seed du an mau.
 
 INSERT INTO
     du_an (
@@ -193,13 +196,13 @@ VALUES (
         4
     );
 
--- add data to trang_thai_cong_viec
+-- Seed trang thai task mac dinh.
 
 INSERT INTO
     trang_thai_cong_viec (ten)
 VALUES ('Chưa bắt đầu'), ('Đang thực hiện'), ('Đã hoàn thành');
 
--- add data to cong_viec
+-- Seed cong viec mau.
 
 INSERT INTO
     cong_viec (

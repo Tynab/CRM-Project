@@ -8,7 +8,6 @@ import javax.servlet.http.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.core.exc.*;
 import com.fasterxml.jackson.databind.*;
 import com.yan.crm_project.model.Role;
 import com.yan.crm_project.service.*;
@@ -27,22 +26,29 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping(API_VIEW)
+/**
+ * Tom tat: Cung cap REST endpoint lien quan den JWT, hien tai gom refresh
+ * access token bang refresh token hop le.
+ */
 public class ApiController {
     @Autowired
     private UserService userService;
 
-    // Refresh token
+    /**
+     * Tao access token moi tu refresh token Bearer trong Authorization header.
+     */
     @GetMapping(TOKEN_VIEW + REFRESH_VIEW)
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response)
-            throws StreamWriteException, DatabindException, IOException {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var header = request.getHeader(AUTHORIZATION);
-        // check token format in authorization header
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
-            // get token from authorization header
             try {
                 var refreshToken = header.substring(TOKEN_PREFIX.length());
                 var algorithm = HMAC256(SECRET_KEY.getBytes());
                 var user = userService.getUser(require(algorithm).build().verify(refreshToken).getSubject());
+                if (user == null) {
+                    throw new IllegalArgumentException("User not found");
+                }
+
                 var tokens = new HashMap<>();
                 tokens.put(ACCESS_TOKEN_KEY,
                         create().withSubject(user.getEmail())
@@ -56,16 +62,22 @@ public class ApiController {
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
             } catch (Exception e) {
-                var errorMsg = e.getMessage();
-                response.setHeader(ERROR_HEADER_KEY, errorMsg);
-                response.setStatus(FORBIDDEN.value());
-                var error = new HashMap<>();
-                error.put(ERROR_MESSAGE_KEY, errorMsg);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
+                writeTokenError(response, e.getMessage());
             }
         } else {
-            throw new RuntimeException("Refresh token is missing");
+            writeTokenError(response, "Refresh token is missing");
         }
+    }
+
+    /**
+     * Ghi response loi JWT theo cung cau truc JSON cho client.
+     */
+    private void writeTokenError(HttpServletResponse response, String errorMsg) throws IOException {
+        response.setHeader(ERROR_HEADER_KEY, errorMsg);
+        response.setStatus(FORBIDDEN.value());
+        var error = new HashMap<>();
+        error.put(ERROR_MESSAGE_KEY, errorMsg);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.savedrequest.*;
 
 import com.yan.crm_project.filter.*;
-import com.yan.crm_project.filter.AuthenticationFilter;
 
 import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.ViewConstant.*;
@@ -21,7 +20,11 @@ import static com.yan.crm_project.constant.ViewConstant.*;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class AppplicationSecurity extends WebSecurityConfigurerAdapter {
+/**
+ * Tom tat: Cau hinh phan quyen web MVC, form login va JWT filter cho cac API
+ * dang nhap/refresh token.
+ */
+public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 

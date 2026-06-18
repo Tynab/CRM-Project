@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Tom tat: Form cap nhat mo ta vai tro nguoi dung. -->
 
 <head>
     <meta charset="utf-8">
@@ -48,7 +49,8 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form th:action="@{/role/edit/save}" method="put" class="form-horizontal form-material">
+                            <!-- Tom tat: Form cap nhat mo ta vai tro bang POST de tuong thich HTML form. -->
+                            <form th:action="@{/role/edit/save}" method="post" class="form-horizontal form-material">
                                 <input type="hidden" th:value="${role.id}" name="id" readonly>
                                 <div class="form-group">
                                     <label class="col-md-12">
