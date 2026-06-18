@@ -18,11 +18,19 @@ import static org.imgscalr.Scalr.Mode.*;
 
 @Service
 @Slf4j
+/**
+ * Tom tat: Resize avatar ve anh JPG vuong kich thuoc AVATAR_SIZE.
+ */
 public class ImageServiceImpl implements ImageService {
     @Override
     public boolean resizeImage(File file, String name) {
         try {
-            var outputImg = resize(read(file), ULTRA_QUALITY, FIT_EXACT, AVATAR_SIZE);
+            var inputImg = read(file);
+            if (inputImg == null) {
+                return false;
+            }
+
+            var outputImg = resize(inputImg, ULTRA_QUALITY, FIT_EXACT, AVATAR_SIZE);
             write(outputImg, "jpg", get(AVATAR_PATH, name).toFile());
             outputImg.flush();
             return true;

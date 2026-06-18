@@ -1,6 +1,13 @@
 package com.yan.crm_project.constant;
 
-public class TemplateConstant {
+/**
+ * Tom tat: Luu ten file Thymeleaf template de controller tra ve view name thong
+ * nhat va de doi ten template o mot cho.
+ */
+public final class TemplateConstant {
+    private TemplateConstant() {
+    }
+
     public static final String LOGIN_TEMP = "login";
     public static final String INDEX_TEMP = "index";
     public static final String FORBIDDEN_TEMP = "403";

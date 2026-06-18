@@ -14,6 +14,9 @@ import lombok.extern.slf4j.*;
 @Service
 @Transactional
 @Slf4j
+/**
+ * Tom tat: Doc danh muc trang thai cong viec tu database.
+ */
 public class TaskStatusServiceImpl implements TaskStatusService {
     @Autowired
     private TaskStatusRepository taskStatusRepository;

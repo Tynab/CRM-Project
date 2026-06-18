@@ -1,12 +1,14 @@
 pipeline {
+    // Tom tat: Pipeline build image CRM, push Docker Hub, restart container va
+    // gui thong bao Telegram theo tung stage.
     agent any
     
     environment {
-        // Telegram configre
+        // Cau hinh Telegram lay tu Jenkins credentials.
         TOKEN = credentials('telegram_token')
         CHAT_ID = credentials('telegram_chatid')
 
-        // Telegram message
+        // Noi dung thong bao duoc tao tu commit hien tai.
         GIT_MESSAGE = sh(returnStdout: true, script: "git log -n 1 --format=%s ${GIT_COMMIT}").trim()
         GIT_AUTHOR = sh(returnStdout: true, script: "git log -n 1 --format=%ae ${GIT_COMMIT}").trim()
         GIT_COMMIT_SHORT = sh(returnStdout: true, script: "git rev-parse --short ${GIT_COMMIT}").trim()
@@ -26,6 +28,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                // Build Docker image tu source hien tai.
                 sh "curl --location --request POST 'https://api.telegram.org/bot${TOKEN}/sendMessage' --form text='${TEXT_PRE}' --form chat_id='${CHAT_ID}'"
                 sh "curl --location --request POST 'https://api.telegram.org/bot${TOKEN}/sendMessage' --form text='${TEXT_BUILD}' --form chat_id='${CHAT_ID}'"
                 sh 'docker build -t yamiannephilim/crm:latest .'
@@ -34,6 +37,7 @@ pipeline {
 
         stage('Push') {
             steps {
+                // Push image len Docker Hub voi credential da cau hinh trong Jenkins.
                 sh "curl --location --request POST 'https://api.telegram.org/bot${TOKEN}/sendMessage' --form text='${TEXT_PUSH}' --form chat_id='${CHAT_ID}'"
 
                 withDockerRegistry(credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/') {
@@ -44,6 +48,7 @@ pipeline {
 
         stage('Clean') {
             steps {
+                // Dung va xoa container crm cu neu dang ton tai.
                 sh "curl --location --request POST 'https://api.telegram.org/bot${TOKEN}/sendMessage' --form text='${TEXT_CLEAN}' --form chat_id='${CHAT_ID}'"
 
                 script {
@@ -58,6 +63,7 @@ pipeline {
 
         stage('Run') {
             steps {
+                // Tao network neu can va chay container moi tu image latest.
                 sh "curl --location --request POST 'https://api.telegram.org/bot${TOKEN}/sendMessage' --form text='${TEXT_RUN}' --form chat_id='${CHAT_ID}'"
                 sh 'docker container stop crm || echo "this container does not exist"'
                 sh 'docker network create yan || echo "this network exist"'

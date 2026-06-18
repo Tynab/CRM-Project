@@ -4,18 +4,21 @@ import java.util.*;
 
 import com.yan.crm_project.model.*;
 
+/**
+ * Tom tat: Khai bao nghiep vu quan ly tai khoan va adapter UserDetailsService.
+ */
 public interface UserService {
-    public Iterable<User> getUsers();
+    Iterable<User> getUsers();
 
-    public List<User> getUsers(String name);
+    List<User> getUsers(String name);
 
-    public User getUser(int id);
+    User getUser(int id);
 
-    public User getUser(String email);
+    User getUser(String email);
 
-    public User saveUser(User user);
+    User saveUser(User user);
 
-    public User saveUserWithoutPassword(User user);
+    User saveUserWithoutPassword(User user);
 
-    public void deleteUser(int id);
+    void deleteUser(int id);
 }

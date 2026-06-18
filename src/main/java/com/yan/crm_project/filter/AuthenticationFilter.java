@@ -26,8 +26,11 @@ import static org.springframework.http.MediaType.*;
 
 @Slf4j
 @RequiredArgsConstructor
+/**
+ * Tom tat: Xu ly dang nhap API va phat cap access/refresh token JWT khi xac
+ * thuc thanh cong.
+ */
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    // Fields
     private final AuthenticationManager authenticationManager;
 
     @Override
@@ -35,8 +38,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             throws AuthenticationException {
         var username = request.getParameter("username");
         var password = request.getParameter("password");
-        log.info("Email: {}", username);
-        log.info("Password: {}", password);
+        log.info("Login attempt for email: {}", username);
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 

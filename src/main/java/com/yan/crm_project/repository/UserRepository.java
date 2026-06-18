@@ -8,8 +8,12 @@ import org.springframework.stereotype.*;
 import com.yan.crm_project.model.*;
 
 @Repository
+/**
+ * Tom tat: Truy van nguoi dung theo ID, email va ten hien thi cho man hinh
+ * quan ly/thanh tim kiem.
+ */
 public interface UserRepository extends JpaRepository<User, Integer> {
-    public List<User> findAllByName(String name);
+    List<User> findAllByNameContainingIgnoreCase(String name);
 
-    public User findByEmail(String email);
+    User findByEmail(String email);
 }

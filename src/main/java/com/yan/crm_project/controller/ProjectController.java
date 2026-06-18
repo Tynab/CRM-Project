@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
+import org.springframework.web.servlet.mvc.support.*;
 
 import com.yan.crm_project.model.*;
 import com.yan.crm_project.service.*;
 import com.yan.crm_project.util.*;
 
-import static com.yan.crm_project.common.Bean.*;
 import static com.yan.crm_project.constant.ApplicationConstant.Role.*;
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static com.yan.crm_project.constant.TemplateConstant.*;
@@ -18,10 +18,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping(PROJECT_VIEW)
+/**
+ * Tom tat: Quan ly du an va ap dung rule admin/leader theo nguoi tao du an.
+ */
 public class ProjectController {
-    @Autowired
-    private UserService userService;
-
     @Autowired
     private RoleService roleService;
 
@@ -34,27 +34,28 @@ public class ProjectController {
     @Autowired
     private AuthenticationUtil authenticationUtil;
 
-    // Load project list
+    /**
+     * Nap danh sach du an.
+     */
     @GetMapping("")
     public ModelAndView project() {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var mav = new ModelAndView(PROJECT_TEMP);
             mav.addObject(ACCOUNT_PARAM, account);
             mav.addObject(PROJECTS_PARAM, projectService.getProjects());
-            _isMsgShow = applicationUtil.showMessageBox(mav);
             return mav;
         }
     }
 
-    // Load new project input form
+    /**
+     * Nap form tao du an.
+     */
     @GetMapping(ADD_VIEW)
     public ModelAndView projectAdd() {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
@@ -64,38 +65,36 @@ public class ProjectController {
         }
     }
 
-    // Add new project
+    /**
+     * Tao du an va gan nguoi tao la account hien tai.
+     */
     @PostMapping(ADD_VIEW + SAVE_VIEW)
-    public String projectAddSave(Project project) {
+    public String projectAddSave(Project project, RedirectAttributes redirectAttributes) {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             project.setOriginatorId(account.getId());
             projectService.saveProject(project);
-            _isMsgShow = true;
-            _msg = "Thêm dự án thành công!";
+            applicationUtil.addFlashMessage(redirectAttributes, "Thêm dự án thành công!");
             return REDIRECT_PREFIX + PROJECT_VIEW;
         }
     }
 
-    // Load edit project input form
+    /**
+     * Nap form cap nhat du an neu account co quyen voi originator hien tai.
+     */
     @GetMapping(EDIT_VIEW)
-    public ModelAndView projectEdit(int id) {
+    public ModelAndView projectEdit(int id, RedirectAttributes redirectAttributes) {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return new ModelAndView(REDIRECT_PREFIX + LOGOUT_VIEW);
         } else {
             var project = projectService.getProject(id);
-            // check if project is exist
             if (project == null) {
-                _isMsgShow = true;
-                _msg = "Dự án không tồn tại!";
+                applicationUtil.addFlashMessage(redirectAttributes, "Dự án không tồn tại!");
                 return new ModelAndView(REDIRECT_PREFIX + PROJECT_VIEW);
             } else {
-                // check permission
                 if (!isPermissionLeader(account, project.getOriginatorId())) {
                     return new ModelAndView(FORWARD_PREFIX + FORBIDDEN_VIEW);
                 } else {
@@ -108,54 +107,55 @@ public class ProjectController {
         }
     }
 
-    // Edit project
-    @RequestMapping(value = EDIT_VIEW + SAVE_VIEW, method = { GET, PUT })
-    public String projectEditSave(Project project) {
+    /**
+     * Luu cap nhat du an, khong tin originatorId gui len tu form.
+     */
+    @PostMapping(EDIT_VIEW + SAVE_VIEW)
+    public String projectEditSave(Project project, RedirectAttributes redirectAttributes) {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
-            // check permission
-            if (!isPermissionLeader(account, project.getOriginatorId())) {
+            var existingProject = projectService.getProject(project.getId());
+            if (existingProject == null) {
+                applicationUtil.addFlashMessage(redirectAttributes, "Dự án không tồn tại!");
+                return REDIRECT_PREFIX + PROJECT_VIEW;
+            }
+
+            if (!isPermissionLeader(account, existingProject.getOriginatorId())) {
                 return FORWARD_PREFIX + FORBIDDEN_VIEW;
             } else {
+                project.setOriginatorId(existingProject.getOriginatorId());
                 projectService.saveProject(project);
-                _isMsgShow = true;
-                _msg = "Cập nhật dự án thành công!";
+                applicationUtil.addFlashMessage(redirectAttributes, "Cập nhật dự án thành công!");
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             }
         }
     }
 
-    // Delete project
+    /**
+     * Xoa du an neu khong co cong viec va account co quyen.
+     */
     @RequestMapping(value = DELETE_VIEW, method = { GET, DELETE })
-    public String projectDelete(int id) {
+    public String projectDelete(int id, RedirectAttributes redirectAttributes) {
         var account = authenticationUtil.getAccount();
-        // check current account still valid
         if (account == null) {
             return REDIRECT_PREFIX + LOGOUT_VIEW;
         } else {
             var project = projectService.getProject(id);
-            // check if project is exist
             if (project == null) {
-                _isMsgShow = true;
-                _msg = "Dự án không tồn tại!";
+                applicationUtil.addFlashMessage(redirectAttributes, "Dự án không tồn tại!");
                 return REDIRECT_PREFIX + PROJECT_VIEW;
             } else {
-                // check project disconnect
                 if (project.getTasks().size() > 0) {
-                    _isMsgShow = true;
-                    _msg = "Dự án đang có công việc, không thể xóa!";
+                    applicationUtil.addFlashMessage(redirectAttributes, "Dự án đang có công việc, không thể xóa!");
                     return REDIRECT_PREFIX + PROJECT_VIEW;
                 } else {
-                    // check permission
                     if (!isPermissionLeader(account, project.getOriginatorId())) {
                         return FORWARD_PREFIX + FORBIDDEN_VIEW;
                     } else {
                         projectService.deleteProject(id);
-                        _isMsgShow = true;
-                        _msg = "Xóa dự án thành công!";
+                        applicationUtil.addFlashMessage(redirectAttributes, "Xóa dự án thành công!");
                         return REDIRECT_PREFIX + PROJECT_VIEW;
                     }
                 }
@@ -163,15 +163,19 @@ public class ProjectController {
         }
     }
 
-    // Get role of current account
+    /**
+     * Lay role cua account hien tai de so quyen.
+     */
     private String getCurrentAccountRole(int roleId) {
-        return roleService.getRole(roleId).getName().toUpperCase();
+        var role = roleService.getRole(roleId);
+        return role == null ? "" : role.getName().toUpperCase();
     }
 
-    // Check permission leader for project
+    /**
+     * Admin co toan quyen; leader chi thao tac du an do chinh minh tao.
+     */
     private boolean isPermissionLeader(User user, int originatorId) {
         var currentAccountRole = getCurrentAccountRole(user.getRoleId());
-        return currentAccountRole.equals(LEADER) && userService.getUser(originatorId).getId() == user.getId()
-                || currentAccountRole.equals(ADMIN);
+        return currentAccountRole.equals(ADMIN) || currentAccountRole.equals(LEADER) && originatorId == user.getId();
     }
 }

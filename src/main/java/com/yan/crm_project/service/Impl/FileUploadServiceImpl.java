@@ -2,6 +2,7 @@ package com.yan.crm_project.service.Impl;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
 
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
@@ -15,14 +16,17 @@ import static java.nio.file.Files.*;
 
 @Service
 @Slf4j
+/**
+ * Tom tat: Luu file avatar tam thoi vao thu muc cau hinh va xoa file sau khi
+ * resize thanh cong.
+ */
 public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public void init() {
-        var folderPath = Paths.get(AVATAR_PATH);
-        // check exists path
+        var folderPath = Paths.get(AVATAR_PATH).toAbsolutePath().normalize();
         if (!exists(folderPath)) {
             try {
-                createDirectory(folderPath);
+                createDirectories(folderPath);
             } catch (IOException e) {
                 throw new RuntimeException("Could not initialize storage!");
             }
@@ -32,7 +36,21 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public File upload(MultipartFile file) {
         try {
-            var filePath = Paths.get(AVATAR_PATH, AVATAR_PREFIX + file.getOriginalFilename());
+            var folderPath = Paths.get(AVATAR_PATH).toAbsolutePath().normalize();
+            createDirectories(folderPath);
+            var originalName = org.springframework.util.StringUtils
+                    .cleanPath(Optional.ofNullable(file.getOriginalFilename()).orElse("avatar"));
+            if (originalName.contains("..")) {
+                log.warn("Rejected unsafe upload filename: {}", originalName);
+                return null;
+            }
+
+            var filePath = folderPath.resolve(AVATAR_PREFIX + originalName).normalize();
+            if (!filePath.startsWith(folderPath)) {
+                log.warn("Rejected upload outside avatar folder: {}", originalName);
+                return null;
+            }
+
             write(filePath, file.getBytes());
             return filePath.toFile();
         } catch (IOException e) {
@@ -43,7 +61,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public void remove(String fileName) {
-        var filePath = Paths.get(AVATAR_PATH, fileName);
+        var folderPath = Paths.get(AVATAR_PATH).toAbsolutePath().normalize();
+        var filePath = folderPath.resolve(fileName).normalize();
+        if (!filePath.startsWith(folderPath)) {
+            log.warn("Rejected delete outside avatar folder: {}", fileName);
+            return;
+        }
+
         if (exists(filePath)) {
             try {
                 delete(filePath);

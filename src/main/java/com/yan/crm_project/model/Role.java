@@ -13,13 +13,21 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+/**
+ * Tom tat: Entity loai_thanh_vien, luu vai tro phan quyen cua nguoi dung.
+ */
 public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id")
     private int id;
 
     @NonNull
+    @ToString.Include
     @Column(name = "ten")
     private String name;
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Tom tat: Trang cap nhat trang thai cong viec duoc giao cho account hien tai. -->
 
 <head>
     <meta charset="utf-8">
@@ -48,11 +49,14 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
+                            <!-- Tom tat: Form chi cho phep user cap nhat trang thai task cua chinh minh. -->
                             <form class="form-horizontal form-material" th:action="@{/profile/edit/task/save}"
-                                method="put">
+                                method="post">
                                 <input type="hidden" th:value="${task.id}" name="id" readonly>
-                                <input type="hidden" th:value="${task.startDate}" name="startDate" readonly>
-                                <input type="hidden" th:value="${task.endDate}" name="endDate" readonly>
+                                <input type="hidden" th:value="${#dates.format(task.startDate, 'yyyy-MM-dd')}"
+                                    name="startDate" readonly>
+                                <input type="hidden" th:value="${#dates.format(task.endDate, 'yyyy-MM-dd')}"
+                                    name="endDate" readonly>
                                 <input type="hidden" th:value="${task.doerId}" name="doerId" readonly>
                                 <input type="hidden" th:value="${task.projectId}" name="projectId" readonly>
                                 <div class="form-group">

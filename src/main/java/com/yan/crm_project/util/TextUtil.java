@@ -5,24 +5,33 @@ import org.springframework.stereotype.*;
 
 import static org.springframework.util.StringUtils.*;
 
-//Ex: " ai?đứng như bóng dừa!tóc(dài )bay( trong gió).  có phải,người còn đó:là con gái của Bến Tre thời 4.0. "
 @Component
+/**
+ * Tom tat: Chuan hoa doan van ban tu do, gom khoang trang quanh dau cau,
+ * ngoac va viet hoa sau dau ket thuc cau.
+ */
 public class TextUtil {
+    private static final String[] BRACKET_PATTERNS = { "\\(", "\\)", "\\[", "\\]", "\\{", "\\}", "<", ">" };
+    private static final String[][] BRACKET_SPACE_RULES = { { "\\(", " \\(" }, { "\\)", "\\) " }, { "\\[", " \\[" },
+            { "\\]", "\\] " }, { "\\{", " \\{" }, { "\\}", "\\} " }, { "<", " <" }, { ">", "> " } };
+    private static final String[] PUNCTUATION_TRIM_PATTERNS = { "\\.", ",", ";", ":", "\\?", "!" };
+    private static final String[] PUNCTUATION_WITH_SPACE = { ".", ",", ";", ":", "?", "!" };
+    private static final String[] SENTENCE_BOUNDARIES = { ".", "?", "!" };
+
     @Autowired
     private StringUtil stringUtil;
 
     @Autowired
     private NumberUtil numberUtil;
 
-    // Add whitespace after character
+    /**
+     * Them mot khoang trang sau dau cau dau tien neu ky tu ke tiep khong phai so.
+     */
     public String charWithSpace(String s, String character) {
-        // If string is not empty
         if (hasText(s)) {
             var index = s.indexOf(character);
-            // Found character
             if (index != -1) {
                 var iStart = index + 1;
-                // Next character is not number
                 if (iStart < s.length() && !numberUtil.isNumeric(s.substring(iStart, iStart + 1))) {
                     s = s.substring(0, index) + character + " " + s.substring(index + 1);
                 }
@@ -31,75 +40,31 @@ public class TextUtil {
         return s;
     }
 
-    // Parse string to legal text
+    /**
+     * Chuan hoa text nghiep vu truoc khi luu role/project/task.
+     */
     public String parseToLegalText(String s) {
-        return capitalize(stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeWhiteSpaceBeginAndEnd(
-                charWithSpace(charWithSpace(charWithSpace(charWithSpace(charWithSpace(charWithSpace(stringUtil
-                        .capitalizeAfterChar(stringUtil.capitalizeAfterChar(stringUtil.capitalizeAfterChar(stringUtil
-                                .removeWhiteSpaceBeforeAndAfterChar(stringUtil.removeWhiteSpaceBeforeAndAfterChar(
-                                        stringUtil.removeWhiteSpaceBeforeAndAfterChar(
-                                                stringUtil.removeWhiteSpaceBeforeAndAfterChar(
-                                                        stringUtil.removeWhiteSpaceBeforeAndAfterChar(
-                                                                stringUtil.removeWhiteSpaceBeforeAndAfterChar(
-                                                                        stringUtil.replaceWordFoundByKeyword(stringUtil
-                                                                                .replaceWordFoundByKeyword(stringUtil
-                                                                                        .replaceWordFoundByKeyword(
-                                                                                                stringUtil
-                                                                                                        .replaceWordFoundByKeyword(
-                                                                                                                stringUtil
-                                                                                                                        .replaceWordFoundByKeyword(
-                                                                                                                                stringUtil
-                                                                                                                                        .replaceWordFoundByKeyword(
-                                                                                                                                                stringUtil
-                                                                                                                                                        .replaceWordFoundByKeyword(
-                                                                                                                                                                stringUtil
-                                                                                                                                                                        .replaceWordFoundByKeyword(
-                                                                                                                                                                                stringUtil
-                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                                                                                        .removeWhiteSpaceBeforeAndAfterChar(
-                                                                                                                                                                                                                                                                                                                stringUtil
-                                                                                                                                                                                                                                                                                                                        .removeWhiteSpaceBeginAndEnd(
-                                                                                                                                                                                                                                                                                                                                s),
-                                                                                                                                                                                                                                                                                                                "\\("),
-                                                                                                                                                                                                                                                                                                "\\)"),
-                                                                                                                                                                                                                                                                                "\\["),
-                                                                                                                                                                                                                                                                "\\]"),
-                                                                                                                                                                                                                                                "\\{"),
-                                                                                                                                                                                                                                "\\}"),
-                                                                                                                                                                                                                "<"),
-                                                                                                                                                                                                ">"),
-                                                                                                                                                                                "\\(",
-                                                                                                                                                                                " \\("),
-                                                                                                                                                                "\\)",
-                                                                                                                                                                "\\) "),
-                                                                                                                                                "\\[",
-                                                                                                                                                " \\["),
-                                                                                                                                "\\]",
-                                                                                                                                "\\] "),
-                                                                                                                "\\{",
-                                                                                                                " \\{"),
-                                                                                                "\\}", "\\} "),
-                                                                                        "<", " <"),
-                                                                                ">", "> "),
-                                                                        "\\."),
-                                                                ","),
-                                                        ";"),
-                                                ":"),
-                                        "\\?"), "!"),
-                                "."), "?"), "!"),
-                        "."), ","), ";"), ":"), "?"), "!"))));
+        if (!hasText(s)) {
+            return s;
+        }
+
+        var text = stringUtil.removeWhiteSpaceBeginAndEnd(s);
+        for (var pattern : BRACKET_PATTERNS) {
+            text = stringUtil.removeWhiteSpaceBeforeAndAfterChar(text, pattern);
+        }
+        for (var rule : BRACKET_SPACE_RULES) {
+            text = stringUtil.replaceWordFoundByKeyword(text, rule[0], rule[1]);
+        }
+        for (var pattern : PUNCTUATION_TRIM_PATTERNS) {
+            text = stringUtil.removeWhiteSpaceBeforeAndAfterChar(text, pattern);
+        }
+        for (var punctuation : PUNCTUATION_WITH_SPACE) {
+            text = charWithSpace(text, punctuation);
+        }
+        for (var boundary : SENTENCE_BOUNDARIES) {
+            text = stringUtil.capitalizeAfterChar(text, boundary);
+        }
+
+        return capitalize(stringUtil.replaceMultiBySingleWhitespace(stringUtil.removeWhiteSpaceBeginAndEnd(text)));
     }
 }

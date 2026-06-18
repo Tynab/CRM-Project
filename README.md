@@ -36,13 +36,6 @@
         - Xem thống kê công việc (cá nhân)
         - Quản lý tài khoản cá nhân
 
-## LINK DEMO
-<div align='center'>
-
-[Click vào đây để xem chi tiết](https://crm.yamiannephilim.com)
-
-</div>
-
 ## HÌNH ẢNH DEMO
 <p align='center'>
 <img src='pic/0.jpg'></img>

@@ -1,6 +1,13 @@
 package com.yan.crm_project.constant;
 
-public class AttributeConstant {
+/**
+ * Tom tat: Dat ten tap trung cho model attribute, flash message, JWT claim va
+ * duong dan upload de controller/template khong phai lap chuoi literal.
+ */
+public final class AttributeConstant {
+    private AttributeConstant() {
+    }
+
     public static final String ACCESS_TOKEN_KEY = "access_token";
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
 
@@ -39,5 +46,6 @@ public class AttributeConstant {
 
     public static final String ERROR_MESSAGE_KEY = "error_message";
 
-    public static final String AVATAR_PATH = "./src/main/resources/static/plugins/images/users";
+    public static final String AVATAR_PATH = System.getenv().getOrDefault("CRM_AVATAR_PATH",
+            "./src/main/resources/static/plugins/images/users");
 }

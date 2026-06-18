@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tom tat: Maven project cho CRM Spring Boot MVC dong goi WAR, dung Thymeleaf,
+    Spring Security, Spring Data JPA, MySQL, JWT va imgscalr.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -14,7 +18,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>crm_project</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Spring Boot CRM web application with Thymeleaf, JPA, Security and JWT</description>
     <properties>
         <java.version>11</java.version>
     </properties>

@@ -6,6 +6,9 @@ import org.springframework.stereotype.*;
 import com.yan.crm_project.model.*;
 
 @Repository
+/**
+ * Tom tat: Truy van role theo ten de kiem tra trung lap khi tao moi.
+ */
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-    public Role findByName(String name);
+    Role findByName(String name);
 }

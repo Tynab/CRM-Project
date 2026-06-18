@@ -4,10 +4,13 @@ import java.io.*;
 
 import org.springframework.web.multipart.*;
 
+/**
+ * Tom tat: Quan ly vong doi file upload avatar tam thoi.
+ */
 public interface FileUploadService {
-    public void init();
+    void init();
 
-    public File upload(MultipartFile file);
+    File upload(MultipartFile file);
 
-    public void remove(String fileName);
+    void remove(String fileName);
 }

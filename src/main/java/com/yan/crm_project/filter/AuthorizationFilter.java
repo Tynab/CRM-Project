@@ -2,7 +2,6 @@ package com.yan.crm_project.filter;
 
 import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -27,6 +26,10 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.security.core.context.SecurityContextHolder.*;
 
 @Slf4j
+/**
+ * Tom tat: Doc Bearer token, xac thuc JWT va nap authority vao SecurityContext
+ * cho cac request API da dang nhap.
+ */
 public class AuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

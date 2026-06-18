@@ -2,12 +2,15 @@ package com.yan.crm_project.service;
 
 import com.yan.crm_project.model.*;
 
+/**
+ * Tom tat: Khai bao nghiep vu CRUD du an.
+ */
 public interface ProjectService {
-    public Iterable<Project> getProjects();
+    Iterable<Project> getProjects();
 
-    public Project getProject(int id);
+    Project getProject(int id);
 
-    public Project saveProject(Project project);
+    Project saveProject(Project project);
 
-    public void deleteProject(int id);
+    void deleteProject(int id);
 }

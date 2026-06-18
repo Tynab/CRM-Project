@@ -19,10 +19,15 @@ import lombok.extern.slf4j.*;
 
 import static com.yan.crm_project.constant.AttributeConstant.*;
 import static java.util.Collections.*;
+import static org.springframework.util.StringUtils.*;
 
 @Service
 @Transactional
 @Slf4j
+/**
+ * Tom tat: Hien thuc quan ly nguoi dung, gom chuan hoa input, ma hoa mat khau
+ * va nap principal cho Spring Security.
+ */
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
@@ -59,7 +64,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<User> getUsers(String name) {
         log.info("Fetching all users by name: {}", name);
-        return userRepository.findAllByName(name);
+        return hasText(name) ? userRepository.findAllByNameContainingIgnoreCase(stringUtil.parseName(name))
+                : userRepository.findAll();
     }
 
     @Override
@@ -87,7 +93,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUserWithoutPassword(User user) {
-        user.setPassword(getUser(user.getId()).getPassword());
+        var existingUser = getUser(user.getId());
+        if (existingUser == null) {
+            throw new IllegalArgumentException("User not found: " + user.getId());
+        }
+
+        user.setEmail(stringUtil.parseEmail(user.getEmail()));
+        user.setPassword(existingUser.getPassword());
         user.setName(stringUtil.parseName(user.getName()));
         user.setAddress(addressUtil.parseToLegalAddress(user.getAddress()));
         log.info("Saving user with email: {}", user.getEmail());

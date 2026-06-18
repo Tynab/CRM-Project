@@ -16,13 +16,22 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+/**
+ * Tom tat: Entity du_an, gom thong tin thoi gian, nguoi tao va danh sach cong
+ * viec thuoc du an.
+ */
 public class Project {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @Column(name = "id")
     private int id;
 
     @NonNull
+    @ToString.Include
     @Column(name = "ten")
     private String name;
 
